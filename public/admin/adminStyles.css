@@ -1,0 +1,22 @@
+p {
+    color: rgb(0, 0, 0);
+  }
+  @font-face {
+    font-family: BlockLetters;
+    src: url(../data/ThatSoundsGreat-yYLE3.ttf);
+  }
+  .adminButtons {
+    border-radius: 6px;
+    width: 12%; 
+    padding-top: .5%;
+    padding-bottom: .5%;
+  }
+  .adminButtons:hover {
+    border-color: rgb(0, 0, 0);
+    background-color:#d6d5d5;
+    transition: 0.2s;
+  }
+  .showLunch {
+    font-size: 1.4vw;
+    text-align: center;
+  }

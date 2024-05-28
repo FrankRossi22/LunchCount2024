@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../defaultPage.css">
+    <link rel="stylesheet" href="adminStyles.css">
+    <title>LunchCount</title>
+</head>
+<body>
+    <main>
+        <section class="pageHeader">
+            <h1> L u n c h </h1>
+            <h1>C o u n t </h1>
+            <hr /> <br />
+        </section>
+        <section id="options" class="adminOps" style="text-align: center;">
+            <h2 style="font-size: 2vw;">Admin Options</h2>
+            <hr style="width: 17%;"/> <br />
+            <div class="changeLunch" style="padding-bottom: 2%;">
+                <button id="adminButton1" class="adminButtons" onclick="changeLunch()">Change Lunch</button>
+            </div>
+            <div class="showLunch" style="padding-bottom: 2%;">
+                <button id="adminButton2" class="adminButtons" onclick="showLunch()">Show Lunch Options</button>
+            </div>
+            <div class="showLunchCount" style="padding-bottom: 2%;">
+                <button id="adminButton3" class="adminButtons" onclick="showLunchCount()">Show Lunch Count</button>
+            </div>
+        </section>
+        <section id="optionPicked" class="optionPicked" style="text-align: center;">
+            <div id="showLunch" class="showLunch" style="display: none;">
+                <h2 style="font-size: 2vw;">Current Lunch Options</h2>
+                <hr style="width: 17%;"/> <br />
+                <p>Chicken or Beef</p>
+                <p>Fries or Tater Tots</p>
+            </div>
+            <div id="showCount" class="showLunchCount" style="display: none;">
+                <h2 style="font-size: 2vw;">Current Lunch Count</h2>
+                <hr style="width: 17%;"/> <br />
+                <p>30 Chicken and 40 Beef</p>
+                <p>50 Fries and 20 Tater Tots</p>
+            </div>
+            <div id="changeLunch" class="changeLunch" style="display: none;">
+                <h2 style="font-size: 2vw;">Change Lunch Options</h2>
+                <hr style="width: 17%;"/> <br />
+            </div>
+            <div class="backButton" style="padding-top: 7%;">
+                <button id="backButton" class="adminButtons" style="display: none;" onclick="showOptions()">Back</button>
+            </div>
+        </div> 
+    </main>
+</body>
+<script src="adminPage.js"></script>
+</html>

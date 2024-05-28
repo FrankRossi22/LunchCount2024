@@ -1,0 +1,21 @@
+{
+  "name": "lunchcount",
+  "version": "1.0.0",
+  "description": "This is the LunchCount web app by Frank Rossi",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "lunch",
+    "lunchcount",
+    "schoollunch",
+    "school"
+  ],
+  "author": "Frank Rossi",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../defaultPage.css">
+    <link rel="stylesheet" href="signInStyles.css">
+    <title>LunchCount</title>
+</head>
+<body>
+    <div class="custom-alert" id="customAlert" style="text-align: center;">
+        <p id="customAlertMessage" class="custom-Message"></p>
+        <div style="text-align: center;">
+        <button class="close-button" onclick="hideCustomAlert()">Close</button>
+        </div>
+    </div>
+    <main>
+        <section class="pageHeader">
+            <h1> L u n c h </h1>
+            <h1>C o u n t </h1>
+            <hr /> <br />
+        </section>
+        <section class="signInBack">
+            <form class="signInInputs" id="emailInput">
+                <div class="signInText">
+                    <b>Sign In:</b> 
+                </div>
+                <br /> <br /> <br />
+                <input class="inputs" id="email" type="text" size="40" autocomplete="on" placeholder="School Email" style="height: 30px;"/>
+                <br /> <br /> <br />
+                <input class="inputs" id="classCode" type="text" size="40" autocomplete="off" placeholder="Class Code" style="height: 30px;"/>
+                <br /> <br /> <br />
+                <input type="button" value="Sign In" class="buttons" style="font-family: BlockLetters; font-size: 15px;" onclick="signIn()">
+            </form>
+        </section>
+    </main>
+</body>
+<script src="signIn.js"></script>
+</html>
