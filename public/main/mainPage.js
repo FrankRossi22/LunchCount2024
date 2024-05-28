@@ -37,7 +37,3 @@ function prevImageSet() {
         document.getElementById("buttonDiv").style.display = "none";
     }
 }
-
-function test() {
-    document.getElementById("lastText").style.display = "default";
-}
