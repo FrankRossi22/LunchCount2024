@@ -18,6 +18,7 @@ function signIn() {
         },
         body: JSON.stringify(userInfo)
     }
+    //send user data to server to be validated => open next page if so
     fetch('/validateAdmin', options).then(response => {
         const data = response.json();
         data.then(function(result) {
@@ -32,18 +33,17 @@ function signIn() {
     });
 }
 
+
 function alertBox(text) {
     let customAlert = document.getElementById('customAlert');
     let customAlertMessage = document.getElementById('customAlertMessage');
     customAlertMessage.innerText = text;
     customAlert.style.display = 'block';
 }
-
 function hideCustomAlert() {
     let customAlert = document.getElementById('customAlert');
     customAlert.style.display = 'none';
 }
-
 const input = document.getElementById("emailInput");
 input.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {

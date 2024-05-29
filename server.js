@@ -7,6 +7,7 @@ app.use(express.json({limit: '1mb'}))
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+//set links to corresponding html file
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, '/public/main/redirects.html'));
 });
@@ -24,8 +25,10 @@ app.get('/main', function(req, res) {
 });
 app.use("/images", express.static("/data"));
 
+
 const imageSets = [["cheeseburger3.jpg", "chickenSandwich3.jpeg"], ["fries.webP", "taterTots.webp"]];
 const imageNameSets = [["Cheeseburger", "Chicken Sandwich"], ["French Fries", "Tater Tots"]];
+//get and send images to user for MainPage
 app.post('/fetchImageSet', (request, response) => {
     response.json({
         images: imageSets,
@@ -41,6 +44,7 @@ var adminPasses = ["1234"]
 var schoolData = [schoolEmails, classCodes, adminEmails, adminPasses];
 var schools = new Map();
 schools.set('school.edu', schoolData);
+//validate logins for main login
 app.post('/validateUser', (request, response) => {
     const data = request.body;
     const school = getEmail(data.email);
@@ -52,7 +56,7 @@ app.post('/validateUser', (request, response) => {
         valid: isValid
     });
 });
-
+//validate logins for admin login
 app.post('/validateAdmin', (request, response) => {
     const data = request.body;
     const school = getEmail(data.email);
@@ -71,10 +75,11 @@ function validLogin(schoolData, userData) {
     return emails.includes(userData.email) && codes.includes(userData.classCode);
 }
 function validAdminLogin(schoolData, userData) {
-    const emails = schoolData[2];
+    const adminEmails = schoolData[2];
     const passes = schoolData[3];
-    return emails.includes(userData.email) && passes.includes(userData.adminPass);
+    return adminEmails.includes(userData.email) && passes.includes(userData.adminPass);
 }
+//gets school by returning everything in user email after the @
 function getEmail(userEmail) {
     var email = '';
     for(var i = userEmail.length - 1; i >= 0; i--) {
