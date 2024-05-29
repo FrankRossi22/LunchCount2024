@@ -1,4 +1,4 @@
-//Click Code in the Top Left To View This Correctly\\
+//Click Code in the Top Left To View This Correctly//
 when running on server redirects can be found in the server.js file // 
 the app.get('/') functions show the different redirects: // 
 ex - // 
