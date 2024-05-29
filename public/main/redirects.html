@@ -8,20 +8,24 @@
     <title>LunchCount</title>
 </head>
 <body>
+    <section class="pageHeader">
+        <img src="/files/lcLogo2.png" style="width: 10%; height: 7%; padding-top: .5%;">
+        <hr style="margin-bottom: 0; padding-bottom: 0;"/>
+    </section>
+    <section class="topRow">
+        <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toDir()">Menu</button>
+        <hr />
+    </section>
     <main>
-        <section class="pageHeader">
-            <h1> L u n c h </h1>
-            <h1> C o u n t </h1>
-            <hr /> <br />
-        </section>
         <section style="text-align: center; padding-top: 40px;">
-            <button onclick="admin()">Admin Page</button>
-            <button onclick="adminLog()">Admin Login</button>
+            <button class="tBut" onclick="admin()">Admin Page</button>
+            <button class="tBut" onclick="adminLog()">Admin Login</button>
             <br /> <br />
-            <button onclick="main()">Main Page</button>
-            <button onclick="mainLog()">Main Login</button>
+            <button class="tBut" onclick="main()">Main Page</button>
+            <button class="tBut" onclick="mainLog()">Main Login</button>
         </section>
     </main>
 </body>
+<script src="/defaultScripts.js"></script>
 <script src="../main/redirects.js"></script>
 </html>

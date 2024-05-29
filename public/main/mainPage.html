@@ -8,12 +8,15 @@
     <title>LunchCount</title>
 </head>
 <body onload="getImages()">
+    <section class="pageHeader">
+        <img src="/files/lcLogo2.png" style="width: 10%; height: 7%; padding-top: .5%;">
+        <hr style="margin-bottom: 0; padding-bottom: 0;"/>
+    </section>
+    <section class="topRow">
+        <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toDir()">Menu</button>
+        <hr />
+    </section>
     <main>
-        <section class="pageHeader">
-            <h1> L u n c h </h1>
-            <h1> C o u n t </h1>
-            <hr /> <br />
-        </section>
         <!--Section displays two figures with image set-->
         <!--Needs updated to be updated to do: Dynamic number of figures based on desired selection-->
         <section class="lunchOptions" style="overflow:hidden;">
@@ -40,5 +43,6 @@
         </section>
     </main>
 </body>
+<script src="/defaultScripts.js"></script>
 <script src="../main/mainPage.js"></script>
 </html>

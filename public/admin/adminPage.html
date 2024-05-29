@@ -8,17 +8,15 @@
     <title>LunchCount</title>
 </head>
 <body>
+    <section class="pageHeader">
+        <img src="/files/lcLogo2.png" style="width: 10%; height: 7%; padding-top: .5%;">
+        <hr style="margin-bottom: 0; padding-bottom: 0;"/>
+    </section>
+    <section class="topRow">
+        <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toDir()">Menu</button>
+        <hr />
+    </section>
     <main>
-        <section class="pageHeader" style="display: inline; vertical-align: middle;">
-
-            <div style="vertical-align: middle;">
-                <button style="float: left; margin-top: 3.5%;">Menu</button>
-            </div>
-            <div style="align-items: center;text-align: center; padding-right: 1%;">
-                <img src="/files/lcLogo2.png" style="width: 10%; height: 7%;">
-            </div>
-        </section>
-        <hr /> <br />
         <!--Section Shows Admin Options and displays selected option-->
         <section id="options" class="adminOps" style="text-align: center;">
             <h2 style="font-size: max(2vw, 12px);">Admin Options</h2>
@@ -63,5 +61,6 @@
         </section> 
     </main>
 </body>
+<script src="/defaultScripts.js"></script>
 <script src="/admin/adminPage.js"></script>
 </html>

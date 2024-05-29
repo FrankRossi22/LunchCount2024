@@ -8,6 +8,14 @@
     <title>LunchCount</title>
 </head>
 <body>
+    <section class="pageHeader">
+        <img src="/files/lcLogo2.png" style="width: 10%; height: 7%; padding-top: .5%;">
+        <hr style="margin-bottom: 0; padding-bottom: 0;"/>
+    </section>
+    <section class="topRow">
+        <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toDir()">Menu</button>
+        <hr />
+    </section>
     <!--Section displays (from js) a pop up box alerting the user that an incorrect login was used and hides itself when closed by user-->
     <div class="custom-alert" id="customAlert" style="text-align: center;">
         <p id="customAlertMessage" class="custom-Message"></p>
@@ -15,12 +23,7 @@
         <button class="close-button" onclick="hideCustomAlert()">Close</button>
         </div>
     </div>
-    <main>
-        <section class="pageHeader">
-            <h1> L u n c h </h1>
-            <h1> C o u n t </h1>
-            <hr /> <br />
-        </section>
+    <main style="margin-top: 3%;">
         <!--Section Gets User Email and Password and logs them in if they are valid-->
         <section class="signInBack">
             <form class="signInInputs" id="emailInput">
@@ -37,5 +40,6 @@
         </section>
     </main>
 </body>
+<script src="/defaultScripts.js"></script>
 <script src="/main/signIn.js"></script>
 </html>
