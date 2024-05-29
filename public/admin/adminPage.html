@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../defaultPage.css">
-    <link rel="stylesheet" href="adminStyles.css">
+    <link rel="stylesheet" href="/defaultPage.css">
+    <link rel="stylesheet" href="/admin/adminStyles.css">
     <title>LunchCount</title>
 </head>
 <body>
@@ -16,8 +16,8 @@
         </section>
         <!--Section Shows Admin Options and displays selected option-->
         <section id="options" class="adminOps" style="text-align: center;">
-            <h2 style="font-size: 2vw;">Admin Options</h2>
-            <hr style="width: 17%;"/> <br />
+            <h2 style="font-size: max(2vw, 12px);">Admin Options</h2>
+            <hr style="width: 17%; min-width: 100px;"/> <br />
             <div class="changeLunch" style="padding-bottom: 2%;">
                 <button id="adminButton1" class="adminButtons" onclick="changeLunch()">Change Lunch</button>
             </div>
@@ -58,5 +58,5 @@
         </section> 
     </main>
 </body>
-<script src="adminPage.js"></script>
+<script src="/admin/adminPage.js"></script>
 </html>

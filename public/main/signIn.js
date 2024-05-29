@@ -1,5 +1,4 @@
-const schoolEmails = ["user.1@school.edu"]
-var classCodes = ["1234"]
+
 
 function signIn() {
     var isValid = false;
@@ -10,31 +9,26 @@ function signIn() {
         alertBox("Please Input Email and Class Code\n\n");
         return;
     }
-    while(i < schoolEmails.length && !isValid) {
-        if(schoolEmails[i] === email) {
-            isValid = true;
+    const userInfo = {email, classCode};
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userInfo)
+    }
+    fetch('/validateUser', options).then(response => {
+        const data = response.json();
+        data.then(function(result) {
+        isValid = result.valid;
+        if(!isValid) {
+            alertBox("Invalid Email or Class Code\nPlease Try Again\n\n");
+            return;
+        } else {
+            window.location.replace("http://localhost:3000/main");
         }
-        i++;
-    }
-    if(!isValid) {
-        alertBox("Invalid Email or Class Code\nPlease Try Again\n\n");
-        return;
-    } else {
-        isValid = false;
-        i = 0;
-        while(i < classCodes.length && !isValid) {
-            if(classCodes[i] === classCode) {
-                isValid = true;
-            }
-            i++;
-        }
-    }
-    if(!isValid) {
-        alertBox("Invalid Email or Class Code\nPlease Try Again\n\n");
-        return;
-    } else {
-        window.location.replace("http://127.0.0.1:5500/public/main/mainPage.html");
-    }
+        });
+    });
 }
 
 function alertBox(text) {

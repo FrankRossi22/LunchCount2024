@@ -10,31 +10,26 @@ function signIn() {
         alertBox("Please Input Email and Password\n\n");
         return;
     }
-    while(i < adminEmails.length && !isValid) {
-        if(adminEmails[i] === email) {
-            isValid = true;
+    const userInfo = {email, adminPass};
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userInfo)
+    }
+    fetch('/validateAdmin', options).then(response => {
+        const data = response.json();
+        data.then(function(result) {
+        isValid = result.valid;
+        if(!isValid) {
+            alertBox("Invalid Email or Password\nPlease Try Again\n\n");
+            return;
+        } else {
+            window.location.replace("http://localhost:3000/adminPage");
         }
-        i++;
-    }
-    if(!isValid) {
-        alertBox("Invalid Email or Password\nPlease Try Again\n\n");
-        return;
-    } else {
-        isValid = false;
-        i = 0;
-        while(i < adminPasswords.length && !isValid) {
-            if(adminPasswords[i] === adminPass) {
-                isValid = true;
-            }
-            i++;
-        }
-    }
-    if(!isValid) {
-        alertBox("Invalid Email or Password\nPlease Try Again\n\n");
-        return;
-    } else {
-        window.location.replace("http://127.0.0.1:5500/public/admin/adminPage.html");
-    }
+        });
+    });
 }
 
 function alertBox(text) {
