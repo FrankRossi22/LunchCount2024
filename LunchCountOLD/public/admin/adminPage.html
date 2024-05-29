@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../defaultPage.css">
+    <link rel="stylesheet" href="adminStyles.css">
+    <title>LunchCount</title>
+</head>
+<body>
+    <main>
+        <section class="pageHeader">
+            <h1> L u n c h </h1>
+            <h1>C o u n t </h1>
+            <hr /> <br />
+        </section>
+        <!--Section Shows Admin Options and displays selected option-->
+        <section id="options" class="adminOps" style="text-align: center;">
+            <h2 style="font-size: 2vw;">Admin Options</h2>
+            <hr style="width: 17%;"/> <br />
+            <div class="changeLunch" style="padding-bottom: 2%;">
+                <button id="adminButton1" class="adminButtons" onclick="changeLunch()">Change Lunch</button>
+            </div>
+            <div class="showLunch" style="padding-bottom: 2%;">
+                <button id="adminButton2" class="adminButtons" onclick="showLunch()">Show Lunch Options</button>
+            </div>
+            <div class="showLunchCount" style="padding-bottom: 2%;">
+                <button id="adminButton3" class="adminButtons" onclick="showLunchCount()">Show Lunch Count</button>
+            </div>
+        </section>
+        <!--Section Holds Options to be displayed based on previous input-->
+        <!--All Admin Options need to be updated to work with server data // all current options are placeholders-->
+        <section id="optionPicked" class="optionPicked" style="text-align: center;">
+            <!--Div shows current lunch options-->
+            <div id="showLunch" class="showLunch" style="display: none;">
+                <h2 style="font-size: 2vw;">Current Lunch Options</h2>
+                <hr style="width: 17%;"/> <br />
+                <p>Chicken or Beef</p>
+                <p>Fries or Tater Tots</p>
+            </div>
+            <!--Div shows current count of selected options from school-->
+            <div id="showCount" class="showLunchCount" style="display: none;">
+                <h2 style="font-size: 2vw;">Current Lunch Count</h2>
+                <hr style="width: 17%;"/> <br />
+                <p>30 Chicken and 40 Beef</p>
+                <p>50 Fries and 20 Tater Tots</p>
+            </div>
+            <!--Div allows admin to update the lunch menu-->
+            <!--This option will need to be set in a way that wont disturb current lunch count or alert admin if it will-->
+            <div id="changeLunch" class="changeLunch" style="display: none;">
+                <h2 style="font-size: 2vw;">Change Lunch Options</h2>
+                <hr style="width: 17%;"/> <br />
+            </div>
+            <!--Div displays a back button to return to admin options-->
+            <div class="backButton" style="padding-top: 7%;">
+                <button id="backButton" class="adminButtons" style="display: none;" onclick="showOptions()">Back</button>
+            </div>
+        </section> 
+    </main>
+</body>
+<script src="adminPage.js"></script>
+</html>

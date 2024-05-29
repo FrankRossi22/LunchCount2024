@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../defaultPage.css">
+    <link rel="stylesheet" href="../main/signInStyles.css">
+    <title>LunchCount</title>
+</head>
+<body>
+    <!--Section displays (from js) a pop up box alerting the user that an incorrect login was used and hides itself when closed by user-->
+    <div class="custom-alert" id="customAlert" style="text-align: center;">
+        <p id="customAlertMessage" class="custom-Message"></p>
+        <div style="text-align: center;">
+            <button class="close-button" onclick="hideCustomAlert()">Close</button>
+        </div>
+    </div>
+    <main>
+        <section class="pageHeader">
+            <h1> L u n c h </h1>
+            <h1>C o u n t </h1>
+            <hr /> <br />
+        </section>
+        <!--Section Gets User Email and Password and logs them in if they are valid-->
+        <section class="signInBack">
+            <form class="signInInputs" id="emailInput">
+                <div class="signInText">
+                    <b>Admin</b> <br />
+                    <b>Sign In:</b> 
+                </div>
+                <br /> <br />
+                <input class="inputs" id="email" type="text" size="40" autocomplete="on" placeholder="School Email" style="height: 30px;"/>
+                <br /> <br /> <br />
+                <input class="inputs" id="adminPass" type="text" size="40" autocomplete="off" placeholder="Admin Password" style="height: 30px;"/>
+                <br /> <br /> <br />
+                <input type="button" value="Sign In" class="buttons" style="font-family: BlockLetters; font-size: 15px;" onclick="signIn()">
+            </form>
+        </section>
+    </main>
+</body>
+<script src="adminSignIn.js"></script>
+</html>

@@ -1,10 +1,23 @@
-const imageSets = [["cheeseburger3.jpg", "chickenSandwich3.jpeg"], ["fries.webP", "taterTots.webp"]];
-const imageNameSets = [["Cheeseburger", "Chicken Sandwich"], ["French Fries", "Tater Tots"]];
+var imageSets;
+var imageNameSets;
 var currSet = -1;
+const options = {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    }
+}
+fetch('/fetchImageSet', options).then(response => {
+    var data = response.json();
+    data.then(function(result) {
+        imageSets = result.images;
+        imageNameSets = result.imageNames;
+    });
+});
 function load() {
     currSet = currSet + 1;
-    document.getElementById("image1").src= "../../data/" + imageSets[currSet][0];
-    document.getElementById("image2").src= "../../data/" + imageSets[currSet][1];
+    document.getElementById("image1").src= "../data/" + imageSets[currSet][0];
+    document.getElementById("image2").src= "../data/" + imageSets[currSet][1];
     document.getElementById("imageName1").innerText = imageNameSets[currSet][0];
     document.getElementById("imageName2").innerText = imageNameSets[currSet][1];
     document.getElementById("lastB").style.display = "inline";
@@ -17,8 +30,8 @@ function nextImageSet() {
         return;
     } else {
         currSet = currSet + 1;
-        document.getElementById("image1").src= "../../data/" + imageSets[currSet][0];
-        document.getElementById("image2").src= "../../data/" + imageSets[currSet][1];
+        document.getElementById("image1").src= "../data/" + imageSets[currSet][0];
+        document.getElementById("image2").src= "../data/" + imageSets[currSet][1];
         document.getElementById("imageName1").innerText = imageNameSets[currSet][0];
         document.getElementById("imageName2").innerText = imageNameSets[currSet][1];
     }
@@ -29,8 +42,8 @@ function nextImageSet() {
 
 function prevImageSet() {
     currSet = currSet - 1;
-    document.getElementById("image1").src= "../../data/" + imageSets[currSet][0];
-    document.getElementById("image2").src= "../../data/" + imageSets[currSet][1];
+    document.getElementById("image1").src= "../data/" + imageSets[currSet][0];
+    document.getElementById("image2").src= "../data/" + imageSets[currSet][1];
     document.getElementById("imageName1").innerText = imageNameSets[currSet][0];
     document.getElementById("imageName2").innerText = imageNameSets[currSet][1];
     if(currSet === 0) {

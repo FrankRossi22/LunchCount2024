@@ -1,0 +1,19 @@
+  body {
+    background-color: rgb(169, 211, 238);
+  }
+  @font-face {
+    font-family: BlockLetters;
+    src: url(data/ThatSoundsGreat-yYLE3.ttf);
+  }
+  h1 {
+    color: rgb(0, 0, 0);
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-size: 3.5vw;
+    font-family: BlockLetters;
+  }
+  hr {
+    border-color: black;
+  }
+  

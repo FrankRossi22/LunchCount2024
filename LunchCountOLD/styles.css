@@ -1,0 +1,57 @@
+  p {
+    color: rgb(0, 0, 0);
+  }
+  @font-face {
+    font-family: BlockLetters;
+    src: url(../../data/ThatSoundsGreat-yYLE3.ttf);
+  }
+  .lunchOptions {
+    padding-top: 10px;
+  }
+  figure {
+    width: 50%;
+    float: left;
+    margin: 0;
+    text-align: center;
+    padding: 0;
+  }
+  img {
+    border-radius: 18px;
+  }
+  .buttons {
+    border-radius: 8px;
+    width: 160px;
+    height: 50px;
+    text-align: center;
+  }
+  .buttons:hover {
+    border-color: rgb(0, 0, 0);
+    background-color:#d6d5d5;
+    transition: 0.2s;
+  }
+  figcaption {
+    font-size: 25px;
+    padding-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .imgButton {
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(199, 223, 226);
+    border-width: 1px;
+    
+  }
+  .imgButton:hover {
+    background-color:#2b2a2a;
+    transition: 0.5s;
+  }
+  .backB {
+    font-family: BlockLetters; 
+    font-size: 1vw; 
+    display: none; 
+    width: 8%; 
+    padding-top: .5%;
+    padding-bottom: .5%;
+    border-radius: 8px;
+    text-align: center;
+  }
