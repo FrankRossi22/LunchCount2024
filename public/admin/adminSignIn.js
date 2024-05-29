@@ -26,7 +26,7 @@ function signIn() {
             alertBox("Invalid Email or Password\nPlease Try Again\n\n");
             return;
         } else {
-            window.location.replace("http://localhost:3000/adminPage");
+            window.location.href = "http://localhost:3000/adminPage";
         }
         });
     });

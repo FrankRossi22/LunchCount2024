@@ -8,7 +8,7 @@ app.use(express.json({limit: '1mb'}))
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res) {
-    res.redirect('/Login');
+    res.sendFile(path.join(__dirname, '/public/main/redirects.html'));
 });
 app.get('/AdminLogin', function(req, res) {
     res.sendFile(path.join(__dirname, '/public/admin/adminSignIn.html'));

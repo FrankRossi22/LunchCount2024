@@ -25,7 +25,7 @@ function signIn() {
             alertBox("Invalid Email or Class Code\nPlease Try Again\n\n");
             return;
         } else {
-            window.location.replace("http://localhost:3000/main");
+            window.location.href = "http://localhost:3000/main";
         }
         });
     });

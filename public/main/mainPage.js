@@ -7,13 +7,16 @@ const options = {
         'Content-Type': 'application/json',
     }
 }
-fetch('/fetchImageSet', options).then(response => {
-    var data = response.json();
-    data.then(function(result) {
-        imageSets = result.images;
-        imageNameSets = result.imageNames;
+async function getImages() {
+    await fetch('/fetchImageSet', options).then(response => {
+        var data = response.json();
+        data.then(async function(result) {
+            imageSets = await result.images;
+            imageNameSets = await result.imageNames;
+            load();
+        });
     });
-});
+}
 function load() {
     currSet = currSet + 1;
     document.getElementById("image1").src= "../data/" + imageSets[currSet][0];
