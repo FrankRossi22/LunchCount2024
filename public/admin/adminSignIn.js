@@ -1,6 +1,3 @@
-const adminEmails = ["admin.1@school.edu"]
-var adminPasswords = ["1234"]
-console.log(localStorage.getItem("admin"));
 function signIn() {
     var isValid = false;
     var email = document.getElementById("email").value;

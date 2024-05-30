@@ -1,5 +1,4 @@
 
-const imageNameSets = [["Cheeseburger", "Chicken Sandwich"], ["French Fries", "Tater Tots"]];
 function checkValid() {
     const admin = localStorage.getItem("admin");
     if(admin === null) {

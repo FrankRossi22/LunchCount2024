@@ -1,13 +1,9 @@
-//const { json } = require("express");
 
 var imageSets;
 var imageNameSets;
 var currSet = -1;
 const school = localStorage.getItem("school");
 const schoolJ = {school};
-if(school === null) {
-    window.location.href = "http://localhost:3000/login";
-}
 const options = {
     method: 'POST',
     headers: {
@@ -16,23 +12,23 @@ const options = {
     body: JSON.stringify(schoolJ)
 }
 
+//check if user is logged in
+if(school === null) {
+    window.location.href = "http://localhost:3000/login";
+}
+//function gets school image data from server and loads page 
 async function getImages() {
-    console.log(school);
     await fetch('/fetchImageSet', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-            const validCheck = await result.message;
-            //console.log(validCheck);
-            if(validCheck.length > 0) {
-                imageSets = validCheck[0];
-                imageNameSets = validCheck[1];
-            } else {
-                window.location.href = "http://localhost:3000/login";
-            }
+            const imageData = await result.message;
+            imageSets = imageData[0];
+            imageNameSets = imageData[1];
             load();
         });
     });
 }
+
 function load() {
     currSet = currSet + 1;
     document.getElementById("image1").src= "../data/" + imageSets[currSet][0];

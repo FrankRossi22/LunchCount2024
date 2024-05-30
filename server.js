@@ -25,9 +25,10 @@ app.get('/main', (req, res) => {
 });
 app.use("/images", express.static("/data"));
 
+//load databases
 const Datastore = require('nedb')
-const schoolLogin = new Datastore('user.db')
-const schoolImages = new Datastore('images.db')
+const schoolLogin = new Datastore('databases/user.db')
+const schoolImages = new Datastore('databases/images.db')
 schoolLogin.loadDatabase();
 schoolImages.loadDatabase();
 //addSchool();
@@ -82,16 +83,6 @@ app.post('/validateAdmin', (request, response) => {
         });
     })
 });
-function addSchool() {
-    const schoolEmails = ["user.1@osu.edu", "user.2@osu.edu", "user.3@osu.edu"];
-    const adminEmails = ["admin.1@osu.edu"];
-    var classCodes = ["1970", "2004"];
-    var adminPasses = ["1969"];
-    schoolLogin.insert({school: "osu.edu", schoolEmails: schoolEmails, classCodes: classCodes, adminEmails: adminEmails, adminPasswords: adminPasses});
-    const imageSets = [["pizza.jpg","tacos.jpg"],["salad.jpg","corn.jpg"]];
-    const imageNameSets = [["Pizza","Tacos"],["Salad","Corn"]];
-    schoolImages.insert({school: "osu.edu", images: imageSets, imageNames: imageNameSets});
-}
 
 function validLogin(schoolData, userData) {
     const emails = schoolData[0];
@@ -114,4 +105,16 @@ function getEmail(userEmail) {
         }
     }
     return email;
+}
+
+//temporary function to add schools to databases
+function addSchool() {
+    const schoolEmails = ["user.1@osu.edu", "user.2@osu.edu", "user.3@osu.edu"];
+    const adminEmails = ["admin.1@osu.edu"];
+    var classCodes = ["1970", "2004"];
+    var adminPasses = ["1969"];
+    schoolLogin.insert({school: "osu.edu", schoolEmails: schoolEmails, classCodes: classCodes, adminEmails: adminEmails, adminPasswords: adminPasses});
+    const imageSets = [["pizza.jpg","tacos.jpg"],["salad.jpg","corn.jpg"]];
+    const imageNameSets = [["Pizza","Tacos"],["Salad","Corn"]];
+    schoolImages.insert({school: "osu.edu", images: imageSets, imageNames: imageNameSets});
 }
