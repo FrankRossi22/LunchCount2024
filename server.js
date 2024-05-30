@@ -8,65 +8,84 @@ app.use(express.json({limit: '1mb'}))
 app.use(express.static(path.join(__dirname, 'public')));
 
 //set links to corresponding html file
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/main/redirects.html'));
 });
-app.get('/AdminLogin', function(req, res) {
+app.get('/AdminLogin', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/admin/adminSignIn.html'));
 });
-app.get('/AdminPage', function(req, res) {
+app.get('/AdminPage', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/admin/adminPage.html'));
 });
-app.get('/Login', function(req, res) {
+app.get('/Login', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/main/signInPage.html'));
 });
-app.get('/main', function(req, res) {
+app.get('/main', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/main/mainPage.html'));
 });
 app.use("/images", express.static("/data"));
 
+const Datastore = require('nedb')
+const schoolLogin = new Datastore('user.db')
+const schoolImages = new Datastore('images.db')
+schoolLogin.loadDatabase();
+schoolImages.loadDatabase();
+ 
 
-const imageSets = [["cheeseburger3.jpg", "chickenSandwich3.jpeg"], ["fries.webP", "taterTots.webp"]];
-const imageNameSets = [["Cheeseburger", "Chicken Sandwich"], ["French Fries", "Tater Tots"]];
 //get and send images to user for MainPage
 app.post('/fetchImageSet', (request, response) => {
-    response.json({
-        images: imageSets,
-        imageNames: imageNameSets
-    });
+    const data = request.body.school;
+    var returnData = [];
+    schoolImages.find({school: data}, (err, data) => {
+        if(data.length > 0) {
+            returnData[0] = data[0].images;
+            returnData[1] = data[0].imageNames;
+        }
+        response.json({
+            message: returnData
+        });
+    })
 });
 
 
-const schoolEmails = ["user.1@school.edu"]
-const adminEmails = ["admin.1@school.edu"]
-var classCodes = ["1234"]
-var adminPasses = ["1234"]
-var schoolData = [schoolEmails, classCodes, adminEmails, adminPasses];
-var schools = new Map();
-schools.set('school.edu', schoolData);
+// const schoolEmails = ["user.1@osu.edu", "user.2@osu.edu", "user.3@osu.edu"];
+// const adminEmails = ["admin.1@osu.edu"];
+// var classCodes = ["1970", "2004"];
+// var adminPasses = ["1969"];
+// schoolLogin.insert({school: "osu.edu", schoolEmails: schoolEmails, classCodes: classCodes, adminEmails: adminEmails, adminPasswords: adminPasses});
+// const imageSets = []
+
 //validate logins for main login
 app.post('/validateUser', (request, response) => {
-    const data = request.body;
-    const school = getEmail(data.email);
+    const userData = request.body;
+    const school = getEmail(userData.email);
     var isValid = false;
-    if(schools.has(school)) {
-        isValid = validLogin(schools.get(school), data);
-    }
-    response.json({
-        valid: isValid
-    });
+    schoolLogin.find({school: school}, (err, data) => {
+        if(data.length > 0) {
+           const schoolData = [data[0].schoolEmails, data[0].classCodes];
+           isValid = validLogin(schoolData, userData);
+        }
+        response.json({
+            school: school,
+            valid: isValid
+        });
+    })
 });
 //validate logins for admin login
 app.post('/validateAdmin', (request, response) => {
-    const data = request.body;
-    const school = getEmail(data.email);
+    const userData = request.body;
+    const school = getEmail(userData.email);
     var isValid = false;
-    if(schools.has(school)) {
-        isValid = validAdminLogin(schools.get(school), data);
-    }
-    response.json({
-        valid: isValid
-    });
+    schoolLogin.find({school: school}, (err, data) => {
+        if(data.length > 0) {
+           const schoolData = [data[0].adminEmails, data[0].adminPasswords];
+           isValid = validAdminLogin(schoolData, userData);
+        }
+        response.json({
+            school: school,
+            valid: isValid
+        });
+    })
 });
 
 function validLogin(schoolData, userData) {
@@ -75,8 +94,9 @@ function validLogin(schoolData, userData) {
     return emails.includes(userData.email) && codes.includes(userData.classCode);
 }
 function validAdminLogin(schoolData, userData) {
-    const adminEmails = schoolData[2];
-    const passes = schoolData[3];
+    const adminEmails = schoolData[0];
+    const passes = schoolData[1];
+    console.log(passes);
     return adminEmails.includes(userData.email) && passes.includes(userData.adminPass);
 }
 //gets school by returning everything in user email after the @

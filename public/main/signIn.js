@@ -26,6 +26,7 @@ function signIn() {
             alertBox("Invalid Email or Class Code\nPlease Try Again\n\n");
             return;
         } else {
+            localStorage.setItem("school", result.school);
             window.location.href = "http://localhost:3000/main";
         }
         });

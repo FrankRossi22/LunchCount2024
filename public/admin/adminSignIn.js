@@ -1,6 +1,6 @@
 const adminEmails = ["admin.1@school.edu"]
 var adminPasswords = ["1234"]
-
+console.log(localStorage.getItem("admin"));
 function signIn() {
     var isValid = false;
     var email = document.getElementById("email").value;
@@ -27,6 +27,8 @@ function signIn() {
             alertBox("Invalid Email or Password\nPlease Try Again\n\n");
             return;
         } else {
+            localStorage.setItem("school", result.school);
+            localStorage.setItem("admin", true);
             window.location.href = "http://localhost:3000/adminPage";
         }
         });

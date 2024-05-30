@@ -1,18 +1,34 @@
+//const { json } = require("express");
+
 var imageSets;
 var imageNameSets;
 var currSet = -1;
+const school = localStorage.getItem("school");
+const schoolJ = {school};
+if(school === null) {
+    window.location.href = "http://localhost:3000/login";
+}
 const options = {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
-    }
+    },
+    body: JSON.stringify(schoolJ)
 }
+
 async function getImages() {
+    console.log(school);
     await fetch('/fetchImageSet', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-            imageSets = await result.images;
-            imageNameSets = await result.imageNames;
+            const validCheck = await result.message;
+            //console.log(validCheck);
+            if(validCheck.length > 0) {
+                imageSets = validCheck[0];
+                imageNameSets = validCheck[1];
+            } else {
+                window.location.href = "http://localhost:3000/login";
+            }
             load();
         });
     });

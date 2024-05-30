@@ -1,6 +1,11 @@
 
 const imageNameSets = [["Cheeseburger", "Chicken Sandwich"], ["French Fries", "Tater Tots"]];
-
+function checkValid() {
+    const admin = localStorage.getItem("admin");
+    if(admin === null) {
+        window.location.href = "http://localhost:3000/adminLogin";
+    }
+}
 function showLunch() {
     hideOptions()
     document.getElementById("showLunch").style.display = "block";
