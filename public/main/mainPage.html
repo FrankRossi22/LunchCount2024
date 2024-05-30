@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../defaultPage.css">
-    <link rel="stylesheet" href="../main/styles.css">
+    <link rel="stylesheet" href="../main/mainStyles.css">
     <title>LunchCount</title>
 </head>
 <body onload="getImages()">
@@ -19,17 +19,8 @@
     <main>
         <!--Section displays two figures with image set-->
         <!--Needs updated to be updated to do: Dynamic number of figures based on desired selection-->
-        <section class="lunchOptions" style="overflow:hidden;">
-            <figure> <figcaption id="imageName1" style="font-size: 2vw;"></figcaption>
-                <button id="Select" class="imgButton" title="Select" style="width: 60%; height: 60%;" onclick="nextImageSet()">
-                    <img id="image1" alt="Cheeseburger" style="width:100%;height:100%;">
-                </button>
-            </figure>
-            <figure> <figcaption id="imageName2" style="font-size: 2vw;"></figcaption>
-                <button id="Select" class="imgButton" title="Select" style="width: 60%; height: 60%;" onclick="nextImageSet()">
-                    <img id="image2" alt="Chicken Sandwich" style="width:100%;height:100%;">
-                </button>
-            </figure>
+        <section id="imageCont" class="lunchOptions" style="overflow:hidden;">
+            
         </section>
         <!--Section displays back button to see previous options if past first option set-->
         <section>

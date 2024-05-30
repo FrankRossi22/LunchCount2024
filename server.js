@@ -41,6 +41,7 @@ app.post('/fetchImageSet', (request, response) => {
         if(data.length > 0) {
             returnData[0] = data[0].images;
             returnData[1] = data[0].imageNames;
+            returnData[2] = data[0].courses;
         }
         response.json({
             message: returnData
@@ -92,7 +93,6 @@ function validLogin(schoolData, userData) {
 function validAdminLogin(schoolData, userData) {
     const adminEmails = schoolData[0];
     const passes = schoolData[1];
-    console.log(passes);
     return adminEmails.includes(userData.email) && passes.includes(userData.adminPass);
 }
 //gets school by returning everything in user email after the @

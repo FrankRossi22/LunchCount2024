@@ -51,12 +51,13 @@
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(53, 53, 53, 0.9);
+    background: rgba(53, 53, 53, 0.95);
     padding: 30px;
     border: 1px solid #ccc;
     border-radius: 5px;
     display: none;
     max-width: 300px;
+    margin-top: 5%;
 }
 
 .close-button {
