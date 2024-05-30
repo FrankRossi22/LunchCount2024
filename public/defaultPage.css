@@ -35,8 +35,13 @@
     border-radius: 6px;
     width: 5%;
     padding: 2px;
+    margin-bottom: .1%;
     font-family: BlockLetters;
-    font-size: 1vw;
+    font-size: max(1vw, 8px);
+    min-width: 40px;
+    
+    
+    
   }
 
   .topButtons:hover {
