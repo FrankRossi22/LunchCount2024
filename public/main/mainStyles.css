@@ -1,5 +1,8 @@
   p {
     color: rgb(0, 0, 0);
+    text-align: center;
+    margin-top: 3%;
+    font-size: 2vw;
   }
   @font-face {
     font-family: BlockLetters;
@@ -50,7 +53,7 @@
     background-color:#2b2a2a;
     transition: 0.5s;
   }
-  .backB {
+  .bottomB {
     font-family: BlockLetters; 
     font-size: 1vw; 
     display: none; 
@@ -59,4 +62,21 @@
     padding-bottom: .5%;
     border-radius: 8px;
     text-align: center;
+    vertical-align: middle;
+    margin: .7%;
+  }
+  .buttonDiv {
+    position: fixed;
+    /* center the element */
+    right: 0;
+    left: 0;
+    margin-right: auto;
+    margin-left: auto;
+    /* give it dimensions */
+    min-height: 10em;
+    width: 45%;
+    border-radius: 10px;
+    background-color: rgb(155, 155, 155);
+    margin-top: 2%;
+    min-width: 250px;
   }

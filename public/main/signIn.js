@@ -27,6 +27,7 @@ function signIn() {
             return;
         } else {
             localStorage.setItem("school", result.school);
+            localStorage.setItem("email", email);
             window.location.href = "http://localhost:3000/main";
         }
         });

@@ -49,7 +49,15 @@ app.post('/fetchImageSet', (request, response) => {
     })
 });
 
-
+app.post('/updateLunchCount', (request, response) => {
+    const data = request.body;
+    console.log(data);
+    var returnData = true;
+    response.json({
+        message: returnData
+    });
+    
+});
 
 
 //validate logins for main login

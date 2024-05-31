@@ -2,16 +2,11 @@
 var imageSets;
 var imageNameSets;
 var courseSet;
-var currSet = -1;
+var currSet = 0;
+var atEnd = false;
 const school = localStorage.getItem("school");
-const schoolJ = {school};
-const options = {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(schoolJ)
-}
+
+
 
 //check if user is logged in
 if(school === null) {
@@ -19,6 +14,12 @@ if(school === null) {
 }
 //function gets school image data from server and loads page 
 async function getImages() {
+    const schoolJ = {school};
+    const options = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(schoolJ)
+    }
     await fetch('/fetchImageSet', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
@@ -54,29 +55,37 @@ const buttonGroupPressed = e => {
   if(!isButton) {
     return
   }
-  localStorage.setItem(courseSet[currSet - 1], e.target.id);
-  console.log(e.target.id);
+  if(atEnd) {
+    currSet++;
+    localStorage.setItem(courseSet[currSet - 1], e.target.id);
+    finish();
+  } else {
+    localStorage.setItem(courseSet[currSet - 1], e.target.id);
+  }
 }
 sec.addEventListener("click", buttonGroupPressed);
 
 function load() {
-    currSet = currSet + 1;
+    // localStorage.setItem("Main", null);
+    // localStorage.setItem("Side", null);
+    console.log(localStorage.getItem("email"));
     var fig = getFig(imageSets[currSet][0], imageNameSets[currSet][0])
     sec.appendChild(fig);
     fig = getFig(imageSets[currSet][1], imageNameSets[currSet][1]);
     sec.appendChild(fig);
     document.getElementById("lastB").style.display = "inline";
+    
     document.getElementById("lastText").style.display = "block";
     document.getElementById("buttonDiv").style.textAlign = "center";
 }
 
 function nextImageSet() {
     if(currSet === imageSets.length - 1) {
-        finish();
+        atEnd = true;
         return;
     } else {
         sec.innerHTML = '';
-        currSet = currSet + 1;
+        currSet++;
         var fig = getFig(imageSets[currSet][0], imageNameSets[currSet][0])
         sec.appendChild(fig);
         fig = getFig(imageSets[currSet][1], imageNameSets[currSet][1]);
@@ -89,7 +98,13 @@ function nextImageSet() {
 }
 
 function prevImageSet() {
-    currSet = currSet - 1;
+    if(atEnd) {
+        currSet--;
+        atEnd = false;
+        document.getElementById('lastText').style.display = "block";
+        document.getElementById('submitB').style.display = "none";
+    }
+    currSet--;
     sec.innerHTML = '';
     var fig = getFig(imageSets[currSet][0], imageNameSets[currSet][0])
     sec.appendChild(fig);
@@ -100,9 +115,43 @@ function prevImageSet() {
     }
 }
 function finish() {
+    currSet++;
+    document.getElementById('lastText').style.display = "none";
+    document.getElementById('submitB').style.display = "inline";
     sec.innerHTML = '';
     for(course in courseSet) {
         //console.log(courseSet[course]);
+        var para = document.createElement('p');
+        const text = document.createTextNode(courseSet[course] + ":    " + localStorage.getItem(courseSet[course]));
+        para.appendChild(text);
+        sec.appendChild(para);
         console.log(courseSet[course] + ":    " + localStorage.getItem(courseSet[course]));
     }
 }
+async function submit() {
+    var studentChoices = [];
+    for(var i = 0; i < courseSet.length; i++) {
+        studentChoices[i] = localStorage.getItem(courseSet[i]);
+    }
+    const message = [localStorage.getItem('school'), studentChoices];
+    const options = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(message)
+    }
+    await fetch('/updateLunchCount', options).then(response => {
+        var data = response.json();
+        data.then(async function(result) {
+            console.log(result);
+            if(result) {
+                sec.innerHTML = '';
+                var para = document.createElement('p');
+                const text = document.createTextNode('Thankyou for submitting!');
+                para.appendChild(text);
+                sec.appendChild(para);
+                document.getElementById("buttonDiv").style.display = "none";
+            }
+        });
+    });
+}
+
