@@ -1,3 +1,8 @@
+/*
+TODO - 
+Send Date and Time to server with login info
+*/
+
 function signIn() {
     var isValid = false;
     var email = document.getElementById("email").value;

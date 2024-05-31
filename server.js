@@ -7,6 +7,16 @@ app.use(express.json({limit: '1mb'}))
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+/*
+TODO - 
+Create Database for storing lunchCount data from main
+Figure out how to pull data from new db effectively
+Get Date and Time and use them for all databases
+Figure out how to edit databases
+Setup date and time to save lunch menus for future days and edit the send to main accordingly
+*/
+
 //set links to corresponding html file
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/main/redirects.html'));

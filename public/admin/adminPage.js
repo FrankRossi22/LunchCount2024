@@ -1,3 +1,7 @@
+/*
+TODO - 
+Everything besides formatting // setup server data transfer // decide what to do
+*/
 
 function checkValid() {
     const admin = localStorage.getItem("admin");

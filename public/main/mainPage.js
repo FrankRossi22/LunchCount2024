@@ -6,8 +6,12 @@ var currSet = 0;
 var atEnd = false;
 const school = localStorage.getItem("school");
 
-
-
+/*
+TODO - 
+Use dynamic number of images per row if number of items is > 3
+Get Date and Time when submitting and send to server with choices // also send user email
+Setup phone width checker to display differently below a certain width
+*/
 //check if user is logged in
 if(school === null) {
     window.location.href = "http://localhost:3000/login";
@@ -66,8 +70,6 @@ const buttonGroupPressed = e => {
 sec.addEventListener("click", buttonGroupPressed);
 
 function load() {
-    // localStorage.setItem("Main", null);
-    // localStorage.setItem("Side", null);
     console.log(localStorage.getItem("email"));
     displayCurr(imageSets[currSet], imageNameSets[currSet]);
     document.getElementById("lastB").style.display = "inline";
