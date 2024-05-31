@@ -2,7 +2,7 @@ function admin() {
     window.location.href = "http://localhost:3000/adminPage";
 }
 function main() {
-    window.location.href = "http://localhost:3000/main";
+    window.location.href = "http://localhost:3000/student";
 }
 function adminLog() {
     window.location.href = "http://localhost:3000/adminLogin";

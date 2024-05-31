@@ -1,13 +1,13 @@
 
 /*
 TODO - 
-Send Date and Time to server with login info
+    Send Date and Time to server with login info
 */
 
 function signIn() {
     var isValid = false;
-    var email = document.getElementById("email").value;
-    var classCode = document.getElementById("classCode").value;
+    const email = document.getElementById("email").value;
+    const classCode = document.getElementById("classCode").value;
     var i = 0;
     if(classCode === "" || email === "") {
         alertBox("Please Input Email and Class Code\n\n");
@@ -32,7 +32,7 @@ function signIn() {
         } else {
             localStorage.setItem("school", result.school);
             localStorage.setItem("email", email);
-            window.location.href = "http://localhost:3000/main";
+            window.location.href = "http://localhost:3000/student";
         }
         });
     });

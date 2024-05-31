@@ -1,0 +1,97 @@
+Date : 2024-05-31 16:53:12
+Directory : c:\Users\Frank\LunchCount2024
+Total : 56 files,  3731 codes, 93 comments, 121 blanks, all 3945 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          4 |      1,502 |          0 |          4 |      1,506 |
+| JavaScript |         18 |        822 |         39 |         79 |        940 |
+| CSS        |         15 |        726 |          4 |         34 |        764 |
+| HTML       |         18 |        678 |         50 |          4 |        732 |
+| Markdown   |          1 |          3 |          0 |          0 |          3 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                      | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                         |         56 |      3,731 |         93 |        121 |      3,945 |
+| . (Files)                                                                 |          4 |        900 |         16 |         14 |        930 |
+| LunchCountOLD                                                             |         35 |      2,065 |         35 |         70 |      2,170 |
+| LunchCountOLD (Files)                                                     |         11 |      1,052 |          5 |         21 |      1,078 |
+| LunchCountOLD\admin                                                       |          5 |        193 |         10 |         10 |        213 |
+| LunchCountOLD\main                                                        |          6 |        299 |          5 |         14 |        318 |
+| LunchCountOLD\public                                                      |         13 |        521 |         15 |         25 |        561 |
+| LunchCountOLD\public (Files)                                              |          2 |         29 |          0 |          1 |         30 |
+| LunchCountOLD\public\admin                                                |          5 |        193 |         10 |         10 |        213 |
+| LunchCountOLD\public\main                                                 |          6 |        299 |          5 |         14 |        318 |
+| public                                                                    |         17 |        766 |         42 |         37 |        845 |
+| public (Files)                                                            |          3 |         61 |          0 |          5 |         66 |
+| public\admin                                                              |          5 |        202 |         19 |          9 |        230 |
+| public\main                                                               |          9 |        503 |         23 |         23 |        549 |
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                  | language   | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\admin\adminPage.html          | HTML       |         54 |          8 |          0 |         62 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\admin\adminPage.js            | JavaScript |         24 |          0 |          6 |         30 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\admin\adminSignIn.html        | HTML       |         40 |          2 |          0 |         42 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\admin\adminSignIn.js          | JavaScript |         53 |          0 |          4 |         57 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\admin\adminStyles.css         | CSS        |         22 |          0 |          0 |         22 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\defaultPage.css               | CSS        |         18 |          0 |          1 |         19 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\in1dex.html                   | HTML       |         11 |          0 |          0 |         11 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\mainPage.html                 | HTML       |         41 |          3 |          0 |         44 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\mainPage.js                   | JavaScript |         37 |          0 |          3 |         40 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\main\mainPage.html            | HTML       |         41 |          3 |          0 |         44 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\main\mainPage.js              | JavaScript |         37 |          0 |          3 |         40 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\main\signIn.js                | JavaScript |         53 |          0 |          4 |         57 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\main\signInPage.html          | HTML       |         39 |          2 |          0 |         41 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\main\signInStyles.css         | CSS        |         74 |          0 |          5 |         79 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\main\styles.css               | CSS        |         55 |          0 |          2 |         57 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\package-lock.json             | JSON       |        694 |          0 |          1 |        695 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\package.json                  | JSON       |         21 |          0 |          1 |         22 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\admin\adminPage.html   | HTML       |         54 |          8 |          0 |         62 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\admin\adminPage.js     | JavaScript |         24 |          0 |          6 |         30 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\admin\adminSignIn.html | HTML       |         40 |          2 |          0 |         42 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\admin\adminSignIn.js   | JavaScript |         53 |          0 |          4 |         57 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\admin\adminStyles.css  | CSS        |         22 |          0 |          0 |         22 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\defaultPage.css        | CSS        |         18 |          0 |          1 |         19 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\in1dex.html            | HTML       |         11 |          0 |          0 |         11 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\main\mainPage.html     | HTML       |         41 |          3 |          0 |         44 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\main\mainPage.js       | JavaScript |         37 |          0 |          3 |         40 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\main\signIn.js         | JavaScript |         53 |          0 |          4 |         57 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\main\signInPage.html   | HTML       |         39 |          2 |          0 |         41 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\main\signInStyles.css  | CSS        |         74 |          0 |          5 |         79 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\public\main\styles.css        | CSS        |         55 |          0 |          2 |         57 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\server.js                     | JavaScript |          9 |          0 |          4 |         13 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\signIn.js                     | JavaScript |         53 |          0 |          4 |         57 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\signInPage.html               | HTML       |         39 |          2 |          0 |         41 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\signInStyles.css              | CSS        |         74 |          0 |          5 |         79 |
+| c:\Users\Frank\LunchCount2024\LunchCountOLD\styles.css                    | CSS        |         55 |          0 |          2 |         57 |
+| c:\Users\Frank\LunchCount2024\README.md                                   | Markdown   |          3 |          0 |          0 |          3 |
+| c:\Users\Frank\LunchCount2024\package-lock.json                           | JSON       |        765 |          0 |          1 |        766 |
+| c:\Users\Frank\LunchCount2024\package.json                                | JSON       |         22 |          0 |          1 |         23 |
+| c:\Users\Frank\LunchCount2024\public\admin\adminPage.html                 | HTML       |         58 |          8 |          0 |         66 |
+| c:\Users\Frank\LunchCount2024\public\admin\adminPage.js                   | JavaScript |         29 |          4 |          6 |         39 |
+| c:\Users\Frank\LunchCount2024\public\admin\adminSignIn.html               | HTML       |         44 |          2 |          0 |         46 |
+| c:\Users\Frank\LunchCount2024\public\admin\adminSignIn.js                 | JavaScript |         48 |          5 |          3 |         56 |
+| c:\Users\Frank\LunchCount2024\public\admin\adminStyles.css                | CSS        |         23 |          0 |          0 |         23 |
+| c:\Users\Frank\LunchCount2024\public\defaultPage.css                      | CSS        |         47 |          0 |          5 |         52 |
+| c:\Users\Frank\LunchCount2024\public\defaultScripts.js                    | JavaScript |          3 |          0 |          0 |          3 |
+| c:\Users\Frank\LunchCount2024\public\in1dex.html                          | HTML       |         11 |          0 |          0 |         11 |
+| c:\Users\Frank\LunchCount2024\public\main\mainPage.html                   | HTML       |         37 |          3 |          4 |         44 |
+| c:\Users\Frank\LunchCount2024\public\main\mainPage.js                     | JavaScript |        139 |          9 |         10 |        158 |
+| c:\Users\Frank\LunchCount2024\public\main\mainStyles.css                  | CSS        |         86 |          2 |          0 |         88 |
+| c:\Users\Frank\LunchCount2024\public\main\redirects.css                   | CSS        |         28 |          2 |          1 |         31 |
+| c:\Users\Frank\LunchCount2024\public\main\redirects.html                  | HTML       |         35 |          0 |          0 |         35 |
+| c:\Users\Frank\LunchCount2024\public\main\redirects.js                    | JavaScript |         12 |          0 |          0 |         12 |
+| c:\Users\Frank\LunchCount2024\public\main\signIn.js                       | JavaScript |         48 |          5 |          3 |         56 |
+| c:\Users\Frank\LunchCount2024\public\main\signInPage.html                 | HTML       |         43 |          2 |          0 |         45 |
+| c:\Users\Frank\LunchCount2024\public\main\signInStyles.css                | CSS        |         75 |          0 |          5 |         80 |
+| c:\Users\Frank\LunchCount2024\server.js                                   | JavaScript |        110 |         16 |         12 |        138 |
+| Total                                                                     |            |      3,731 |         93 |        121 |      3,945 |
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+

@@ -13,21 +13,16 @@
         <hr style="margin-bottom: 0; padding-bottom: 0;"/>
     </section>
     <section class="topRow">
+        <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toMain()">Admin</button>
         <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toDir()">Menu</button>
         <hr />
     </section>
     <main>
-        <!--Section Shows Admin Options and displays selected option-->
-        <section id="options" class="adminOps" style="text-align: center;">
-            <h2>Admin Options</h2>
-            <hr style="width: 17%; min-width: 100px;"/> <br />
-            <div class="changeLunch" style="padding-bottom: 2%;">
-                <button id="adminButton1" class="adminButtons" onclick="changeLunch()">Add/Change Lunch</button>
-            </div>
-            <div class="showLunchCount" style="padding-bottom: 2%;">
-                <button id="adminButton3" class="adminButtons" onclick="showLunchCount()">Show Lunch Count</button>
-            </div>
-        </section>
+        <div id="changeLunch" class="changeLunch">
+            <h2 style="font-size: 2vw;">Change Lunch Options</h2>
+            <hr style="width: 17%;"/> <br />
+            <input type="date">
+         </div>
     </main>
 </body>
 <script src="/defaultScripts.js"></script>

@@ -8,10 +8,11 @@ const school = localStorage.getItem("school");
 
 /*
 TODO - 
-Use dynamic number of images per row if number of items is > 3
-Get Date and Time when submitting and send to server with choices // also send user email
-Setup phone width checker to display differently below a certain width
+    Use dynamic number of images per row if number of items is > 3
+    Get Date and Time when submitting and send to server with choices // also send user email
+    Setup phone width checker to display differently below a certain width
 */
+
 //check if user is logged in
 if(school === null) {
     window.location.href = "http://localhost:3000/login";
@@ -132,7 +133,7 @@ async function submit() {
     for(var i = 0; i < courseSet.length; i++) {
         studentChoices[i] = localStorage.getItem(courseSet[i]);
     }
-    const message = [localStorage.getItem('school'), studentChoices];
+    const message = [localStorage.getItem('school'), localStorage.getItem('email'), studentChoices];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},

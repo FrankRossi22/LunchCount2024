@@ -1,6 +1,6 @@
 /*
 TODO - 
-Everything besides formatting // setup server data transfer // decide what to do
+    Everything besides formatting // setup server data transfer // decide what to do
 */
 
 function checkValid() {
@@ -9,30 +9,31 @@ function checkValid() {
         window.location.href = "http://localhost:3000/adminLogin";
     }
 }
-function showLunch() {
-    hideOptions()
-    document.getElementById("showLunch").style.display = "block";
-}
 
 function showLunchCount() {
-    hideOptions()
-    document.getElementById("showCount").style.display = "block";
+    window.location.href = "http://localhost:3000/yourCount";
 }
 
 function changeLunch() {
-    hideOptions()
-    document.getElementById("changeLunch").style.display = "block";
+    window.location.href = "http://localhost:3000/createLunch";
+}
+function toMain() {
+    window.location.href = "http://localhost:3000/adminPage";
 }
 
-function hideOptions() {
-    document.getElementById("options").style.display = "none"; 
-    document.getElementById("backButton").style.display = "inline";
+function sendDate() {
+    const date = parseDate(document.getElementById("date").value);
+    console.log(date);
 }
-
-function showOptions() {
-    document.getElementById("showLunch").style.display = "none";
-    document.getElementById("showCount").style.display = "none";
-    document.getElementById("changeLunch").style.display = "none";
-    document.getElementById("options").style.display = "block"; 
-    document.getElementById("backButton").style.display = "none";
+function parseDate(oldDate) {
+    var day = oldDate.substring(8);
+    var month = oldDate.substring(5, 7);
+    var year = oldDate.substring(0, 4);
+    if(day.charAt(0) === '0') {
+        day = day.substring(1);
+    }
+    if(month.charAt(0) === '0') {
+        month = month.substring(1);
+    }
+    return month + "/" + day + "/" + year;
 }

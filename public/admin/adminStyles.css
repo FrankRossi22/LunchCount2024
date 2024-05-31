@@ -1,6 +1,12 @@
 p {
     color: rgb(0, 0, 0);
   }
+  h2 {
+    font-size: max(2vw, 12px);
+  }
+  .mainCont {
+    text-align: center;
+  }
   @font-face {
     font-family: BlockLetters;
     src: url(/files/ThatSoundsGreat-yYLE3.ttf);
@@ -20,4 +26,31 @@ p {
   .showLunch {
     font-size: 1.4vw;
     text-align: center;
+  }
+  .changeLunch input {
+    margin: 1%;
+  }
+  input[type="date"] {
+    padding: 1%;
+    background-color: rgb(87, 87, 87);
+    font-size: 1vw;
+    font-family: "Roboto Mono", monospace;
+    color: white;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator{
+    background-color: white;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+ 
+  .changeLunch .buttons {
+    border-radius: 6px;
+    width: 4%; 
+    padding-top: .8%;
+    padding-bottom: .8%;
+    min-width: 120px;
   }

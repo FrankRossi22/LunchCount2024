@@ -10,11 +10,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /*
 TODO - 
-Create Database for storing lunchCount data from main
-Figure out how to pull data from new db effectively
-Get Date and Time and use them for all databases
-Figure out how to edit databases
-Setup date and time to save lunch menus for future days and edit the send to main accordingly
+    Create Database for storing lunchCount data from main
+    Figure out how to pull data from new db effectively
+    Get Date and Time and use them for all databases
+    Figure out how to edit databases
+    Setup date and time to save lunch menus for future days and edit the send to main accordingly
 */
 
 //set links to corresponding html file
@@ -30,18 +30,28 @@ app.get('/AdminPage', (req, res) => {
 app.get('/Login', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/main/signInPage.html'));
 });
-app.get('/main', (req, res) => {
+app.get('/student', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/main/mainPage.html'));
 });
+app.get('/createLunch', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/admin/subpages/changeLunch.html'));
+});
+app.get('/yourCount', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/admin/subpages/seeCount.html'));
+});
+
 app.use("/images", express.static("/data"));
 
 //load databases
-const Datastore = require('nedb')
-const schoolLogin = new Datastore('databases/user.db')
-const schoolImages = new Datastore('databases/images.db')
+const Datastore = require('nedb');
+const schoolLogin = new Datastore('databases/user.db');
+const schoolImages = new Datastore('databases/images.db');
+const schoolCounts = new Datastore('databases/lunchCounts.db');
 schoolLogin.loadDatabase();
 schoolImages.loadDatabase();
+schoolCounts.loadDatabase();
 //addSchool();
+console.log(getDate())
 
 //get and send images to user for MainPage
 app.post('/fetchImageSet', (request, response) => {
@@ -61,6 +71,7 @@ app.post('/fetchImageSet', (request, response) => {
 
 app.post('/updateLunchCount', (request, response) => {
     const data = request.body;
+    updateLunchCount(data);
     console.log(data);
     var returnData = true;
     response.json({
@@ -69,6 +80,19 @@ app.post('/updateLunchCount', (request, response) => {
     
 });
 
+function updateLunchCount(schoolData) {
+    const school = schoolData[0]; const user = schoolData[1]; const choices = schoolData[2]; const date = getDate();
+    schoolCounts.find({school: school}, (err, data) => {
+        if(data.length > 0) {
+            
+        } else {
+            schoolCounts.find({school: school}, (err, data) => {
+                
+            })
+            schoolCounts.insert({school: school, user: user, date: date});
+        }
+    })
+}
 
 //validate logins for main login
 app.post('/validateUser', (request, response) => {
@@ -135,4 +159,8 @@ function addSchool() {
     const imageSets = [["pizza.jpg","tacos.jpg"],["salad.jpg","corn.jpg"]];
     const imageNameSets = [["Pizza","Tacos"],["Salad","Corn"]];
     schoolImages.insert({school: "osu.edu", images: imageSets, imageNames: imageNameSets});
+}
+
+function getDate() {
+    return new Date(Date.now()).toLocaleString();;
 }
