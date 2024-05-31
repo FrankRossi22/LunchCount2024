@@ -69,12 +69,8 @@ function load() {
     // localStorage.setItem("Main", null);
     // localStorage.setItem("Side", null);
     console.log(localStorage.getItem("email"));
-    var fig = getFig(imageSets[currSet][0], imageNameSets[currSet][0])
-    sec.appendChild(fig);
-    fig = getFig(imageSets[currSet][1], imageNameSets[currSet][1]);
-    sec.appendChild(fig);
+    displayCurr(imageSets[currSet], imageNameSets[currSet]);
     document.getElementById("lastB").style.display = "inline";
-    
     document.getElementById("lastText").style.display = "block";
     document.getElementById("buttonDiv").style.textAlign = "center";
 }
@@ -86,10 +82,7 @@ function nextImageSet() {
     } else {
         sec.innerHTML = '';
         currSet++;
-        var fig = getFig(imageSets[currSet][0], imageNameSets[currSet][0])
-        sec.appendChild(fig);
-        fig = getFig(imageSets[currSet][1], imageNameSets[currSet][1]);
-        sec.appendChild(fig);
+        displayCurr(imageSets[currSet], imageNameSets[currSet]);
     }
     if(currSet === 1) {
         document.getElementById("buttonDiv").style.display = "block";
@@ -106,12 +99,16 @@ function prevImageSet() {
     }
     currSet--;
     sec.innerHTML = '';
-    var fig = getFig(imageSets[currSet][0], imageNameSets[currSet][0])
-    sec.appendChild(fig);
-    fig = getFig(imageSets[currSet][1], imageNameSets[currSet][1]);
-    sec.appendChild(fig);
+    displayCurr(imageSets[currSet], imageNameSets[currSet]);
     if(currSet === 0) {
         document.getElementById("buttonDiv").style.display = "none";
+    }
+}
+function displayCurr(images, imageNames) {
+    console.log('adad');
+    for(image in images) {
+        var fig = getFig(images[image], imageNames[image]);
+        sec.appendChild(fig);
     }
 }
 function finish() {
