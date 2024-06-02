@@ -53,6 +53,9 @@ schoolCounts.loadDatabase();
 //addSchool();
 console.log(getDate())
 
+/*
+    Main Page Functions
+*/
 //get and send images to user for MainPage
 app.post('/fetchImageSet', (request, response) => {
     const data = request.body.school;
@@ -68,7 +71,6 @@ app.post('/fetchImageSet', (request, response) => {
         });
     })
 });
-
 app.post('/updateLunchCount', (request, response) => {
     const data = request.body;
     updateLunchCount(data);
@@ -77,9 +79,7 @@ app.post('/updateLunchCount', (request, response) => {
     response.json({
         message: returnData
     });
-    
 });
-
 function updateLunchCount(schoolData) {
     const school = schoolData[0]; const user = schoolData[1]; const choices = schoolData[2]; const date = getDate();
     schoolCounts.find({school: school}, (err, data) => {
@@ -93,7 +93,9 @@ function updateLunchCount(schoolData) {
         }
     })
 }
-
+/*
+    Login Page Functions
+*/
 //validate logins for main login
 app.post('/validateUser', (request, response) => {
     const userData = request.body;
@@ -126,7 +128,6 @@ app.post('/validateAdmin', (request, response) => {
         });
     })
 });
-
 function validLogin(schoolData, userData) {
     const emails = schoolData[0];
     const codes = schoolData[1];
@@ -149,6 +150,68 @@ function getEmail(userEmail) {
     return email;
 }
 
+/*
+    Admin Page Functions
+*/
+app.post('/getCurrLunch', (request, response) => {
+    const adminData = request.body;
+    console.log(adminData[1]);
+    var returnData = [];
+    schoolImages.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
+        if(data.length > 0) {
+            returnData[0] = data[0].courses;
+            returnData[1] = data[0].imageNames;
+        }
+        response.json({
+            message: returnData
+        });
+    })
+});
+app.post('/updateLunch', (request, response) => {
+    const adminData = request.body;
+    console.log(adminData[1]);
+    var returnData = [];
+    schoolImages.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
+        if(data.length > 0) {
+            returnData[0] = data[0].courses;
+            returnData[1] = data[0].imageNames;
+        }
+        response.json({
+            message: returnData
+        });
+    })
+});
+app.post('/createLunch', (request, response) => {
+    const adminData = request.body;
+    console.log(adminData[1]);
+    var returnData = [];
+    schoolImages.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
+        if(data.length > 0) {
+            returnData[0] = data[0].courses;
+            returnData[1] = data[0].imageNames;
+        }
+        response.json({
+            message: returnData
+        });
+    })
+});
+app.post('/getCount', (request, response) => {
+    const adminData = request.body;
+    console.log(adminData[1]);
+    var returnData = [];
+    schoolImages.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
+        if(data.length > 0) {
+            returnData[0] = data[0].courses;
+            returnData[1] = data[0].imageNames;
+        }
+        response.json({
+            message: returnData
+        });
+    })
+});
+/*
+    Helper Functions
+*/
 //temporary function to add schools to databases
 function addSchool() {
     const schoolEmails = ["user.1@osu.edu", "user.2@osu.edu", "user.3@osu.edu"];
@@ -162,5 +225,5 @@ function addSchool() {
 }
 
 function getDate() {
-    return new Date(Date.now()).toLocaleString();;
+    return new Date(Date.now()).toLocaleString();
 }

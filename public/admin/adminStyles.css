@@ -3,13 +3,23 @@ p {
   }
   h2 {
     font-size: max(2vw, 12px);
+    text-align: center;
+  }
+  h3 {
+    margin: 0;
   }
   .mainCont {
+    text-align: center;
+  }
+  .subCont {
     text-align: center;
   }
   @font-face {
     font-family: BlockLetters;
     src: url(/files/ThatSoundsGreat-yYLE3.ttf);
+  }
+  .lunchInputs {
+    height: 20px;
   }
   .adminButtons {
     border-radius: 6px;
@@ -47,10 +57,15 @@ p {
     border-radius: 3px;
   }
  
-  .changeLunch .buttons {
+  .buttons {
+    font-family: BlockLetters;
+    font-size: 1vw;
     border-radius: 6px;
-    width: 4%; 
+    width: 9%; 
     padding-top: .8%;
     padding-bottom: .8%;
-    min-width: 120px;
+    min-width: 80px;
+  }
+  .subCont {
+    display: none;
   }

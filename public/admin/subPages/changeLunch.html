@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/admin/adminStyles.css">
     <title>LunchCount</title>
 </head>
-<body onload="checkValid()">
+<body onload="setState()">
     <section class="pageHeader">
         <img src="/files/lcLogo2.png" style="width: 10%; height: 7%; padding-top: .5%;">
         <hr style="margin-bottom: 0; padding-bottom: 0;"/>
@@ -17,16 +17,28 @@
         <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toDir()">Menu</button>
         <hr />
     </section>
-    <main class="changeLunch">
+    <main id="main" class="changeLunch" style="display: none;">
+        <h2 id="header">Change Lunch</h2>
+        <hr style="width: 17%;"/> <br />
         <div id="changeLunch" class="mainCont">
-            <h2>Change Lunch</h2>
-            <hr style="width: 17%;"/> <br />
             <form class="dateInput" id="dateInput">
                 <b style="font-size: 1vw;">Select Date:</b>  <br />
                 <input type="date"  id="date" class="date"> <br />
-                <input type="button" value="Submit" class="buttons" style="font-family: BlockLetters; font-size: .8vw;" onclick="sendDate()">
+                <input type="button" value="Submit" class="buttons" onclick="sendDate()">
             </form>
          </div>
+         <div id="newLunch" class="subCont">
+            <form id="inputForm" class="lunchInput">
+            </form>
+            <input type="button" value="Add Item" class="buttons"onclick="addItem()">
+            <input type="button" value="Add Course" class="buttons"onclick="nextCourse()"> <br />
+            <input type="button" value="Back" class="buttons" onclick="backToDate()">
+            <input type="button" value="Submit" class="buttons" onclick="submitLunch()">
+         </div>
+         <div id="editLunch" class="subCont">
+
+         </div>
+
     </main>
 </body>
 <script src="/defaultScripts.js"></script>
