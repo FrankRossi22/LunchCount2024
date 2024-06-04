@@ -44,8 +44,9 @@ function getFig(image, imageName) {
     const figCap = document.createElement('figcaption');
     const but = document.createElement('button');
     const img = document.createElement('img');
-    img.src = "../data/" + image;
+    img.src = "/images/" + image;
     img.id = imageName;
+    img.className = 'lunchImg';
     but.className = 'imgButton';
     but.id = imageName;
     figCap.innerText = imageName;
@@ -134,10 +135,11 @@ async function submit() {
         studentChoices[i] = localStorage.getItem(courseSet[i]);
     }
     const message = [localStorage.getItem('school'), localStorage.getItem('email'), studentChoices];
+    const name = ["todd"];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(message)
+        body: JSON.stringify(name)
     }
     await fetch('/updateLunchCount', options).then(response => {
         var data = response.json();

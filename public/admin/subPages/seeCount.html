@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/defaultPage.css">
     <link rel="stylesheet" href="/admin/adminStyles.css">
+    <link rel="stylesheet" href= "/select2/css/select2.min.css" /> 
+    <script src="/jquery/jquery.js"></script>
+    <script src="/select2/js/select2.min.js"></script>
     <title>LunchCount</title>
 </head>
-<body onload="checkValid()">
+<body onload="test()">
     <section class="pageHeader">
         <img src="/files/lcLogo2.png" style="width: 10%; height: 7%; padding-top: .5%;">
         <hr style="margin-bottom: 0; padding-bottom: 0;"/>
@@ -17,12 +20,98 @@
         <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toDir()">Menu</button>
         <hr />
     </section>
-    <main onload="showCurrentCount()">
-        <div id="changeLunch" class="mainCont">
+    <main>
+        <div id="changeLunch" class="mainCont" style="display: none;">
             <h2>Current Count</h2>
             <hr style="width: 17%;"/> <br />
             
+         </div>                  
+          </div>
+         <div style="display: block; margin-top: 6%;" class="mainCont">
+            <form> 
+                <h4>Selections using Select2</h4> 
+                <select class="country" id="212" style="width: 200px;"> 
+
+                </select> 
+            </form> 
          </div>
+         <script>
+          $(document).ready(function () { 
+                //Select2 
+                var data = [{id: 0, text: 'enhancement'},{id: 1, text: 'bug'},{id: 2, text: 'rags'},{id: 3, text: 'holder'},{id: 5, text: 'base'}];
+                $(".country").select2({
+                data: data, tags: true
+                }) 
+            }); 
+        </script>
+        <div style="display: block; margin-top: 6%;" class="mainCont2" id="addme"> 
+            <select id="country-select" class="test" style="width: 16%; padding-bottom: 5%;">
+            </select>
+            <select id="country-select2" class="test" style="width: 16%; padding-bottom: 5%;">
+            </select>
+            <button id="but">Submit</button>
+            <button id="addSelect" onclick="addS()">Hit</button>
+            <!-- <script>
+              function addS() {
+                var sel = document.createElement('select');
+                sel.className = 'test';
+                sel.style.width = '16%';
+                var div = document.getElementById('addme');
+                div.appendChild(sel);
+                sendIt();
+              }
+              function sendIt() {
+                function formatOption(option) {
+                  if (!option.id) {
+                    return option.text;
+                  }
+            
+                  var optionWithImage = $(
+                    '<span class="textCont"><img src="' + option.id + '" class="img-flag" /> ' + option.text + '</span>'
+                  );
+                  return optionWithImage;
+                }
+                // Add options dynamically
+                var options = [
+                  { id: '../images/apple.jpg', text: 'Apple' },
+                  { id: '../images/boscoSticks.jpg', text: 'Bosco Sticks' },
+                  { id: '../images/tacos.jpg', text: 'Tacos' }
+                ];
+            
+                $('.test').select2({
+                  templateResult: formatOption,
+                  templateSelection: formatOption,
+                  data: options, tags: false,
+                });
+              }
+              var button = document.getElementById('but')
+              // $(button).click(function() {
+              //   function formatOption(option) {
+              //     if (!option.id) {
+              //       return option.text;
+              //     }
+            
+              //     var optionWithImage = $(
+              //       '<span class="textCont"><img src="' + option.id + '" class="img-flag" /> ' + option.text + '</span>'
+              //     );
+              //     return optionWithImage;
+              //   }
+              //   // Add options dynamically
+              //   var options = [
+              //     { id: '../images/apple.jpg', text: 'Apple' },
+              //     { id: '../images/boscoSticks.jpg', text: 'Bosco Sticks' },
+              //     { id: '../images/tacos.jpg', text: 'Tacos' }
+              //   ];
+            
+              //   $('.test').select2({
+              //     templateResult: formatOption,
+              //     templateSelection: formatOption,
+              //     data: options, tags: false,
+              //   });
+                
+              // });
+            </script> -->
+        </div>
     </main>
 </body>
 <script src="/defaultScripts.js"></script>

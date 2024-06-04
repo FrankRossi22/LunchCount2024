@@ -48,15 +48,17 @@
     font-weight: bold;
     font-size: 2vw;
   }
+ 
   .imgButton {
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px rgb(199, 223, 226);
     border-width: 1px;
     width: 50%; 
     height: 50%;
+    
   }
   .imgButton:hover {
-    background-color:#2b2a2a;
+    background-color:#b8b8b8;
     transition: 0.5s;
   }
   .bottomB {

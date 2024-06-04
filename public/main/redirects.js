@@ -10,3 +10,7 @@ function adminLog() {
 function mainLog() {
     window.location.href = "http://localhost:3000/login";
 }
+function clearData() {
+    localStorage.clear();
+    sessionStorage.clear();
+}
