@@ -3,6 +3,7 @@ TODO -
     Everything besides formatting // setup server data transfer // decide what to do
 */
 
+
 /*
     All Page Functions
 */
@@ -50,21 +51,25 @@ function showCurrentCount() {
     Create Lunch Page Functions
 */
 var currInput = 1;
-async function sendDate() {
+var selectBoxOptions = [];
+//function gets date input from user and gets back whether or not there is a lunch created and sends the data if so
+async function checkDate() {
     if(document.getElementById("date").value === '') {
+        console.log("aaaaa");
         return;
     }
     const date = parseDate(document.getElementById("date").value);
-    console.log(document.getElementById("date").value);
     const message = [localStorage.getItem('school'), date];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(message)
     }
+    //ask server for lunch on selected date
     await fetch('/getCurrLunch', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
+            console.log(result.message + "adad");
             if(result.message.length === 0) {
                 document.getElementById('header').innerHTML = 'Create Lunch';
                 document.getElementById('changeLunch').style.display = 'none';
@@ -76,6 +81,7 @@ async function sendDate() {
         });
     });
 }
+//function keeps state on reload
 function setState() {
     checkValid();
     const state = [sessionStorage.getItem("currState"), sessionStorage.getItem("currDate")];
@@ -83,6 +89,7 @@ function setState() {
     sessionStorage.setItem("currState", state[0]);
     sessionStorage.setItem("currDate", state[1]);
     if(state[0] === "newPage") {
+        getOptions();
         document.getElementById('header').innerHTML = 'Create Lunch';
         document.getElementById('changeLunch').style.display = 'none';
         document.getElementById('newLunch').style.display = 'block';
@@ -90,40 +97,54 @@ function setState() {
     }
     document.getElementById('main').style.display = 'block';
 }
+//function adds item to current course
 function addItem() {
     const form = document.getElementById('inputForm');
     appendSelect("Menu Item", "lunch");
     form.appendChild(document.createElement("br"));
     currInput++;
 }
-
+//gets lunch options data from server and sets up select boxes for fetched options
 function formatSelect() {
     function formatOption(option) {
-      if (!option.id) {
-        return option.text;
-      }
-
-      var optionWithImage = $(
-        '<span class="textCont"><img src="' + option.id + '" class="img-flag" /> ' + option.text + '</span>'
-      );
+      if (!option.id) {return option.text;}
+      var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="img-flag" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
       return optionWithImage;
     }
-    // Add options dynamically
     var options = [
-      { id: '../images/apple.jpg', text: 'Apple' },
-      { id: '../images/boscoSticks.jpg', text: 'Bosco Sticks' },
-      { id: '../images/tacos.jpg', text: 'Tacos' },
-      { id: '../images/cheeseburger.jpg', text: 'Cheesburger' },
-      { id: '../images/fries.jpg', text: 'French Fries' },
-      { id: '../images/taterTots.jpg', text: 'Tater Tots' }
+      { id: 'apple.jpg', text: 'Apple' },
+      { id: 'boscoSticks.jpg', text: 'Bosco Sticks' },
+      { id: 'tacos.jpg', text: 'Tacos' },
+      { id: 'cheeseburger.jpg', text: 'Cheesburger' },
+      { id: 'fries.jpg', text: 'French Fries' },
+      { id: 'taterTots.jpg', text: 'Tater Tots' }
     ];
-
-    $('.lunchInputs').select2({
-      templateResult: formatOption,
-      templateSelection: formatOption,
-      data: options, tags: false,
-    });
+    $('.lunchInputs').select2({templateResult: formatOption, templateSelection: formatOption,data: options, tags: false, placeholder: "Select Your Item"});
   }
+
+  async function getOptions() {
+    const message = [localStorage.getItem('school')];
+    const options = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(message)
+    }
+    //ask server for lunch on selected date
+    await fetch('/getLunchOptions', options).then(response => {
+        var data = response.json();
+        data.then(async function(result) {
+            const opsSet = result.message;
+            //console.log(opsSet);
+            if(opsSet.length != 0) {
+                for(var i = 0; i < opsSet.length; i++) {
+                    selectBoxOptions[i] = {id: opsSet[i][0], text: opsSet[i][1]};
+                }
+                console.log(selectBoxOptions);
+            }
+            formatSelect();
+        });
+    });
+}
 function createInput(placeholder, id, type) {
     const input = document.createElement('input');
     input.placeholder = placeholder;
@@ -141,10 +162,8 @@ function appendSelect(placeholder, id) {
     const select = document.createElement('select');
     const div = document.createElement('div');
     div.className = 'selectDivs';
-    select.className = 'lunchInputs';
-    select.id = 'item' + currInput;
-    select.style.width = "16%"
-    select.style.margin = "100px"
+    select.className = 'lunchInputs'; select.id = 'item' + currInput; select.style.width = "20%"; select.style.margin = "100px";
+    select.appendChild(document.createElement('option'));
     const form = document.getElementById('inputForm');
     div.appendChild(select);
     form.appendChild(div);

@@ -58,11 +58,17 @@ const Datastore = require('nedb');
 const schoolLogin = new Datastore('databases/user.db');
 const schoolLunches = new Datastore('databases/lunchOptions.db');
 const schoolCounts = new Datastore('databases/lunchCounts.db');
+const optionCaches = new Datastore('databases/schoolMenuItems.db');
+optionCaches.loadDatabase();
 schoolLogin.loadDatabase();
 schoolLunches.loadDatabase();
 schoolCounts.loadDatabase();
+
+var ops = [["cheesburger.jpg", "Cheeseburger"], ["tacos.jpg", "Tacos"], ["chickenSandwich.jpg", "Chicken Sandwich"], ["pizza.jpg", "Pizza"],["taterTots.jpg", "Tater Tots"], ["fries.jpg", "French Fries"],["corn.jpg", "Buttered Corn"], ["boscoSticks.jpg", "Bosco Sticks"],["apple.jpg", "Apple"], ["banana.webp", "Banana"],["salad.webp", "Salad"]];
+//schoolLunches.insert({school: "all", options: ops});
 //addSchool();
 console.log(getDate())
+
 
 /*
     Main Page Functions
@@ -167,9 +173,10 @@ function getEmail(userEmail) {
 */
 app.post('/getCurrLunch', (request, response) => {
     const adminData = request.body;
-    console.log(adminData[1]);
+    console.log(adminData[0] + "  aaa");
     var returnData = [];
     schoolLunches.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
+        console.log("ss");
         if(data.length > 0) {
             returnData[0] = data[0].courses;
             returnData[1] = data[0].imageNames;
@@ -177,6 +184,11 @@ app.post('/getCurrLunch', (request, response) => {
         response.json({
             message: returnData
         });
+    })
+    schoolLunches.find({ school: "school.edu" }, (err, data) => {
+        console.log(data + "vc");
+        
+        
     })
 });
 app.post('/submitLunch', (request, response) => {
@@ -187,7 +199,27 @@ app.post('/submitLunch', (request, response) => {
     response.json({
         message: returnData
     });
-
+});
+app.post('/getLunchOptions', (request, response) => {
+    var returnData = [];
+    const adminData = request.body;
+    optionCaches.find({ school: adminData[0] }, (err, data) => {
+        if(data.length > 0) {
+            returnData = data[0].options;
+            response.json({
+                message: returnData
+            });
+        } else {
+            optionCaches.find({ school: "all" }, (err, data) => {
+                if(data.length > 0) {
+                    returnData = data[0].options;
+                }
+                response.json({
+                    message: returnData
+                });
+            })
+        }
+    })
 });
 app.post('/updateLunch', (request, response) => {
     const adminData = request.body;
