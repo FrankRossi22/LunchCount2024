@@ -10,11 +10,11 @@
     <script src="/select2/js/select2.min.js"></script>
     <title>LunchCount</title>
 </head>
-<body onload="test()">
-    <section class="pageHeader">
-        <img src="/files/lcLogo2.png" style="width: 10%; height: 7%; padding-top: .5%;">
-        <hr style="margin-bottom: 0; padding-bottom: 0;"/>
-    </section>
+<body onload="getOptions('all')">
+  <section class="pageHeader">
+    <img src="/files/lcLogo2.png" class="banner">
+    <hr class="bannerHeader" />
+  </section>
     <section class="topRow">
         <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toMain()">Admin</button>
         <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toDir()">Menu</button>
@@ -29,21 +29,17 @@
           </div>
          <div style="display: block; margin-top: 6%;" class="mainCont">
             <form> 
-                <h4>Selections using Select2</h4> 
-                <select class="country-select2" id="212" style="width: 200px; height: 100px;"> 
-                  <option></option>
+                <h4>Selections using Select2</h4>
+                <select class="lunchInputs" id="item-2" style="width: 20%;">
+                  <option></option> 
                 </select> 
+               
             </form> 
+            <form id="1234">
+              <button type="button" onclick="formatSelect('item-2')">change</button> 
+            </form>
          </div>
-         <script>
-          $(document).ready(function () { 
-                //Select2 
-                var data = [{id: 0, text: 'enhancement'},{id: 1, text: 'bug'},{id: 2, text: 'rags'},{id: 3, text: 'holder'},{id: 5, text: 'base'}];
-                $(".country-select2").select2({
-                data: data, tags: true, placeholder: {id: 0, text: 'enhancement'}
-                }) 
-            }); 
-        </script>
+         
         <div style="display: block; margin-top: 6%;" class="mainCont2" id="addme"> 
             
             <!-- <script>

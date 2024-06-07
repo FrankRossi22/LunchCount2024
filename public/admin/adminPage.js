@@ -40,7 +40,6 @@ async function getCount() {
     await fetch('/getCurrLunch', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-            console.log(result.message);
         });
     });
 }
@@ -51,11 +50,19 @@ function showCurrentCount() {
     Create Lunch Page Functions
 */
 var currInput = 1;
+var currItem = 0;
+var currCourse = 0;
 var selectBoxOptions = [];
+var currMenu = [];
 //function gets date input from user and gets back whether or not there is a lunch created and sends the data if so
-async function checkDate() {
+async function getDateData() {
     if(document.getElementById("date").value === '') {
-        console.log("aaaaa");
+        document.getElementById('header').innerHTML = 'Change Lunch';
+        document.getElementById('inputForm').innerHTML = '';
+        document.getElementById('updateForm').innerHTML = '';
+        document.getElementById('newLunch').style.display = 'none';
+        document.getElementById('updateLunch').style.display = 'none';
+
         return;
     }
     const date = parseDate(document.getElementById("date").value);
@@ -69,61 +76,50 @@ async function checkDate() {
     await fetch('/getCurrLunch', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-            console.log(result.message + "adad");
+            getOptions(localStorage.getItem('school'));
             if(result.message.length === 0) {
-                document.getElementById('header').innerHTML = 'Create Lunch';
-                document.getElementById('changeLunch').style.display = 'none';
-                document.getElementById('newLunch').style.display = 'block';
-                sessionStorage.setItem("currState", "newPage");
-                sessionStorage.setItem("currDate", date);
-                setState();
+                showCreateLunch();
+            } else {
+                lunchData = result.message;
+                currMenu = JSON.parse(lunchData.menu)
+                showUpdateLunch();
             }
         });
     });
 }
-//function keeps state on reload
-function setState() {
-    checkValid();
-    const state = [sessionStorage.getItem("currState"), sessionStorage.getItem("currDate")];
+function showUpdateLunch() {
+    document.getElementById('header').innerHTML = 'Update Lunch';
+    //document.getElementById('changeLunch').style.display = 'none';
+    document.getElementById('newLunch').style.display = 'none';
+    document.getElementById('inputForm').innerHTML = '';
+    document.getElementById('updateLunch').style.display = 'block';
+    document.getElementById('main').style.display = 'block';
+    resetMenu();
+}
+//function >
+function showCreateLunch() {
     sessionStorage.clear();
-    sessionStorage.setItem("currState", state[0]);
-    sessionStorage.setItem("currDate", state[1]);
-    if(state[0] === "newPage") {
-        getOptions();
-        document.getElementById('header').innerHTML = 'Create Lunch';
-        document.getElementById('changeLunch').style.display = 'none';
-        document.getElementById('newLunch').style.display = 'block';
-        resetCourse();
-    }
+    document.getElementById('updateForm').innerHTML = '';
+    getOptions(localStorage.getItem('school'));
+    document.getElementById('header').innerHTML = 'Create Lunch';
+    //document.getElementById('changeLunch').style.display = 'none';
+    document.getElementById('updateLunch').style.display = 'none';
+    document.getElementById('newLunch').style.display = 'block';
+    resetCourse();
+    
     document.getElementById('main').style.display = 'block';
 }
 //function adds item to current course
 function addItem() {
     const form = document.getElementById('inputForm');
-    appendSelect("Menu Item", "lunch");
+    appendSelect(form, currInput, true);
+    formatSelect('item' + currInput);
     form.appendChild(document.createElement("br"));
     currInput++;
 }
-//gets lunch options data from server and sets up select boxes for fetched options
-function formatSelect() {
-    function formatOption(option) {
-      if (!option.id) {return option.text;}
-      var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="img-flag" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
-      return optionWithImage;
-    }
-    var options = [
-      { id: 'apple.jpg', text: 'Apple' },
-      { id: 'boscoSticks.jpg', text: 'Bosco Sticks' },
-      { id: 'tacos.jpg', text: 'Tacos' },
-      { id: 'cheeseburger.jpg', text: 'Cheesburger' },
-      { id: 'fries.jpg', text: 'French Fries' },
-      { id: 'taterTots.jpg', text: 'Tater Tots' }
-    ];
-    $('.lunchInputs').select2({templateResult: formatOption, templateSelection: formatOption,data: options, tags: false, placeholder: "Select Your Item"});
-  }
-
-  async function getOptions() {
-    const message = [localStorage.getItem('school')];
+//function loads select box options client side
+async function getOptions(school) {
+    const message = [school];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -133,65 +129,87 @@ function formatSelect() {
     await fetch('/getLunchOptions', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-            const opsSet = result.message;
-            //console.log(opsSet);
+            const opsSet = [...result.message[0][1], ...result.message[1][1]];
             if(opsSet.length != 0) {
                 for(var i = 0; i < opsSet.length; i++) {
                     selectBoxOptions[i] = {id: opsSet[i][0], text: opsSet[i][1]};
                 }
-                console.log(selectBoxOptions);
             }
-            formatSelect();
         });
     });
 }
-function createInput(placeholder, id, type) {
-    const input = document.createElement('input');
-    input.placeholder = placeholder;
-    input.className = 'lunchCourse';
-    input.type = type;
-    input.autocomplete = 'off';
-    input.size = '40';
-    input.id = id + currInput;
-    if(type === "file") {
-        input.accept = ".jpg,.jpeg,.webp,.png";
-    }
-    return input;
-}
-function appendSelect(placeholder, id) {
+//function creates a new select element and appends it to the given parent element
+function appendSelect(parent, idMod, placeholder) {
     const select = document.createElement('select');
     const div = document.createElement('div');
     div.className = 'selectDivs';
-    select.className = 'lunchInputs'; select.id = 'item' + currInput; select.style.width = "20%"; select.style.margin = "100px";
-    select.appendChild(document.createElement('option'));
-    const form = document.getElementById('inputForm');
+    select.className = 'lunchInputs'; select.id = 'item' + idMod; select.style.width = "20%"; select.style.margin = "100px";
+    if(placeholder) {select.appendChild(document.createElement('option'));}
     div.appendChild(select);
-    form.appendChild(div);
-    formatSelect();
+    parent.appendChild(div);
 }
 function nextCourse() {
     updateLocal();
     // const p = JSON.parse(sessionStorage.getItem('currLunchItems'))
-    // console.log(p[0][1]);
     resetCourse();
 }
-function getSelections(numInputs) {
-    var course = document.getElementById('courseIn1').value;
+//function gets and returns select box inputs for the given course
+function getSelections(numInputs, courseID) {
+    var course = document.getElementById(courseID).value;
     var inputs = [];
     for(var i = 1; i < numInputs; i++) {
         var select = document.getElementById("item" + i);
-        var text = select.options[select.selectedIndex].text
-        inputs[i - 1] = text;
+        var text = select.options[select.selectedIndex].text;
+        var src = select.options[select.selectedIndex].value;
+        inputs[i - 1] = [text, src];
     }
     return [course, inputs];
 }
+//function adds select boxes with given menu items selected by default
+function addCourseItems(items) {
+    const form = document.getElementById('updateForm');
+    for(var i = 0; i < items.length; i++) {
+        appendSelect(form, currItem, false);
+        //formatSelect("item" + currItem)
+        formatSelectSpecific({id: items[i][1], text: items[i][0]},'item' + currItem);
+        form.appendChild(document.createElement("br"));
+        currItem++;
+    }
+    
+}
+//function adds all courses from currMenu into the update form
+function loadCourses() {
+    const form = document.getElementById('updateForm');
+    for(currCourse = 0; currCourse < currMenu.length; currCourse++) {
+        var h3 = document.createElement('h3');
+        h3.innerHTML = 'Course';
+        var input = createInput("Course", "courseIn", currCourse + 1);
+        input.value = currMenu[currCourse][0];
+        form.appendChild(h3);
+        form.appendChild(input);
+        form.appendChild(document.createElement("br")); form.appendChild(document.createElement("br"));
+        h3 = document.createElement('h3');
+        h3.innerHTML = 'Course Items';
+        addCourseItems(currMenu[currCourse][1]);
+    }
+}
+//function resets menu html and variables
+function resetMenu() {
+    getOptions(localStorage.getItem('school'))
+    currItem = 1;
+    currCourse = 0;
+    const form = document.getElementById('updateForm');
+    form.innerHTML = '';
+    loadCourses();
+}
+//function resets course html and variables
 function resetCourse() {
     currInput = 1;
     const form = document.getElementById('inputForm');
     form.innerHTML = '';
     var h3 = document.createElement('h3');
     h3.innerHTML = 'Course';
-    const input = createInput("Course", "courseIn");
+    const input = createInput("Course", "courseIn", currInput);
     form.appendChild(h3);
     form.appendChild(input);
     form.appendChild(document.createElement("br")); form.appendChild(document.createElement("br"));
@@ -200,24 +218,24 @@ function resetCourse() {
     form.appendChild(h3);
     addItem();
 }
+//function updates local storage to hold all input items for the new menu
 function updateLocal() {
     const prevCount = currInput;
     currInput = 1;
-    const prevInputs = getSelections(prevCount);
+    const prevInputs = getSelections(prevCount, "courseIn1");
     if(sessionStorage.getItem('currLunchItems') === null) {
         sessionStorage.setItem('currLunchItems', JSON.stringify([prevInputs]));
         // const p = JSON.parse(sessionStorage.getItem('currLunchItems'))[0]
-        // console.log(p);
     } else {
         var currLunch = JSON.parse(sessionStorage.getItem('currLunchItems'));
-        currLunch.push([prevInputs]);
+        currLunch.push(prevInputs);
         sessionStorage.setItem('currLunchItems', JSON.stringify(currLunch));
     }
 }
+//function sends new lunch menu to the server
 async function submitLunch() {
     updateLocal();
-    const message = [localStorage.getItem('school'), sessionStorage.getItem('currDate'), sessionStorage.getItem('currLunchItems')];
-    //console.log(message);
+    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), sessionStorage.getItem('currLunchItems')];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -230,6 +248,47 @@ async function submitLunch() {
         });
     });
 }
+//function gets updated menu selections and sets them to session storage
+function getUpdated() {
+    var j = 1
+    var passedItems = 0;
+    updatedMenu = []
+    for(var i = 0; i < currMenu.length; i++) {
+        inputs = [];
+        while(j <= currMenu[i][1].length + passedItems) {
+            var select = document.getElementById("item" + j);
+            var text = select.options[select.selectedIndex].text;
+            var src = select.options[select.selectedIndex].value;
+            inputs[j - 1 - passedItems] = [text, src];
+            j++;
+            //console.log(inputs);
+        }
+        passedItems += currMenu[i][1].length;
+        updatedMenu[i] = [document.getElementById("courseIn" + (i + 1)).value, inputs];
+    }
+    sessionStorage.setItem("temp", JSON.stringify(updatedMenu));
+}
+//function sends updated lunch menu to the server
+async function updateLunch() {
+    getUpdated();
+    console.log(updatedMenu);
+    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), sessionStorage.getItem("temp", updatedMenu)];
+    const options = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(message)
+    }
+    await fetch('/submitLunch', options).then(response => {
+        var data = response.json();
+        data.then(async function(result) {
+            
+        });
+    });
+}
+
+/*
+    Helper Functions
+*/
 function backToDate() {
     sessionStorage.clear();
     document.getElementById('inputForm').innerHTML = '';
@@ -237,9 +296,16 @@ function backToDate() {
     document.getElementById('header').innerHTML = 'Change Lunch';
     document.getElementById('changeLunch').style.display = 'block';
 }
-/*
-    Helper Functions
-*/
+function createInput(placeholder, id, idOffset) {
+    const input = document.createElement('input');
+    input.placeholder = placeholder;
+    input.className = 'lunchCourseInput';
+    input.type = "text";
+    input.autocomplete = 'off';
+    input.size = '40';
+    input.id = id + idOffset;
+    return input;
+}
 function parseDate(oldDate) {
     var day = oldDate.substring(8);
     var month = oldDate.substring(5, 7);
@@ -258,7 +324,6 @@ function getURL(input) {
     var file = 0;
     reader.onload = function (e) {
              file = e.target.result;
-             console.log(file);
            };
     reader.readAsDataURL(input.files[0]);
     return reader.onload;
@@ -269,12 +334,61 @@ function getURL(input) {
     //     document.getElementById('blah').src = e.target.result;
     //   };
 
-    //   console.log(input.files[0].name)
     //   reader.readAsDataURL(input.files[0]);
     // }
   }
-  function test() {
-    console.log(sessionStorage.getItem('test'));
+function test() {
+    console.log('ssss');
    
+}
+function changePlace(id) {
+    $('#item-1').attr('placeholder', 'New Placeholder Text').select2()
+}
+//gets lunch options data from server and sets up select boxes for fetched options
+function formatSelect(id) {
+    function formatOption(option) {
+        if (!option.id) {return option.text;}
+        var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectOptionImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
+        return optionWithImage;
+      }
+      function formatSelected(option) {
+          if (!option.id) {return option.text;}
+          var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
+          return optionWithImage;
+        }
+    $('#' + id).select2({templateResult: formatOption, templateSelection: formatSelected,data: selectBoxOptions, tags: false, placeholder: "Select Your Item"});
   }
-  
+async function formatSelectSpecific(firstOption, selectId) {
+    var specialOptions = [firstOption, ...selectBoxOptions];
+    var a = true;
+    const repeatItem = selectBoxOptions.find(item => {
+        return item.id == firstOption.id;
+     })
+    const index = 1 + selectBoxOptions.indexOf(repeatItem);
+    specialOptions.splice(index, 1);
+    //specOptions.concat(selectBoxOptions);
+    var firstSet = false;
+    function formatOption(option) {
+      if (!option.id) {return option.text;}
+      var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectOptionImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
+      return optionWithImage;
+    }
+    function formatSelected(option) {
+        if (!option.id) {return option.text;}
+        var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
+        return optionWithImage;
+      }
+      if(a) {
+        $('#' + selectId).select2({templateResult: formatOption, templateSelection: formatSelected,data: specialOptions, tags: false});
+        a = false
+    }
+    //$('#item-2').select2().val(null).trigger('change');
+    // $('#' + selectId).on('select2:select', function (e) {
+    //     var data = e.params.data;
+    //     console.log(data);
+    //     //$('#' + selectId).select2({templateResult: formatOption, templateSelection: formatSelected,data: {id: "h", text: "a"}, tags: false, placeholder: "fe"}).trigger('change');
+    //     //$('#' + selectId).trigger('change');
+    //     return;
+    // });
+    
+  }

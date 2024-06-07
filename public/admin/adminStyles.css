@@ -5,6 +5,9 @@ p {
     font-size: max(2vw, 12px);
     text-align: center;
   }
+  #header {
+    margin: 1%;
+  }
   h3 {
     margin: 0;
   }
@@ -26,9 +29,14 @@ p {
   .selectDivs {
     margin-top: 1%;
   }
-  
-
-  .img-flag {
+  .selectOptionImg {
+    width: 15%;
+    height: 50%;
+    padding: 1%;
+    border-radius: 8px;
+    vertical-align: middle;
+  }
+  .selectImg {
     width: 30%;
     height: 50%;
     padding: 3%;
@@ -41,6 +49,12 @@ p {
   }
   .lunchInputs {
     height: 20px;
+  }
+  .lunchCourseInput {
+    border-radius: 5px;
+    border-color: rgb(192, 192, 192);
+    height: 20px;
+    width: 20%;
   }
   .adminButtons {
     border-radius: 6px;
@@ -70,6 +84,7 @@ p {
     border: none;
     outline: none;
     border-radius: 5px;
+    
   }
   input[type="date"]::-webkit-calendar-picker-indicator{
     background-color: white;
@@ -80,11 +95,11 @@ p {
  
   .buttons {
     font-family: BlockLetters;
-    font-size: 1vw;
+    font-size: .8vw;
     border-radius: 6px;
-    width: 9%; 
-    padding-top: .8%;
-    padding-bottom: .8%;
+    width: 7%; 
+    padding-top: .6%;
+    padding-bottom: .6%;
     min-width: 80px;
   }
   .subCont {

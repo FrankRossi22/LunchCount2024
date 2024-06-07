@@ -10,9 +10,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /*
 TODO - 
-    Figure out how to pull data from new db effectively
-    Figure out how to edit databases
-    Setup date and time to save lunch menus for future days and edit the send to main accordingly
+    Get changelunch working with updating menus
 */
 
 //set links to corresponding html file
@@ -43,18 +41,15 @@ app.use("/images", express.static(__dirname + "/images"));
 app.use("/files", express.static(__dirname + "/files"));
 
 
-app.post('/sendImage', (request, response) => {
-    const data = request.body;
-    console.log(data + "fa");
-});
+
 app.post('/test', (request, response) => {
     const data = request.body;
-    console.log(data + "fa");
     response.end;
 });
 
 //load databases
 const Datastore = require('nedb');
+const { data } = require('jquery');
 const schoolLogin = new Datastore('databases/user.db');
 const schoolLunches = new Datastore('databases/lunchOptions.db');
 const schoolCounts = new Datastore('databases/lunchCounts.db');
@@ -63,9 +58,8 @@ optionCaches.loadDatabase();
 schoolLogin.loadDatabase();
 schoolLunches.loadDatabase();
 schoolCounts.loadDatabase();
-
-var ops = [["cheesburger.jpg", "Cheeseburger"], ["tacos.jpg", "Tacos"], ["chickenSandwich.jpg", "Chicken Sandwich"], ["pizza.jpg", "Pizza"],["taterTots.jpg", "Tater Tots"], ["fries.jpg", "French Fries"],["corn.jpg", "Buttered Corn"], ["boscoSticks.jpg", "Bosco Sticks"],["apple.jpg", "Apple"], ["banana.webp", "Banana"],["salad.webp", "Salad"]];
-//schoolLunches.insert({school: "all", options: ops});
+//var ops = [["Main", [["cheesburger.jpg", "Cheeseburger"], ["tacos.jpg", "Tacos"], ["chickenSandwich.jpg", "Chicken Sandwich"], ["pizza.jpg", "Pizza"], ["boscoSticks.jpg", "Bosco Sticks"]]], ["Side",[["taterTots.jpg", "Tater Tots"], ["fries.jpg", "French Fries"],["corn.jpg", "Buttered Corn"], ["apple.jpg", "Apple"], ["banana.webp", "Banana"],["salad.webp", "Salad"]]]]
+//optionCaches.insert({school: "all", options: ops});
 //addSchool();
 console.log(getDate())
 
@@ -75,15 +69,16 @@ console.log(getDate())
 */
 //get and send images to user for MainPage
 app.post('/fetchImageSet', (request, response) => {
-    const data = request.body.school;
+    const school = request.body.school;
+    console.log(getDate().indexOf(','));
+    var date = getDate();
     var returnData = [];
-    schoolLunches.find({school: data}, (err, data) => {
+    schoolLunches.find({$and: [{ school: school }, { date: date.substring(0, date.indexOf(',')) }]}, (err, data) => {
         if(data.length > 0) {
-            returnData[0] = data[0].images;
-            returnData[1] = data[0].imageNames;
-            returnData[2] = data[0].courses;
+            //console.log(data[0].menu);
+            returnData[0] = data[0].menu;
+           
         }
-        console.log
         response.json({
             message: returnData
         });
@@ -92,7 +87,6 @@ app.post('/fetchImageSet', (request, response) => {
 app.post('/updateLunchCount', (request, response) => {
     const data = request.body;
     //updateLunchCount(data);
-    console.log(data);
     var returnData = true;
     response.json({
         message: returnData
@@ -173,32 +167,32 @@ function getEmail(userEmail) {
 */
 app.post('/getCurrLunch', (request, response) => {
     const adminData = request.body;
-    console.log(adminData[0] + "  aaa");
     var returnData = [];
     schoolLunches.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
-        console.log("ss");
         if(data.length > 0) {
-            returnData[0] = data[0].courses;
-            returnData[1] = data[0].imageNames;
+            returnData = data[0];
         }
         response.json({
             message: returnData
         });
     })
-    schoolLunches.find({ school: "school.edu" }, (err, data) => {
-        console.log(data + "vc");
-        
-        
-    })
 });
 app.post('/submitLunch', (request, response) => {
     const lunchData = request.body;
     console.log(lunchData);
-    schoolLunches.insert({school: lunchData[0], date: lunchData[1], menu: lunchData[2]});
-    var returnData = [true];
-    response.json({
-        message: returnData
-    });
+    schoolLunches.find({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, (err, data) => {
+        console.log(data);
+
+        if(data.length > 0) {
+            schoolLunches.update({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, { $set: { menu: lunchData[2] } }, function (err, numReplaced) {});
+        } else {
+            schoolLunches.insert({school: lunchData[0], date: lunchData[1], menu: lunchData[2]});
+            var returnData = [true];
+            response.json({
+            message: returnData
+            });
+        }
+    })
 });
 app.post('/getLunchOptions', (request, response) => {
     var returnData = [];
@@ -223,7 +217,6 @@ app.post('/getLunchOptions', (request, response) => {
 });
 app.post('/updateLunch', (request, response) => {
     const adminData = request.body;
-    console.log(adminData[1]);
     var returnData = [];
     schoolLunches.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
         if(data.length > 0) {
@@ -237,7 +230,6 @@ app.post('/updateLunch', (request, response) => {
 });
 app.post('/createLunch', (request, response) => {
     const adminData = request.body;
-    console.log(adminData[1]);
     var returnData = [];
     schoolLunches.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
         if(data.length > 0) {
@@ -251,7 +243,6 @@ app.post('/createLunch', (request, response) => {
 });
 app.post('/getCount', (request, response) => {
     const adminData = request.body;
-    console.log(adminData[1]);
     var returnData = [];
     schoolLunches.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
         if(data.length > 0) {

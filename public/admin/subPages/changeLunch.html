@@ -10,24 +10,24 @@
     <script src="/select2/js/select2.min.js"></script>
     <title>LunchCount</title>
 </head>
-<body onload="setState()">
+<body onload="getOptions(localStorage.getItem('school'))">
     <section class="pageHeader">
-        <img src="/files/lcLogo2.png" style="width: 10%; height: 7%; padding-top: .5%;">
-        <hr style="margin-bottom: 0; padding-bottom: 0;"/>
+        <img src="/files/lcLogo2.png" class="banner">
+        <hr class="bannerHeader" />
     </section>
     <section class="topRow">
         <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toMain()">Admin</button>
         <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toDir()">Menu</button>
         <hr />
     </section>
-    <main id="main" class="changeLunch" style="display: none;">
+    <main id="main" class="changeLunch">
         <h2 id="header">Change Lunch</h2>
-        <hr style="width: 17%;"/> <br />
+        <hr style="width: 25%;"/> <br />
         <div id="changeLunch" class="mainCont">
             <form class="dateInput" id="dateInput">
-                <b style="font-size: 1vw;">Select Date:</b>  <br />
-                <input type="date"  id="date" class="date"> <br />
-                <input type="button" value="Submit" class="buttons" onclick="checkDate()">
+                <b style="font-size: 1.3vw;">Select Date:</b>  <br />
+                <input type="date"  id="date" class="date" onchange="getDateData()"> <hr style="width: 15%; margin-bottom: 1%;"/>
+                <!-- <input type="button" value="Submit" class="buttons" onclick="checkDate()"> -->
             </form>
          </div>
          <div id="newLunch" class="subCont">
@@ -38,14 +38,38 @@
             <input type="button" value="Back" class="buttons" onclick="backToDate()">
             <input type="button" value="Submit" class="buttons" onclick="submitLunch()">
          </div>
-         <div id="editLunch" class="subCont">
-
+         <div id="updateLunch" class="subCont">
+          <form id="updateForm" class="lunchInput" enctype="multipart/form-data">
+          </form>
+          <!-- <input type="button" value="Add Item" class="buttons"onclick="addItem()"><br /> -->
+          <!-- <input type="button" value="Add Course" class="buttons"onclick="nextCourse()"> <br /> -->
+          <input type="button" value="Back" class="buttons" onclick="backToDate()">
+          <input type="button" value="Update" class="buttons" onclick="updateLunch()">
          </div>
 
       
     </main>
 </body>
+<script>
+    const beforeUnloadHandler = (event) => {
+    // Recommended
+    event.preventDefault();
+  
+    // Included for legacy support, e.g. Chrome/Edge < 119
+    event.returnValue = true;
+  };
+  
+  const nameInput = document.getElementById('date')
+  
+  nameInput.addEventListener("input", (event) => {
+    if (event.target.value !== "") {
+      //window.addEventListener("beforeunload", beforeUnloadHandler);
+    } else {
+      //window.removeEventListener("beforeunload", beforeUnloadHandler);
+    }
+  });
 
+</script>
 <script src="/defaultScripts.js"></script>
 <script src="/admin/adminPage.js"></script>
 </html>

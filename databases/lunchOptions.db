@@ -1,3 +1,7 @@
+{"school":"school.edu","date":"6/8/2024","menu":"[[\"Test\",[[\"Bosco Sticks\",\"boscoSticks.jpg\"],[\"Pizza\",\"pizza.jpg\"]]],[\"Side\",[[\"Banana\",\"banana.webp\"],[\"Salad\",\"salad.webp\"],[\"Apple\",\"apple.jpg\"]]]]","_id":"4ZsQlF5mX58OOzhh"}
+{"school":"osu.edu","date":"6/6/2024","menu":"[[\"vavav\",[[\"Cheeseburger\",\"cheeseburger.jpg\"],[\"Tacos\",\"tacos.jpg\"]]],[\"Balls\",[[\"Salad\",\"salad.webp\"]]]]","_id":"9D5Ryn3o9VFw3v1v"}
 {"school":"school.edu","images":[["cheeseburger.jpg","chickenSandwich.jpg","pizza.jpg","tacos.jpg"],["fries.jpg","taterTots.jpg"]],"imageNames":[["Cheeseburger","Chicken Sandwich","Pizza","Tacos"],["French Fries","Tater Tots"]],"courses":[["Main"],["Side"]],"date":"5/31/2024","_id":"fBq2FwXk8siTNrbC"}
-{"school":"osu.edu","images":[["pizza.jpg","tacos.jpg"],["salad.webp","corn.jpg"]],"imageNames":[["Pizza","Tacos"],["Salad","Corn"]],"courses":[["Main"],["Side"]],"date":"5/31/2024","_id":"gxwatgcED901TUkO"}
-{"school":"school.edu","date":"6/19/2024","menu":"[[\"va\",[\"Apple\"]]]","_id":"vsQSFc2vrkR5Ursw"}
+{"school":"school.edu","date":"6/12/2024","menu":"[[\"Main\",[[\"Pizza\",\"pizza.jpg\"],[\"Cheeseburger\",\"cheeseburger.jpg\"]]],[\"S\",[[\"French Fries\",\"fries.jpg\"]]]]","_id":"fJVDa5POPXFrENRq"}
+{"school":"school.edu","date":"6/13/2024","menu":"[[\"Main\",[[\"Cheeseburger\",\"cheeseburger.jpg\"],[\"Tacos\",\"tacos.jpg\"],[\"Pizza\",\"pizza.jpg\"]]],[\"Side\",[[\"Tater Tots\",\"taterTots.jpg\"],[\"Buttered Corn\",\"corn.jpg\"]]]]","_id":"fVBwfPeMvzauCzdK"}
+{"school":"school.edu","date":"6/7/2024","menu":"[[\"Main\",[\"Tacos\",\"Chicken Sandwich\"]],[\"Side\",[\"French Fries\",\"Tater Tots\"]]]","_id":"gAJOcRPu2JpsZ5vy"}
+{"school":"school.edu","date":"6/6/2024","menu":"[[\"Main\",[[\"Cheeseburger\",\"cheeseburger.jpg\"],[\"Chicken Sandwich\",\"chickenSandwich.jpg\"]]],[\"Side\",[[\"Banana\",\"banana.webp\"],[\"Buttered Corn\",\"corn.jpg\"]]]]","_id":"owGK15UMUD9ovr9d"}

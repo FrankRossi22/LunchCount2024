@@ -1,7 +1,8 @@
 
 var imageSets;
 var imageNameSets;
-var courseSet;
+var courseSet = [];
+var menuData;
 var currSet = 0;
 var atEnd = false;
 const school = localStorage.getItem("school");
@@ -29,10 +30,10 @@ async function getImages() {
         var data = response.json();
         data.then(async function(result) {
             const imageData = await result.message;
-            imageSets = imageData[0];
-            imageNameSets = imageData[1];
-            courseSet = imageData[2];
-            console.log(courseSet);
+            menuData = JSON.parse(imageData[0]);
+            //imageNameSets = imageData[1];
+            //courseSet = imageData[2];
+            //console.log(menuData[0][0]);
             load();
         });
     });
@@ -73,20 +74,22 @@ sec.addEventListener("click", buttonGroupPressed);
 
 function load() {
     console.log(localStorage.getItem("email"));
-    displayCurr(imageSets[currSet], imageNameSets[currSet]);
+    courseSet[currSet] = menuData[currSet][0];
+    displayCurr(menuData[currSet][1]);
     document.getElementById("lastB").style.display = "inline";
     document.getElementById("lastText").style.display = "block";
     document.getElementById("buttonDiv").style.textAlign = "center";
 }
 
 function nextImageSet() {
-    if(currSet === imageSets.length - 1) {
+    if(currSet === menuData.length - 1) {
         atEnd = true;
         return;
     } else {
         sec.innerHTML = '';
         currSet++;
-        displayCurr(imageSets[currSet], imageNameSets[currSet]);
+        courseSet[currSet] = menuData[currSet][0];
+        displayCurr(menuData[currSet][1]);
     }
     if(currSet === 1) {
         document.getElementById("buttonDiv").style.display = "block";
@@ -103,15 +106,16 @@ function prevImageSet() {
     }
     currSet--;
     sec.innerHTML = '';
-    displayCurr(imageSets[currSet], imageNameSets[currSet]);
+    displayCurr(menuData[currSet][1]);
     if(currSet === 0) {
         document.getElementById("buttonDiv").style.display = "none";
     }
 }
-function displayCurr(images, imageNames) {
-    console.log('adad');
-    for(image in images) {
-        var fig = getFig(images[image], imageNames[image]);
+function displayCurr(courses) {
+    //console.log('adad');
+    for(var i = 0; i < courses.length; i++) {
+        //console.log(course)
+        var fig = getFig(courses[i][1], courses[i][0]);
         sec.appendChild(fig);
     }
 }
@@ -126,7 +130,7 @@ function finish() {
         const text = document.createTextNode(courseSet[course] + ":    " + localStorage.getItem(courseSet[course]));
         para.appendChild(text);
         sec.appendChild(para);
-        console.log(courseSet[course] + ":    " + localStorage.getItem(courseSet[course]));
+        //console.log(courseSet[course] + ":    " + localStorage.getItem(courseSet[course]));
     }
 }
 async function submit() {
@@ -135,11 +139,10 @@ async function submit() {
         studentChoices[i] = localStorage.getItem(courseSet[i]);
     }
     const message = [localStorage.getItem('school'), localStorage.getItem('email'), studentChoices];
-    const name = ["todd"];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(name)
+        body: JSON.stringify(message)
     }
     await fetch('/updateLunchCount', options).then(response => {
         var data = response.json();
