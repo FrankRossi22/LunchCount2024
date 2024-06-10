@@ -46,45 +46,29 @@ function getFig(image, imageName) {
     const but = document.createElement('button');
     const img = document.createElement('img');
     img.src = "/images/" + image;
-    img.id = imageName;
+    img.id = "A" + imageName;
     img.className = 'lunchImg';
     but.className = 'imgButton';
-    but.id = imageName;
+    but.id = "B" + imageName;
     figCap.innerText = imageName;
     but.appendChild(img);
-    but.setAttribute('onclick', 'nextImageSet()');
     fig.appendChild(figCap);
     fig.appendChild(but);
     return fig;
 }
-const buttonGroupPressed = e => { 
-  const isButton = e.target.nodeName === 'BUTTON' || e.target.nodeName === 'IMG';
-  if(!isButton) {
-    return
-  }
-  if(atEnd) {
-    currSet++;
-    localStorage.setItem(courseSet[currSet - 1], e.target.id);
-    finish();
-  } else {
-    localStorage.setItem(courseSet[currSet - 1], e.target.id);
-  }
-}
-sec.addEventListener("click", buttonGroupPressed);
-
-function load() {
-    console.log(localStorage.getItem("email"));
-    courseSet[currSet] = menuData[currSet][0];
-    displayCurr(menuData[currSet][1]);
-    document.getElementById("lastB").style.display = "inline";
-    document.getElementById("lastText").style.display = "block";
-    document.getElementById("buttonDiv").style.textAlign = "center";
-}
-
-function nextImageSet() {
+const buttonGroupPressed = async e => {
+    const isButton = e.target.nodeName === 'BUTTON' || e.target.nodeName === 'IMG';
+    if(!isButton) {
+        return
+    }
+    const text = e.target.id.substring(1, e.target.id.length);
+    console.log(document.getElementById("A" + text));
+    const img = await getTag(document.getElementById("A" + text).src)
+    localStorage.setItem(courseSet[currSet], JSON.stringify([text, img]));
     if(currSet === menuData.length - 1) {
         atEnd = true;
-        return;
+        currSet++;
+        finish();
     } else {
         sec.innerHTML = '';
         currSet++;
@@ -94,8 +78,42 @@ function nextImageSet() {
     if(currSet === 1) {
         document.getElementById("buttonDiv").style.display = "block";
     }
-
 }
+sec.addEventListener("click", buttonGroupPressed);
+function getTag(imgSrc) {
+    var i = imgSrc.length - 2;
+    while(i >= 0) {
+        if(imgSrc.charAt(i) === '/') {
+            return imgSrc.substring(i + 1);
+        }
+        i--;
+    }
+    return "";
+}
+function load() {
+    console.log(localStorage.getItem("email"));
+    courseSet[currSet] = menuData[currSet][0];
+    displayCurr(menuData[currSet][1]);
+    document.getElementById("lastB").style.display = "inline";
+    document.getElementById("lastText").style.display = "block";
+    document.getElementById("buttonDiv").style.textAlign = "center";
+}
+
+// function nextImageSet() {
+//     if(currSet === menuData.length - 1) {
+//         atEnd = true;
+//         return;
+//     } else {
+//         sec.innerHTML = '';
+//         currSet++;
+//         courseSet[currSet] = menuData[currSet][0];
+//         displayCurr(menuData[currSet][1]);
+//     }
+//     if(currSet === 1) {
+//         document.getElementById("buttonDiv").style.display = "block";
+//     }
+
+// }
 
 function prevImageSet() {
     if(atEnd) {
@@ -128,6 +146,7 @@ function finish() {
         //console.log(courseSet[course]);
         var para = document.createElement('p');
         const text = document.createTextNode(courseSet[course] + ":    " + localStorage.getItem(courseSet[course]));
+        console.log(text);
         para.appendChild(text);
         sec.appendChild(para);
         //console.log(courseSet[course] + ":    " + localStorage.getItem(courseSet[course]));

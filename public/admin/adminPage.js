@@ -30,20 +30,22 @@ function toMain() {
     Show Count Functions
 */
 async function getCount() {
-    const date = parseDate(document.getElementById("date").value);
-    const message = [localStorage.getItem('school'), date];
+    //const date = parseDate(document.getElementById("date").value);
+    const message = [localStorage.getItem('school'), "6/7/2024"];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(message)
     }
-    await fetch('/getCurrLunch', options).then(response => {
+    await fetch('/getLunchCount', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
+            console.log(result);
         });
     });
+    return 0;
 }
-function showCurrentCount() {
+function showCount() {
     const count = getCount();
 }
 /*

@@ -19,6 +19,7 @@
     "express": "^4.19.2",
     "jquery": "^3.7.1",
     "nedb": "^1.8.0",
+    "nedb-async-await": "^0.1.2",
     "select2": "^4.1.0-rc.0"
   }
 }

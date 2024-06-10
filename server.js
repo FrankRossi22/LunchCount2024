@@ -52,12 +52,12 @@ const Datastore = require('nedb');
 const { data } = require('jquery');
 const schoolLogin = new Datastore('databases/user.db');
 const schoolLunches = new Datastore('databases/lunchOptions.db');
-const schoolCounts = new Datastore('databases/lunchCounts.db');
+const userCounts = new Datastore('databases/userCounts.db');
 const optionCaches = new Datastore('databases/schoolMenuItems.db');
 optionCaches.loadDatabase();
 schoolLogin.loadDatabase();
 schoolLunches.loadDatabase();
-schoolCounts.loadDatabase();
+userCounts.loadDatabase();
 //var ops = [["Main", [["cheesburger.jpg", "Cheeseburger"], ["tacos.jpg", "Tacos"], ["chickenSandwich.jpg", "Chicken Sandwich"], ["pizza.jpg", "Pizza"], ["boscoSticks.jpg", "Bosco Sticks"]]], ["Side",[["taterTots.jpg", "Tater Tots"], ["fries.jpg", "French Fries"],["corn.jpg", "Buttered Corn"], ["apple.jpg", "Apple"], ["banana.webp", "Banana"],["salad.webp", "Salad"]]]]
 //optionCaches.insert({school: "all", options: ops});
 //addSchool();
@@ -70,10 +70,9 @@ console.log(getDate())
 //get and send images to user for MainPage
 app.post('/fetchImageSet', (request, response) => {
     const school = request.body.school;
-    console.log(getDate().indexOf(','));
     var date = getDate();
     var returnData = [];
-    schoolLunches.find({$and: [{ school: school }, { date: date.substring(0, date.indexOf(',')) }]}, (err, data) => {
+    schoolLunches.find({$and: [{ school: school }, { date: date }]}, (err, data) => {
         if(data.length > 0) {
             //console.log(data[0].menu);
             returnData[0] = data[0].menu;
@@ -85,26 +84,44 @@ app.post('/fetchImageSet', (request, response) => {
     })
 });
 app.post('/updateLunchCount', (request, response) => {
-    const data = request.body;
-    //updateLunchCount(data);
+    const schoolData = request.body;
+    const school = schoolData[0]; const user = schoolData[1]; const selections = schoolData[2]; const date = getDate();
+    //console.log(choices)
+    userCounts.find({$and: [{ user: user }, { date: date }]}, (err, data) => {
+        //console.log(data);
+        var prevSelections = [];
+        if(data.length > 0) {
+            prevSelections = data[0].data;
+        } else {
+            userCounts.insert({user: user, date: date});
+        }
+        userCounts.update({$and: [{ user: user }, { date: date }]}, { $set: { data: selections } }, (err, numReplaced) => {
+            schoolLunches.find({$and: [{ school: school }, { date: date }]}, (err, data) => {
+                if(data.length > 0) {
+                    var currCount = data[0].counts;
+                    for(var i = 0; i < selections.length; i++) {
+                        var curr = JSON.parse(selections[i])[0];
+                        currCount[curr] = currCount[curr] + 1;
+                    }
+                    for(var i = 0; i < prevSelections.length; i++) {
+                        var curr = JSON.parse(prevSelections[i])[0];
+                        currCount[curr] = currCount[curr] - 1;
+                    }
+                    schoolLunches.update({$and: [{ school: school }, { date: date }]}, { $set: { counts: currCount } }, (err, numReplaced) => {});
+                } 
+            })
+        });
+    })
+    
+    //console.log(data)
     var returnData = true;
     response.json({
         message: returnData
     });
 });
-function updateLunchCount(schoolData) {
-    const school = schoolData[0]; const user = schoolData[1]; const choices = schoolData[2]; const date = getDate();
-    schoolCounts.find({school: school}, (err, data) => {
-        if(data.length > 0) {
-            
-        } else {
-            schoolCounts.find({school: school}, (err, data) => {
-                
-            })
-            schoolCounts.insert({school: school, user: user, date: date});
-        }
-    })
-}
+
+
+
 /*
     Login Page Functions
 */
@@ -179,14 +196,22 @@ app.post('/getCurrLunch', (request, response) => {
 });
 app.post('/submitLunch', (request, response) => {
     const lunchData = request.body;
-    console.log(lunchData);
+    var fullMenu = JSON.parse(lunchData[2]);
+    var items = [];
+    for(var i = 0; i < fullMenu.length; i++) {
+        items.push(...fullMenu[i][1])
+    }
+    var jsonCounts = {}
+    for(var i = 0; i < items.length; i++) {
+        jsonCounts[items[i][0]] = 0;
+    }
     schoolLunches.find({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, (err, data) => {
-        console.log(data);
+        //console.log(data);
 
         if(data.length > 0) {
-            schoolLunches.update({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, { $set: { menu: lunchData[2] } }, function (err, numReplaced) {});
+            schoolLunches.update({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, { $set: { menu: lunchData[2], counts: jsonCounts } }, function (err, numReplaced) {});
         } else {
-            schoolLunches.insert({school: lunchData[0], date: lunchData[1], menu: lunchData[2]});
+            schoolLunches.insert({school: lunchData[0], date: lunchData[1], menu: lunchData[2], counts: jsonCounts});
             var returnData = [true];
             response.json({
             message: returnData
@@ -213,6 +238,20 @@ app.post('/getLunchOptions', (request, response) => {
                 });
             })
         }
+    })
+});
+app.post('/getLunchCount', (request, response) => {
+    const adminData = request.body;
+    var returnData = [];
+    schoolLunches.find({$and: [{ school: adminData[0] }, { date: getDate() }]}, (err, data) => {
+        if(data.length > 0) {
+            returnData[0] = data[0].menu;
+            returnData[1] = data[0].counts;
+            //console.log(returnData);
+        }
+        response.json({
+            message: returnData
+        });
     })
 });
 app.post('/updateLunch', (request, response) => {
@@ -270,5 +309,7 @@ function addSchool() {
 }
 
 function getDate() {
-    return new Date(Date.now()).toLocaleString();
+    date = new Date(Date.now()).toLocaleString();
+    
+    return date.substring(0, date.indexOf(','))
 }

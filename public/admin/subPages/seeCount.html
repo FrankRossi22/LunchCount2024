@@ -10,7 +10,7 @@
     <script src="/select2/js/select2.min.js"></script>
     <title>LunchCount</title>
 </head>
-<body onload="getOptions('all')">
+<body onload="getCount()">
   <section class="pageHeader">
     <img src="/files/lcLogo2.png" class="banner">
     <hr class="bannerHeader" />
@@ -21,88 +21,18 @@
         <hr />
     </section>
     <main>
-        <div id="changeLunch" class="mainCont" style="display: none;">
+        <div id="currCountDiv" class="mainCont" style="display: block;">
             <h2>Current Count</h2>
-            <hr style="width: 17%;"/> <br />
+            <hr style="width: 20%;"/> <br />
+
             
-         </div>                  
-          </div>
-         <div style="display: block; margin-top: 6%;" class="mainCont">
-            <form> 
-                <h4>Selections using Select2</h4>
-                <select class="lunchInputs" id="item-2" style="width: 20%;">
-                  <option></option> 
-                </select> 
-               
-            </form> 
-            <form id="1234">
-              <button type="button" onclick="formatSelect('item-2')">change</button> 
-            </form>
          </div>
+         <div style="text-align: center;">
+          <button class="buttons" onclick="showCount()">Show Count</button>
+         </div>                  
+
          
-        <div style="display: block; margin-top: 6%;" class="mainCont2" id="addme"> 
-            
-            <!-- <script>
-              function addS() {
-                var sel = document.createElement('select');
-                sel.className = 'test';
-                sel.style.width = '16%';
-                var div = document.getElementById('addme');
-                div.appendChild(sel);
-                sendIt();
-              }
-              function sendIt() {
-                function formatOption(option) {
-                  if (!option.id) {
-                    return option.text;
-                  }
-            
-                  var optionWithImage = $(
-                    '<span class="textCont"><img src="' + option.id + '" class="img-flag" /> ' + option.text + '</span>'
-                  );
-                  return optionWithImage;
-                }
-                // Add options dynamically
-                var options = [
-                  { id: '../images/apple.jpg', text: 'Apple' },
-                  { id: '../images/boscoSticks.jpg', text: 'Bosco Sticks' },
-                  { id: '../images/tacos.jpg', text: 'Tacos' }
-                ];
-            
-                $('.test').select2({
-                  templateResult: formatOption,
-                  templateSelection: formatOption,
-                  data: options, tags: false,
-                });
-              }
-              var button = document.getElementById('but')
-              // $(button).click(function() {
-              //   function formatOption(option) {
-              //     if (!option.id) {
-              //       return option.text;
-              //     }
-            
-              //     var optionWithImage = $(
-              //       '<span class="textCont"><img src="' + option.id + '" class="img-flag" /> ' + option.text + '</span>'
-              //     );
-              //     return optionWithImage;
-              //   }
-              //   // Add options dynamically
-              //   var options = [
-              //     { id: '../images/apple.jpg', text: 'Apple' },
-              //     { id: '../images/boscoSticks.jpg', text: 'Bosco Sticks' },
-              //     { id: '../images/tacos.jpg', text: 'Tacos' }
-              //   ];
-            
-              //   $('.test').select2({
-              //     templateResult: formatOption,
-              //     templateSelection: formatOption,
-              //     data: options, tags: false,
-              //   });
-                
-              // });
-            </script> -->
-        </div>
+        
     </main>
 </body>
 <script src="/defaultScripts.js"></script>
