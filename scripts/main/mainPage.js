@@ -9,8 +9,6 @@ const school = localStorage.getItem("school");
 
 /*
 TODO - 
-    Use dynamic number of images per row if number of items is > 3
-    Get Date and Time when submitting and send to server with choices // also send user email
     Setup phone width checker to display differently below a certain width
 */
 
@@ -30,7 +28,7 @@ async function getImages() {
         var data = response.json();
         data.then(async function(result) {
             const imageData = await result.message;
-            menuData = JSON.parse(imageData[0]);
+            menuData = imageData[0];
             //imageNameSets = imageData[1];
             //courseSet = imageData[2];
             //console.log(menuData[0][0]);

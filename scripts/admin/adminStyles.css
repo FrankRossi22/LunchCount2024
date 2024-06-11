@@ -17,6 +17,9 @@ p {
   .subCont {
     text-align: center;
   }
+  .lunchInput {
+    text-align: center;
+  }
   /* .select2-selection__rendered {
       line-height: 50% !important;
   } */
@@ -102,6 +105,27 @@ p {
     padding-bottom: .6%;
     min-width: 80px;
   }
+  .minButton {
+    font-family: BlockLetters;
+    font-size: .8vw;
+    border-radius: 6px;
+    width: 2%; 
+    padding-top: .1%;
+    padding-bottom: .1%;
+    min-width: 20px;
+    vertical-align: middle;
+  }
+  .addButton {
+    font-family: BlockLetters;
+    font-size: .8vw;
+    border-radius: 6px;
+    width: 2%; 
+    padding-top: .1%;
+    padding-bottom: .1%;
+    min-width: 20px;
+    vertical-align: middle;
+  }
   .subCont {
+    text-align: center;
     display: none;
   }

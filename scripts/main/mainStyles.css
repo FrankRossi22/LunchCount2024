@@ -6,7 +6,7 @@
   }
   @font-face {
     font-family: BlockLetters;
-    src: url(../files/ThatSoundsGreat-yYLE3.ttf);
+    src: url(/files/ThatSoundsGreat-yYLE3.ttf);
   }
   .lunchOptions {
     padding-top: 0;

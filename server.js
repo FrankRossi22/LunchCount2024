@@ -10,7 +10,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /*
 TODO - 
-    Get changelunch working with updating menus
 */
 
 //set links to corresponding html file
@@ -39,7 +38,7 @@ app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/select2', express.static(__dirname + '/node_modules/select2/dist/'));
 app.use("/images", express.static(__dirname + "/images"));
 app.use("/files", express.static(__dirname + "/files"));
-
+app.use("/scripts", express.static(__dirname + "/scripts"));
 
 
 app.post('/test', (request, response) => {
@@ -74,7 +73,6 @@ app.post('/fetchImageSet', (request, response) => {
     var returnData = [];
     schoolLunches.find({$and: [{ school: school }, { date: date }]}, (err, data) => {
         if(data.length > 0) {
-            //console.log(data[0].menu);
             returnData[0] = data[0].menu;
            
         }
@@ -83,6 +81,7 @@ app.post('/fetchImageSet', (request, response) => {
         });
     })
 });
+//post gets user lunch count from main page and updates user and school counts
 app.post('/updateLunchCount', (request, response) => {
     const schoolData = request.body;
     const school = schoolData[0]; const user = schoolData[1]; const selections = schoolData[2]; const date = getDate();
@@ -196,7 +195,7 @@ app.post('/getCurrLunch', (request, response) => {
 });
 app.post('/submitLunch', (request, response) => {
     const lunchData = request.body;
-    var fullMenu = JSON.parse(lunchData[2]);
+    var fullMenu = lunchData[2];
     var items = [];
     for(var i = 0; i < fullMenu.length; i++) {
         items.push(...fullMenu[i][1])

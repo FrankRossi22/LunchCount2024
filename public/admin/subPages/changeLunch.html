@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/defaultPage.css">
-    <link rel="stylesheet" href="/admin/adminStyles.css">
+    <link rel="stylesheet" href="/scripts/default/defaultPage.css">
+    <link rel="stylesheet" href="/scripts/admin/adminStyles.css">
     <link rel="stylesheet" href= "/select2/css/select2.min.css" /> 
     <script src="/jquery/jquery.js"></script>
     <script src="/select2/js/select2.min.js"></script>
     <title>LunchCount</title>
 </head>
-<body onload="getOptions(localStorage.getItem('school'))">
+<body onload="checkValid()">
     <section class="pageHeader">
         <img src="/files/lcLogo2.png" class="banner">
         <hr class="bannerHeader" />
@@ -26,24 +26,24 @@
         <div id="changeLunch" class="mainCont">
             <form class="dateInput" id="dateInput">
                 <b style="font-size: 1.3vw;">Select Date:</b>  <br />
-                <input type="date"  id="date" class="date" onchange="getDateData()"> <hr style="width: 15%; margin-bottom: 1%;"/>
+                <input type="date"  id="date" class="date" onchange="getDateData()">
                 <!-- <input type="button" value="Submit" class="buttons" onclick="checkDate()"> -->
             </form>
          </div>
          <div id="newLunch" class="subCont">
             <form id="inputForm" class="lunchInput" enctype="multipart/form-data">
             </form>
-            <input type="button" value="Add Item" class="buttons"onclick="addItem()">
-            <input type="button" value="Add Course" class="buttons"onclick="nextCourse()"> <br />
-            <input type="button" value="Back" class="buttons" onclick="backToDate()">
+            <hr style="width: 15%;"/>
+            <input type="button" value="Add Course" class="buttons"onclick="addCourse('inputForm')"> <br />
+            <input type="button" value="Back" class="buttons" onclick="getMenu()">
             <input type="button" value="Submit" class="buttons" onclick="submitLunch()">
          </div>
          <div id="updateLunch" class="subCont">
           <form id="updateForm" class="lunchInput" enctype="multipart/form-data">
           </form>
           <!-- <input type="button" value="Add Item" class="buttons"onclick="addItem()"><br /> -->
-          <!-- <input type="button" value="Add Course" class="buttons"onclick="nextCourse()"> <br /> -->
-          <input type="button" value="Back" class="buttons" onclick="backToDate()">
+          <input type="button" value="Add Course" class="buttons"onclick="addCourse('updateForm')"> <br />
+          <input type="button" value="Back" class="buttons" onclick="getMenu()">
           <input type="button" value="Update" class="buttons" onclick="updateLunch()">
          </div>
 
@@ -70,6 +70,6 @@
   });
 
 </script>
-<script src="/defaultScripts.js"></script>
-<script src="/admin/adminPage.js"></script>
+<script src="/scripts/default/defaultScripts.js"></script>
+<script src="/scripts/admin/adminPage.js"></script>
 </html>

@@ -1,6 +1,5 @@
 /*
 TODO - 
-    Everything besides formatting // setup server data transfer // decide what to do
 */
 
 
@@ -29,6 +28,7 @@ function toMain() {
 /*
     Show Count Functions
 */
+//function gets current count for today from server and calls showCount to display the data
 async function getCount() {
     //const date = parseDate(document.getElementById("date").value);
     const message = [localStorage.getItem('school'), "6/7/2024"];
@@ -40,24 +40,47 @@ async function getCount() {
     await fetch('/getLunchCount', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-            console.log(result);
+            showCount(result.message[0], result.message[1])
         });
     });
-    return 0;
 }
-function showCount() {
-    const count = getCount();
+//function displays lunch count data from given schoolData
+function showCount(menu, counts) {
+    var div = document.getElementById('countsDiv');
+    for(var i = 0; i < menu.length; i++) {
+        var h3 = document.createElement('h3'); var hr = document.createElement('hr');
+        h3.innerHTML = menu[i][0];
+        div.appendChild(h3);
+        hr.style.width = "15%";
+        div.appendChild(hr); 
+        for(var j = 0; j < menu[i][1].length; j++) {
+            var p = document.createElement('p'); var curr = menu[i][1][j][0]
+            p.innerHTML = curr + ":    " + counts[curr];
+            div.appendChild(p);
+        }
+    }
+    
+
 }
 /*
     Create Lunch Page Functions
 */
-var currInput = 1;
+var currInput = 0;
 var currItem = 0;
 var currCourse = 0;
+var deletedCourses = 0;
+var courseLengths = [];
 var selectBoxOptions = [];
 var currMenu = [];
 //function gets date input from user and gets back whether or not there is a lunch created and sends the data if so
 async function getDateData() {
+    await getOptions("all");
+    currInput = 0;
+    currItem = 0;
+    currCourse = 0;
+    deletedCourses = 0;
+    selectBoxOptions = [];
+    currMenu = [];
     if(document.getElementById("date").value === '') {
         document.getElementById('header').innerHTML = 'Change Lunch';
         document.getElementById('inputForm').innerHTML = '';
@@ -83,7 +106,7 @@ async function getDateData() {
                 showCreateLunch();
             } else {
                 lunchData = result.message;
-                currMenu = JSON.parse(lunchData.menu)
+                currMenu = lunchData.menu
                 showUpdateLunch();
             }
         });
@@ -94,6 +117,7 @@ function showUpdateLunch() {
     //document.getElementById('changeLunch').style.display = 'none';
     document.getElementById('newLunch').style.display = 'none';
     document.getElementById('inputForm').innerHTML = '';
+    document.getElementById('updateForm').innerHTML = '';
     document.getElementById('updateLunch').style.display = 'block';
     document.getElementById('main').style.display = 'block';
     resetMenu();
@@ -102,21 +126,56 @@ function showUpdateLunch() {
 function showCreateLunch() {
     sessionStorage.clear();
     document.getElementById('updateForm').innerHTML = '';
+    document.getElementById('inputForm').innerHTML = '';
     getOptions(localStorage.getItem('school'));
     document.getElementById('header').innerHTML = 'Create Lunch';
     //document.getElementById('changeLunch').style.display = 'none';
     document.getElementById('updateLunch').style.display = 'none';
     document.getElementById('newLunch').style.display = 'block';
-    resetCourse();
+    addCourse();
     
     document.getElementById('main').style.display = 'block';
 }
+
 //function adds item to current course
 function addItem() {
     const form = document.getElementById('inputForm');
     appendSelect(form, currInput, true);
     formatSelect('item' + currInput);
     form.appendChild(document.createElement("br"));
+    currInput++;
+}
+function subItem(id) {
+    const div = document.getElementById("select" + id);
+    courseLengths[id.charAt(0)][0]--;
+    //console.log(id)
+    div.remove();
+}
+function subCourse(id) {
+    const div = document.getElementById("courseDiv" + id);
+    courseLengths[id] = null; deletedCourses++;
+    //console.log(id)
+    div.remove();
+}
+async function addItemTest(id) {
+    //const form = document.getElementById('inputForm');
+    const div = document.getElementById('courseDiv' + id);
+    const idMod = id + '' + courseLengths[id][1];
+    //console.log(id)
+    courseLengths[id][0]++;
+    courseLengths[id][1]++;
+    console.log(id)
+    // if((id + 1) < currCourse) {
+    //     appendSelectBefore(form, document.getElementById(id), currInput, true);
+    // } else {
+    //     appendSelect(form, currInput, true);
+    // }
+    //await getOptions("all");
+    var childBelow = document.getElementById("appendButtonsDiv" + id)
+    console.log(childBelow)
+    appendSelectBefore(div, childBelow, idMod, true);
+    formatSelect('item' + idMod);
+    //form.insertBefore(document.createElement("br"), childBelow); form.insertBefore(document.createElement("br"), childBelow);
     currInput++;
 }
 //function loads select box options client side
@@ -142,18 +201,97 @@ async function getOptions(school) {
 }
 //function creates a new select element and appends it to the given parent element
 function appendSelect(parent, idMod, placeholder) {
-    const select = document.createElement('select');
+    const select = document.createElement('select'); select.name = "selects";
     const div = document.createElement('div');
-    div.className = 'selectDivs';
+    div.className = 'selectDivs'; div.id = "select" + idMod;
     select.className = 'lunchInputs'; select.id = 'item' + idMod; select.style.width = "20%"; select.style.margin = "100px";
     if(placeholder) {select.appendChild(document.createElement('option'));}
     div.appendChild(select);
+    var but = document.createElement("input"); but.type = "button"; but.id = "min" + idMod; but.className = "minButton";
+    but.onclick = function() { subItem(this.id.substring(3)); }; but.value = "-"; div.appendChild(but);
     parent.appendChild(div);
 }
+function appendSelectBefore(parent, child, idMod, placeholder) {
+    const select = document.createElement('select'); select.name = "selects";
+    const div = document.createElement('div');
+    div.className = 'selectDivs'; div.id = "select" + idMod;
+    select.className = 'lunchInputs'; select.id = 'item' + idMod; select.style.width = "20%"; select.style.margin = "100px";
+    if(placeholder) {select.appendChild(document.createElement('option'));}
+    div.appendChild(select);
+    var but = document.createElement("input"); but.type = "button"; but.id = "min" + idMod; but.className = "minButton";
+    but.onclick = function() { subItem(this.id.substring(3)); }; but.value = "-"; div.appendChild(but);
+    parent.insertBefore(div, child);
+}
+function test() {
+    var sels = document.getElementsByName("selects");
+    
+    for(var i = 0; i < sels.length; i++) {
+        var select = sels[i]
+        // var text = select.options[select.selectedIndex].text;
+        // var src = select.options[select.selectedIndex].value;
+        console.log(select.id);
+    }
+
+}
 function nextCourse() {
-    updateLocal();
+    //updateLocal();
     // const p = JSON.parse(sessionStorage.getItem('currLunchItems'))
-    resetCourse();
+    addCourse();
+}
+function addCourse(formID) {
+    //currInput = 1;
+    courseLengths[currCourse] = [0, 0];
+    const form = document.getElementById(formID);
+    var div = document.createElement("div"); div.id = "courseDiv" + currCourse;
+    //form.innerHTML = '';
+    var h3 = document.createElement('h3');  h3.innerHTML = 'Course';
+    var hr = document.createElement('hr'); hr.style.width = "15%"; hr.id = "hr" + currCourse;
+    div.appendChild(hr)
+    div.appendChild(h3)
+    const input = createInput("Course", "courseIn", currCourse);
+    div.appendChild(input);
+    var but = document.createElement("input"); but.type = "button"; but.id = "min" + currCourse; but.className = "minButton";
+    but.onclick = function() { subCourse(this.id.substring(3)); }; but.value = "-"; div.appendChild(but); 
+    
+    div.appendChild(document.createElement("br")); div.appendChild(document.createElement("br"));
+    h3 = document.createElement('h3');
+    h3.innerHTML = 'Course Items';
+    div.appendChild(h3);
+    var buttonDiv = document.createElement("div"); buttonDiv.className = "appendButtonsDiv"; buttonDiv.id = "appendButtonsDiv" + currCourse;
+    but = document.createElement("input"); but.type = "button"; but.id = "add" + currCourse; but.className = "addButton";
+    but.onclick = function() { addItemTest(this.id.substring(3)) }; but.value = "+"; buttonDiv.appendChild(but); div.appendChild(buttonDiv);
+    form.appendChild(div);
+    addItemTest(currCourse);
+    currCourse++;
+}
+function getMenu() {
+    
+    var menu = [];
+    var numPrev = 0;
+    var numSkipped = 0;
+    const selects = document.getElementsByName("selects");
+    for(var j = 0; j < courseLengths.length; j++) {
+        while(courseLengths[j] === null) {
+            j++;
+            numSkipped++;
+            if(j >= courseLengths.length) {console.log(menu);return menu;}
+        }
+        var inputs = []
+        var input = document.getElementById("courseIn" + j);
+        var course = input.value;
+
+        for(var i = numPrev; i < courseLengths[j][0] + numPrev; i++) {
+            var select = selects[i];
+            var text = select.options[select.selectedIndex].text;
+            var src = select.options[select.selectedIndex].value;
+            inputs[i - numPrev] = [text, src];
+        }
+        numPrev += courseLengths[j][0];
+        menu[j - numSkipped] = [course, inputs];  
+    }
+    // sessionStorage.setItem("currLunchItems", JSON.stringify(menu));
+    return menu;
+    //console.log(menu);
 }
 //function gets and returns select box inputs for the given course
 function getSelections(numInputs, courseID) {
@@ -169,30 +307,48 @@ function getSelections(numInputs, courseID) {
 }
 //function adds select boxes with given menu items selected by default
 function addCourseItems(items) {
-    const form = document.getElementById('updateForm');
+    const div = document.getElementById('courseDiv' + currCourse);
+    const butDiv = document.getElementById('appendButtonsDiv' + currCourse);
     for(var i = 0; i < items.length; i++) {
-        appendSelect(form, currItem, false);
+        var idMod = currCourse + "" + courseLengths[currCourse][1];
+        appendSelectBefore(div, butDiv, idMod, false);
         //formatSelect("item" + currItem)
-        formatSelectSpecific({id: items[i][1], text: items[i][0]},'item' + currItem);
-        form.appendChild(document.createElement("br"));
-        currItem++;
+        formatSelectSpecific({id: items[i][1], text: items[i][0]},'item' + idMod);
+        //form.appendChild(document.createElement("br"));
+        currInput++;
+        courseLengths[currCourse][0]++; courseLengths[currCourse][1]++;
     }
     
 }
 //function adds all courses from currMenu into the update form
 function loadCourses() {
     const form = document.getElementById('updateForm');
-    for(currCourse = 0; currCourse < currMenu.length; currCourse++) {
-        var h3 = document.createElement('h3');
-        h3.innerHTML = 'Course';
-        var input = createInput("Course", "courseIn", currCourse + 1);
-        input.value = currMenu[currCourse][0];
-        form.appendChild(h3);
-        form.appendChild(input);
-        form.appendChild(document.createElement("br")); form.appendChild(document.createElement("br"));
+    currCourse = 0;
+    for(var i = 0; i < currMenu.length; i++) {
+        const currLength = currMenu[i][1].length;
+        courseLengths[currCourse] = [0, 0];
+        var div = document.createElement("div"); div.id = "courseDiv" + currCourse;
+        //form.innerHTML = '';
+        var h3 = document.createElement('h3');  h3.innerHTML = 'Course';
+        var hr = document.createElement('hr'); hr.style.width = "15%"; hr.id = "hr" + currCourse;
+        div.appendChild(hr)
+        div.appendChild(h3)
+        const input = createInput("Course", "courseIn", currCourse);
+        input.value = currMenu[i][0];
+        div.appendChild(input);
+        var but = document.createElement("input"); but.type = "button"; but.id = "min" + currCourse; but.className = "minButton";
+        but.onclick = function() { subCourse(this.id.substring(3)); }; but.value = "-"; div.appendChild(but); 
+        
+        div.appendChild(document.createElement("br")); div.appendChild(document.createElement("br"));
         h3 = document.createElement('h3');
         h3.innerHTML = 'Course Items';
-        addCourseItems(currMenu[currCourse][1]);
+        div.appendChild(h3);
+        var buttonDiv = document.createElement("div"); buttonDiv.className = "appendButtonsDiv"; buttonDiv.id = "appendButtonsDiv" + currCourse;
+        but = document.createElement("input"); but.type = "button"; but.id = "add" + currCourse; but.className = "addButton";
+        but.onclick = function() { addItemTest(this.id.substring(3)) }; but.value = "+"; buttonDiv.appendChild(but); div.appendChild(buttonDiv);
+        form.appendChild(div);
+        addCourseItems(currMenu[i][1]);
+        currCourse++;
     }
 }
 //function resets menu html and variables
@@ -220,24 +376,11 @@ function resetCourse() {
     form.appendChild(h3);
     addItem();
 }
-//function updates local storage to hold all input items for the new menu
-function updateLocal() {
-    const prevCount = currInput;
-    currInput = 1;
-    const prevInputs = getSelections(prevCount, "courseIn1");
-    if(sessionStorage.getItem('currLunchItems') === null) {
-        sessionStorage.setItem('currLunchItems', JSON.stringify([prevInputs]));
-        // const p = JSON.parse(sessionStorage.getItem('currLunchItems'))[0]
-    } else {
-        var currLunch = JSON.parse(sessionStorage.getItem('currLunchItems'));
-        currLunch.push(prevInputs);
-        sessionStorage.setItem('currLunchItems', JSON.stringify(currLunch));
-    }
-}
+
 //function sends new lunch menu to the server
 async function submitLunch() {
-    updateLocal();
-    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), sessionStorage.getItem('currLunchItems')];
+    
+    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), getMenu()];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -246,7 +389,7 @@ async function submitLunch() {
     await fetch('/submitLunch', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-            
+            getDateData();
         });
     });
 }
@@ -272,9 +415,7 @@ function getUpdated() {
 }
 //function sends updated lunch menu to the server
 async function updateLunch() {
-    getUpdated();
-    console.log(updatedMenu);
-    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), sessionStorage.getItem("temp", updatedMenu)];
+    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), getMenu()];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -283,7 +424,7 @@ async function updateLunch() {
     await fetch('/submitLunch', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-            
+            getDateData();
         });
     });
 }
@@ -339,10 +480,14 @@ function getURL(input) {
     //   reader.readAsDataURL(input.files[0]);
     // }
   }
-function test() {
-    console.log('ssss');
-   
-}
+// function test() {
+//     var sels = document.getElementsByClassName("hi");
+//     var select = sels[0]
+//     //var text = select.options[select.selectedIndex].text;
+//     //var src = select.options[select.selectedIndex].value;
+//     console.log(sels);
+
+// }
 function changePlace(id) {
     $('#item-1').attr('placeholder', 'New Placeholder Text').select2()
 }
