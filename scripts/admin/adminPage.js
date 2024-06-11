@@ -15,22 +15,7 @@ function checkValid() {
         window.location.href = "http://localhost:3000/adminLogin";
     }
 }
-/*
-    Redirect Functions
-*/
-function showLunchCount() {
-    window.location.href = "http://localhost:3000/yourCount";
-}
 
-function changeLunch() {
-    window.location.href = "http://localhost:3000/createLunch";
-}
-function showTest() {
-    window.location.href = "http://localhost:3000/test";
-}
-function toMain() {
-    window.location.href = "http://localhost:3000/adminPage";
-}
 /*
     Show Count Functions
 */
