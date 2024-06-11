@@ -10,6 +10,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /*
 TODO - 
+    Setup better login system
+    Clear user selections when school updates menu
+    Organize code better
+    Setup class code creation system and teacher page
+    Think of more top bar buttons
+    Setup buttons to be able to middle click to open in new tab
 */
 
 //set links to corresponding html file
@@ -34,6 +40,9 @@ app.get('/createLunch', (req, res) => {
 app.get('/yourCount', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/admin/subpages/seeCount.html'));
 });
+app.get('/test', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/admin/subpages/test.html'));
+});
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/select2', express.static(__dirname + '/node_modules/select2/dist/'));
 app.use("/images", express.static(__dirname + "/images"));
@@ -57,9 +66,6 @@ optionCaches.loadDatabase();
 schoolLogin.loadDatabase();
 schoolLunches.loadDatabase();
 userCounts.loadDatabase();
-//var ops = [["Main", [["cheesburger.jpg", "Cheeseburger"], ["tacos.jpg", "Tacos"], ["chickenSandwich.jpg", "Chicken Sandwich"], ["pizza.jpg", "Pizza"], ["boscoSticks.jpg", "Bosco Sticks"]]], ["Side",[["taterTots.jpg", "Tater Tots"], ["fries.jpg", "French Fries"],["corn.jpg", "Buttered Corn"], ["apple.jpg", "Apple"], ["banana.webp", "Banana"],["salad.webp", "Salad"]]]]
-//optionCaches.insert({school: "all", options: ops});
-//addSchool();
 console.log(getDate())
 
 

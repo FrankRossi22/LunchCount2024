@@ -33,15 +33,16 @@ p {
     margin-top: 1%;
   }
   .selectOptionImg {
-    width: 15%;
+    width: 13%;
     height: 50%;
     padding: 1%;
+    padding-right: 3%;
     border-radius: 8px;
     vertical-align: middle;
   }
   .selectImg {
-    width: 30%;
-    height: 50%;
+    width: 23%;
+    height: 30%;
     padding: 3%;
     border-radius: 15px;
     vertical-align: middle;
@@ -107,25 +108,80 @@ p {
   }
   .minButton {
     font-family: BlockLetters;
-    font-size: .8vw;
+    font-size: 1vw;
     border-radius: 6px;
-    width: 2%; 
+    width: 7%; 
     padding-top: .1%;
     padding-bottom: .1%;
+    margin-top: 50%;
+    min-width: 20px;
+    vertical-align: middle;
+  }
+  .minButtonCourse {
+    font-family: BlockLetters;
+    font-size: .8vw;
+    border-radius: 6px;
+    width: 15%; 
+    padding-top: .1%;
+    padding-bottom: .1%;
+    margin-top: 50%;
     min-width: 20px;
     vertical-align: middle;
   }
   .addButton {
     font-family: BlockLetters;
-    font-size: .8vw;
+    font-size: 1vw;
     border-radius: 6px;
-    width: 2%; 
-    padding-top: .1%;
-    padding-bottom: .1%;
+    width: 3%; 
+    padding-top: .2%;
+    padding-bottom: .2%;
     min-width: 20px;
     vertical-align: middle;
   }
   .subCont {
     text-align: center;
     display: none;
+  }
+
+  .selectDivSide {
+    display: inline-block;
+    width: 40%;
+    height: 100%;
+    min-height: 5px;
+    text-align: left;
+  }
+  .selectDivMid {
+    display: inline-block;
+    width: 20%;
+    text-align: center; 
+
+  }
+  .selectDivMain {
+    display: inline-block;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 1%;
+    margin-top: 1%;
+    
+  }
+  .courseDivSide {
+    display: inline-block;
+    width: 40%;
+    height: 100%;
+    min-height: 5px;
+    text-align: left;
+  }
+  .courseDivMid {
+    display: inline-block;
+    width: 20%;
+    text-align: center; 
+
+  }
+  .courseDivMain {
+    display: inline-block;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 1%;
+    margin-top: 1%;
+    
   }

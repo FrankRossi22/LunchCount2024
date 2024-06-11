@@ -10,6 +10,12 @@ const school = localStorage.getItem("school");
 /*
 TODO - 
     Setup phone width checker to display differently below a certain width
+
+    Setup good final screen after submit
+
+    Setup Past Options Screen
+
+    Setup better login system
 */
 
 //check if user is logged in

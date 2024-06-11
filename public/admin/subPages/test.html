@@ -12,8 +12,8 @@
 </head>
 <body onload="checkValid()">
     <section class="pageHeader">
-        <img src="/files/lcLogo2.png" class="banner">
-        <hr class="bannerHeader" />
+        <img src="/files/lcLogo2.png" style="width: 10%; height: 7%; padding-top: .5%;">
+        <hr style="margin-bottom: 0; padding-bottom: 0;"/>
     </section>
     <section class="topRow">
         <button class="topButtons" style="margin-left: 1%; margin-top: .5%;" onclick="toMain()">Admin</button>
@@ -33,44 +33,24 @@
          <div id="newLunch" class="subCont">
             <form id="inputForm" class="lunchInput" enctype="multipart/form-data">
             </form>
-            <hr style="width: 25%;"/>
-            <input type="button" value="Add Course" class="buttons"onclick="newCourse('inputForm')"> <br />
+            <hr style="width: 15%;"/>
+            <input type="button" value="Add Course" class="buttons"onclick="addCourse('inputForm')"> <br />
             <input type="button" value="Back" class="buttons" onclick="getMenu()">
             <input type="button" value="Submit" class="buttons" onclick="submitLunch()">
          </div>
          <div id="updateLunch" class="subCont">
           <form id="updateForm" class="lunchInput" enctype="multipart/form-data">
           </form>
-          <hr style="width: 25%;"/>
           <!-- <input type="button" value="Add Item" class="buttons"onclick="addItem()"><br /> -->
-          <input type="button" value="Add Course" class="buttons"onclick="newCourse('updateForm')"> <br />
+          <input type="button" value="Add Course" class="buttons"onclick="addCourse('updateForm')"> <br />
           <input type="button" value="Back" class="buttons" onclick="getMenu()">
           <input type="button" value="Update" class="buttons" onclick="updateLunch()">
          </div>
 
       
+        <!-- <div style="padding-top: 200px; text-align: center;"><input type="button" onclick="selectTest('sel')" value="Test"/></div> -->
     </main>
 </body>
-<script>
-    const beforeUnloadHandler = (event) => {
-    // Recommended
-    event.preventDefault();
-  
-    // Included for legacy support, e.g. Chrome/Edge < 119
-    event.returnValue = true;
-  };
-  
-  const nameInput = document.getElementById('date')
-  
-  nameInput.addEventListener("input", (event) => {
-    if (event.target.value !== "") {
-      //window.addEventListener("beforeunload", beforeUnloadHandler);
-    } else {
-      //window.removeEventListener("beforeunload", beforeUnloadHandler);
-    }
-  });
-
-</script>
 <script src="/scripts/default/defaultScripts.js"></script>
 <script src="/scripts/admin/adminPage.js"></script>
 </html>
