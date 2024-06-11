@@ -5,3 +5,4 @@
 {"school":"osu.edu","date":"6/5/2024","menu":[["Bab",[["Cheeseburger","cheeseburger.jpg"],["",""]]]],"counts":{"Cheeseburger":0,"":0},"_id":"YrEJEbG7GL1JNI2U"}
 {"school":"osu.edu","date":"6/11/2024","menu":[["Main",[["Tacos","tacos.jpg"]]],["Side",[["Apple","apple.jpg"]]]],"counts":{"Tacos":0,"Apple":0},"_id":"4Kyrdvi1kzwVp4C3"}
 {"school":"osu.edu","date":"6/11/2024","menu":[["Main",[["Cheeseburger","cheeseburger.jpg"]]],["Sides",[["Buttered Corn","corn.jpg"],["Banana","banana.webp"]]]],"counts":{"Cheeseburger":0,"Buttered Corn":0,"Banana":0},"_id":"4Kyrdvi1kzwVp4C3"}
+{"school":"osu.edu","date":"6/11/2024","menu":[["Main",[["Cheeseburger","cheeseburger.jpg"]]],["Sides",[["Buttered Corn","corn.jpg"],["Banana","banana.webp"]]]],"counts":{"Cheeseburger":1,"Buttered Corn":0,"Banana":1},"_id":"4Kyrdvi1kzwVp4C3"}

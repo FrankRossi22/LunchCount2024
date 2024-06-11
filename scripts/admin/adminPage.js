@@ -132,7 +132,7 @@ function showCreateLunch() {
     //document.getElementById('changeLunch').style.display = 'none';
     document.getElementById('updateLunch').style.display = 'none';
     document.getElementById('newLunch').style.display = 'block';
-    addCourse();
+    addCourse("inputForm");
     
     document.getElementById('main').style.display = 'block';
 }
@@ -178,6 +178,7 @@ async function addItemTest(id) {
     //form.insertBefore(document.createElement("br"), childBelow); form.insertBefore(document.createElement("br"), childBelow);
     currInput++;
 }
+var temp = [];
 //function loads select box options client side
 async function getOptions(school) {
     const message = [school];
@@ -190,12 +191,14 @@ async function getOptions(school) {
     await fetch('/getLunchOptions', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
+            temp = result.message;
             const opsSet = [...result.message[0][1], ...result.message[1][1]];
             if(opsSet.length != 0) {
                 for(var i = 0; i < opsSet.length; i++) {
                     selectBoxOptions[i] = {id: opsSet[i][0], text: opsSet[i][1]};
                 }
             }
+            
         });
     });
 }
@@ -260,6 +263,7 @@ function addCourse(formID) {
     var buttonDiv = document.createElement("div"); buttonDiv.className = "appendButtonsDiv"; buttonDiv.id = "appendButtonsDiv" + currCourse;
     but = document.createElement("input"); but.type = "button"; but.id = "add" + currCourse; but.className = "addButton";
     but.onclick = function() { addItemTest(this.id.substring(3)) }; but.value = "+"; buttonDiv.appendChild(but); div.appendChild(buttonDiv);
+    console.log(formID);
     form.appendChild(div);
     addItemTest(currCourse);
     currCourse++;
@@ -491,6 +495,39 @@ function getURL(input) {
 function changePlace(id) {
     $('#item-1').attr('placeholder', 'New Placeholder Text').select2()
 }
+var temp2 = {
+    "results": [
+      { 
+        "text": "Group 1", 
+        "children" : [
+          {
+              "id": 1,
+              "text": "Option 1.1"
+          },
+          {
+              "id": 2,
+              "text": "Option 1.2"
+          }
+        ]
+      },
+      { 
+        "text": "Group 2", 
+        "children" : [
+          {
+              "id": 3,
+              "text": "Option 2.1"
+          },
+          {
+              "id": 4,
+              "text": "Option 2.2"
+          }
+        ]
+      }
+    ],
+    "pagination": {
+      "more": true
+    }
+  }
 //gets lunch options data from server and sets up select boxes for fetched options
 function formatSelect(id) {
     function formatOption(option) {
@@ -503,18 +540,23 @@ function formatSelect(id) {
           var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
           return optionWithImage;
         }
-    $('#' + id).select2({templateResult: formatOption, templateSelection: formatSelected,data: selectBoxOptions, tags: false, placeholder: "Select Your Item"});
+        console.log(temp)
+    var $select2 = $('#' + id).select2({templateResult: formatOption, templateSelection: formatSelected, tags: false, placeholder: {text}});
+
+    for(var i = 0; i < temp.length; i++) {
+        var optgroup = $('<optgroup>');
+        optgroup.attr('label', temp[i][0]);
+        for(var j = 0; j < temp[i][1].length; j++) {
+            var option = $("<option></option>");
+            option.val(temp[i][1][j][0]);
+            option.text(temp[i][1][j][1]);
+            optgroup.append(option);
+            $('#' + id).append(optgroup);
+        }
+    }
   }
 async function formatSelectSpecific(firstOption, selectId) {
-    var specialOptions = [firstOption, ...selectBoxOptions];
     var a = true;
-    const repeatItem = selectBoxOptions.find(item => {
-        return item.id == firstOption.id;
-     })
-    const index = 1 + selectBoxOptions.indexOf(repeatItem);
-    specialOptions.splice(index, 1);
-    //specOptions.concat(selectBoxOptions);
-    var firstSet = false;
     function formatOption(option) {
       if (!option.id) {return option.text;}
       var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectOptionImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
@@ -526,8 +568,25 @@ async function formatSelectSpecific(firstOption, selectId) {
         return optionWithImage;
       }
       if(a) {
-        $('#' + selectId).select2({templateResult: formatOption, templateSelection: formatSelected,data: specialOptions, tags: false});
+        $('#' + selectId).select2({templateResult: formatOption, templateSelection: formatSelected, tags: false});
         a = false
+        for(var i = 0; i < temp.length; i++) {
+            var optgroup = $('<optgroup>');
+            optgroup.attr('label', temp[i][0]);
+            for(var j = 0; j < temp[i][1].length; j++) {
+                var option = $("<option></option>");
+                option.val(temp[i][1][j][0]);
+                option.text(temp[i][1][j][1]);
+                if(temp[i][1][j][1] === firstOption.text) {
+                    console.log("a")
+                    var option = $("<option selected='true'></option>");
+                } 
+                option.val(temp[i][1][j][0]);
+                option.text(temp[i][1][j][1]);
+                optgroup.append(option);
+                $('#' + selectId).append(optgroup);
+            }
+        }
     }
     //$('#item-2').select2().val(null).trigger('change');
     // $('#' + selectId).on('select2:select', function (e) {
@@ -539,3 +598,4 @@ async function formatSelectSpecific(firstOption, selectId) {
     // });
     
   }
+  
