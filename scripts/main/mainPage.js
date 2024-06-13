@@ -131,10 +131,15 @@ function finish() {
     document.getElementById('lastText').style.display = "none";
     document.getElementById('submitB').style.display = "inline";
     sec.innerHTML = '';
+    var para = document.createElement('h3'); para.style.textAlign = 'center'; para.style.fontSize = '6vh';
+        const text = document.createTextNode('Choices:');
+        console.log(text);
+        para.appendChild(text);
+        sec.appendChild(para);
     for(course in courseSet) {
         //console.log(courseSet[course]);
         var para = document.createElement('p');
-        const text = document.createTextNode(courseSet[course] + ":    " + userChoices[course]);
+        const text = document.createTextNode(courseSet[course] + ":    " + userChoices[course][0]);  para.style.fontSize = '4vh';
         console.log(text);
         para.appendChild(text);
         sec.appendChild(para);
