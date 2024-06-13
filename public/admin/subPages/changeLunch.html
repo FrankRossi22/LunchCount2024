@@ -16,13 +16,20 @@
         <hr class="bannerHeader" />
     </section>
     <section class="topRow">
-        <a href="http://localhost:3000/adminPage"><button class="topButtons" style="margin-left: 1%; margin-top: .5%;">Admin</button></a>
-        <a href="http://localhost:3000/"><button class="topButtons" style="margin-left: 1%; margin-top: .5%;">Menu</button></a>
-        <hr />
+      <a href="http://localhost:3000/adminPage"><button class="topButtons" style="margin-left: 1%; margin-top: .5%;">Admin</button></a>
+      <a href="http://localhost:3000/"><button class="topButtons" style="margin-left: 1%; margin-top: .5%;">Menu</button></a>
+      <hr />
     </section>
+    <!--Section displays (from js) a pop up box alerting the user that an incorrect login was used and hides itself when closed by user-->
+    <div class="custom-alert" id="customAlert" style="text-align: center;">
+      <p id="customAlertMessage" class="custom-Message"></p>
+      <div style="text-align: center;">
+          <button class="close-button" onclick="hideCustomAlert()">Close</button>
+      </div>
+    </div>
     <main id="main" class="changeLunch">
         <h2 id="header">Change Lunch</h2>
-        <hr style="width: 25%;"/> <br />
+        <hr style="width: 25%;"/>
         <div id="changeLunch" class="mainCont">
             <form class="dateInput" id="dateInput">
                 <b style="font-size: 1.3vw;">Select Date:</b>  <br />

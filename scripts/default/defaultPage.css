@@ -1,5 +1,6 @@
   body {
-    background-color: rgb(212, 238, 255);
+    /* background-color: rgb(212, 238, 255); */
+    background-color: rgb(179, 215, 255);
     margin: 0; 
     padding: 0;
   }
@@ -59,3 +60,39 @@
     transition: 0.2s;
   }
   
+  .custom-Message {
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+  }
+  .custom-alert {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(53, 53, 53, 0.95);
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: none;
+    max-width: 300px;
+    margin-top: 5%;
+    z-index: 999;
+}
+
+.close-button {
+    background-color:rgba(255, 61, 61, 0.8);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.show-alert-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

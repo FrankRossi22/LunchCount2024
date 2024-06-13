@@ -2,6 +2,7 @@
 var imageSets;
 var imageNameSets;
 var courseSet = [];
+var userChoices = [];
 var menuData;
 var currSet = 0;
 var atEnd = false;
@@ -68,7 +69,7 @@ const buttonGroupPressed = async e => {
     const text = e.target.id.substring(1, e.target.id.length);
     console.log(document.getElementById("A" + text));
     const img = await getTag(document.getElementById("A" + text).src)
-    localStorage.setItem(courseSet[currSet], JSON.stringify([text, img]));
+    userChoices[currSet] = [text, img];
     if(currSet === menuData.length - 1) {
         atEnd = true;
         currSet++;
@@ -103,22 +104,6 @@ function load() {
     document.getElementById("buttonDiv").style.textAlign = "center";
 }
 
-// function nextImageSet() {
-//     if(currSet === menuData.length - 1) {
-//         atEnd = true;
-//         return;
-//     } else {
-//         sec.innerHTML = '';
-//         currSet++;
-//         courseSet[currSet] = menuData[currSet][0];
-//         displayCurr(menuData[currSet][1]);
-//     }
-//     if(currSet === 1) {
-//         document.getElementById("buttonDiv").style.display = "block";
-//     }
-
-// }
-
 function prevImageSet() {
     if(atEnd) {
         currSet--;
@@ -149,7 +134,7 @@ function finish() {
     for(course in courseSet) {
         //console.log(courseSet[course]);
         var para = document.createElement('p');
-        const text = document.createTextNode(courseSet[course] + ":    " + localStorage.getItem(courseSet[course]));
+        const text = document.createTextNode(courseSet[course] + ":    " + userChoices[course]);
         console.log(text);
         para.appendChild(text);
         sec.appendChild(para);
@@ -158,10 +143,10 @@ function finish() {
 }
 async function submit() {
     var studentChoices = [];
-    for(var i = 0; i < courseSet.length; i++) {
-        studentChoices[i] = localStorage.getItem(courseSet[i]);
-    }
-    const message = [localStorage.getItem('school'), localStorage.getItem('email'), studentChoices];
+    // for(var i = 0; i < courseSet.length; i++) {
+    //     studentChoices[i] = localStorage.getItem(courseSet[i]);
+    // }
+    const message = [localStorage.getItem('school'), localStorage.getItem('email'), userChoices];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},

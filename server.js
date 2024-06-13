@@ -91,25 +91,31 @@ app.post('/fetchImageSet', (request, response) => {
 app.post('/updateLunchCount', (request, response) => {
     const schoolData = request.body;
     const school = schoolData[0]; const user = schoolData[1]; const selections = schoolData[2]; const date = getDate();
-    //console.log(choices)
-    userCounts.find({$and: [{ user: user }, { date: date }]}, (err, data) => {
-        //console.log(data);
+    userCounts.find({$and: [{ school: school }, { date: date }]}, (err, data) => {
         var prevSelections = [];
+        var jsonCounts = {}
         if(data.length > 0) {
-            prevSelections = data[0].data;
+            if(data[0].hasOwnProperty("userCounts")) {
+                jsonCounts = JSON.parse(data[0].userCounts);
+                if(jsonCounts.hasOwnProperty(user)) {
+                    prevSelections = jsonCounts[user];
+                }
+            }
         } else {
-            userCounts.insert({user: user, date: date});
+            userCounts.insert({school: school, date: date}); 
         }
-        userCounts.update({$and: [{ user: user }, { date: date }]}, { $set: { data: selections } }, (err, numReplaced) => {
+        jsonCounts[user] = selections;
+        //console.log(jsonCounts);
+        userCounts.update({$and: [{ school: school }, { date: date }]}, { $set: { userCounts: JSON.stringify(jsonCounts) } }, (err, numReplaced) => {
             schoolLunches.find({$and: [{ school: school }, { date: date }]}, (err, data) => {
                 if(data.length > 0) {
                     var currCount = data[0].counts;
                     for(var i = 0; i < selections.length; i++) {
-                        var curr = JSON.parse(selections[i])[0];
+                        var curr = selections[i][0];
                         currCount[curr] = currCount[curr] + 1;
                     }
                     for(var i = 0; i < prevSelections.length; i++) {
-                        var curr = JSON.parse(prevSelections[i])[0];
+                        var curr = prevSelections[i][0];
                         currCount[curr] = currCount[curr] - 1;
                     }
                     schoolLunches.update({$and: [{ school: school }, { date: date }]}, { $set: { counts: currCount } }, (err, numReplaced) => {});
@@ -207,16 +213,20 @@ app.post('/submitLunch', (request, response) => {
         items.push(...fullMenu[i][1])
     }
     var jsonCounts = {}
+  
     for(var i = 0; i < items.length; i++) {
         jsonCounts[items[i][0]] = 0;
+        
     }
     schoolLunches.find({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, (err, data) => {
         //console.log(data);
 
         if(data.length > 0) {
             schoolLunches.update({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, { $set: { menu: lunchData[2], counts: jsonCounts } }, function (err, numReplaced) {});
+            userCounts.update({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, { $unset: { userCounts: true } }, (err, numReplaced) => {});
         } else {
             schoolLunches.insert({school: lunchData[0], date: lunchData[1], menu: lunchData[2], counts: jsonCounts});
+            //userCounts.insert({school: lunchData[0], date: lunchData[1], userCounts: {}});
             var returnData = [true];
             response.json({
             message: returnData

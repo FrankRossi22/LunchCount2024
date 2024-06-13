@@ -1,10 +1,12 @@
 /*
 TODO - 
     Add student view option
-    Fix get count on update menu to clear user selections on that date
     Stop menu submission if boxes are not filled
 */
-
+/*
+CSS Ideas - 
+    ChangeLunch - Make courses show up 3 per row // make course divs have background and or outline to seperate them clearly
+*/
 
 /*
     All Page Functions
@@ -180,7 +182,7 @@ function appendSelectBefore(parent, child, idMod, placeholder) {
     const mainDiv = document.createElement('div');const div1 = document.createElement('div'); const div2 = document.createElement('div');const div3 = document.createElement('div');
     div1.className = "selectDivSide"; div2.className = "selectDivMid";div3.className = "selectDivSide"; mainDiv.className = "selectDivMain";
     mainDiv.id = "select" + idMod;
-    select.className = 'lunchInputs'; select.id = 'item' + idMod; select.style.width = "95%"; select.style.margin = "100px";
+    select.className = 'lunchInputs'; select.id = 'item' + idMod; select.style.width = "100%"; select.style.margin = "100px";
     if(placeholder) {select.appendChild(document.createElement('option'));}
     div2.appendChild(select);
     var but = document.createElement("input"); but.type = "button"; but.id = "min" + idMod; but.className = "minButton";
@@ -193,7 +195,7 @@ function newCourse(formID) {
     addItem(currCourse)
     currCourse++;
 }
-function addCourse(formID, isNew, courseVal) {
+function addCourse1(formID, isNew, courseVal) {
     courseLengths[currCourse] = [0, 0];
     const form = document.getElementById(formID);
     const mainDiv = document.createElement('div');const div1 = document.createElement('div'); const div2 = document.createElement('div');const div3 = document.createElement('div');
@@ -231,11 +233,12 @@ function getMenu() {
         var inputs = []
         var input = document.getElementById("courseIn" + j);
         var course = input.value;
-
+        if(course.replace(/\s+/g, '') === '') {return false;}
         for(var i = numPrev; i < courseLengths[j][0] + numPrev; i++) {
             var select = selects[i];
             var text = select.options[select.selectedIndex].text;
             var src = select.options[select.selectedIndex].value;
+            if(src === '') {return false;}
             inputs[i - numPrev] = [text, src];
         }
         numPrev += courseLengths[j][0];
@@ -282,7 +285,12 @@ function resetMenu() {
 
 //function sends new lunch menu to the server
 async function submitLunch() {
-    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), getMenu()];
+    const menu = getMenu();
+    if(menu === false) {
+        alertBox("Please Fill In or Remove Empty Items or Courses\n\n");
+        return;
+    }
+    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), menu];
     const options = {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(message)}
     await fetch('/submitLunch', options).then(response => {
         var data = response.json();
@@ -294,7 +302,12 @@ async function submitLunch() {
 
 //function sends updated lunch menu to the server
 async function updateLunch() {
-    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), getMenu()];
+    const menu = getMenu();
+    if(menu === false) {
+        alertBox("Please Fill In or Remove Empty Items or Courses\n\n");
+        return;
+    }
+    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), menu];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -412,4 +425,42 @@ async function formatSelectSpecific(firstOption, selectId) {
     // });
     
   }
-  
+
+function alertBox(text) {
+    let customAlert = document.getElementById('customAlert');
+    let customAlertMessage = document.getElementById('customAlertMessage');
+    customAlertMessage.innerText = text;
+    customAlert.style.display = 'block';
+}
+function hideCustomAlert() {
+    let customAlert = document.getElementById('customAlert');
+    customAlert.style.display = 'none';
+}
+
+function addCourse(formID, isNew, courseVal) {
+    courseLengths[currCourse] = [0, 0];
+    const form = document.getElementById(formID);
+
+    const filler1 = document.createElement('div'); const filler2 = document.createElement('div');
+    filler1.className = "courseFillerDiv"; filler2.className = "courseFillerDiv";
+    const mainDiv = document.createElement('div');const div1 = document.createElement('div'); const div2 = document.createElement('div');const div3 = document.createElement('div');
+    div1.className = "courseDivSide"; div2.className = "courseDivMid";div3.className = "courseDivSide"; mainDiv.className = "courseDivMain";
+    mainDiv.id = "courseDiv" + currCourse;
+    var but = document.createElement("input"); but.type = "button"; but.id = "min" + currCourse; but.className = "minButtonCourse";
+    but.onclick = function() { subCourse(this.id.substring(3)); }; but.value = "Remove"; div3.appendChild(but); 
+    var h3 = document.createElement('h3');  h3.innerHTML = 'Course';
+    // var hr = document.createElement('hr'); hr.style.width = "15%"; hr.id = "hr" + currCourse;
+    // mainDiv.appendChild(hr)
+    div2.appendChild(h3); mainDiv.appendChild(div1); mainDiv.appendChild(div2); mainDiv.appendChild(div3)
+    const input = createInput("Course", "courseIn", currCourse);
+    if(!isNew) {input.value = courseVal;}
+    mainDiv.appendChild(input); 
+    mainDiv.appendChild(document.createElement("br")); mainDiv.appendChild(document.createElement("br"));
+    h3 = document.createElement('h3');
+    h3.innerHTML = 'Course Items';
+    mainDiv.appendChild(h3);
+    var buttonDiv = document.createElement("div"); buttonDiv.className = "appendButtonsDiv"; buttonDiv.id = "appendButtonsDiv" + currCourse;
+    but = document.createElement("input"); but.type = "button"; but.id = "add" + currCourse; but.className = "addButton";
+    but.onclick = function() { addItem(this.id.substring(3)) }; but.value = "+"; buttonDiv.appendChild(but); mainDiv.appendChild(buttonDiv);
+    form.appendChild(filler1); form.appendChild(mainDiv); form.appendChild(filler2);
+}
