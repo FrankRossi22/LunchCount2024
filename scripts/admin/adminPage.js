@@ -113,6 +113,7 @@ function showUpdateLunch() {
     document.getElementById('updateForm').innerHTML = '';
     document.getElementById('updateLunch').style.display = 'block';
     document.getElementById('main').style.display = 'block';
+    
     resetMenu();
 }
 //function >
@@ -125,9 +126,13 @@ function showCreateLunch() {
     //document.getElementById('changeLunch').style.display = 'none';
     document.getElementById('updateLunch').style.display = 'none';
     document.getElementById('newLunch').style.display = 'block';
+    const form = document.getElementById('inputForm')
+    const flex = document.createElement('div'); flex.className = "coursesFlexbox"; flex.id = "courseFlex";
+    form.appendChild(flex);
     newCourse("inputForm");
     
     document.getElementById('main').style.display = 'block';
+    
 }
 
 function subItem(id) {
@@ -139,6 +144,9 @@ function subItem(id) {
 function subCourse(id) {
     const div = document.getElementById("courseDiv" + id);
     courseLengths[id] = null; deletedCourses++;
+    if(currCourse - 1 === deletedCourses) {
+        //document.getElementById('courseFlex').style.justifyContent = 'center';
+    }
     //console.log(id)
     div.remove();
 }
@@ -148,7 +156,6 @@ async function addItem(id) {
     courseLengths[id][0]++;
     courseLengths[id][1]++;
     var childBelow = document.getElementById("appendButtonsDiv" + id)
-    console.log(childBelow)
     appendSelectBefore(div, childBelow, idMod, true);
     formatSelect('item' + idMod);
     currInput++;
@@ -280,6 +287,8 @@ function resetMenu() {
     currCourse = 0;
     const form = document.getElementById('updateForm');
     form.innerHTML = '';
+    const flex = document.createElement('div'); flex.className = "coursesFlexbox"; flex.id = "courseFlex";
+    form.appendChild(flex);
     loadCourses();
 }
 
@@ -359,19 +368,18 @@ function parseDate(oldDate) {
 function formatSelect(id) {
     function formatOption(option) {
         if (!option.id) {return option.text;}
-        var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectOptionImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
+        var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectOptionImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.2vw">' + option.text + '</div></div></div></span>');
         return optionWithImage;
       }
       function formatSelected(option) {
           if (!option.id) {return option.text;}
-          var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
+          var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.2vw">' + option.text + '</div></div></div></span>');
           return optionWithImage;
         }
-        console.log(temp)
     $('#' + id).select2({templateResult: formatOption, templateSelection: formatSelected, tags: false, placeholder: "Select An Item"});
 
     for(var i = 0; i < temp.length; i++) {
-        var optgroup = $('<optgroup>');
+        var optgroup = $('<optgroup class="lunchOptGroup">');
         optgroup.attr('label', temp[i][0]);
         for(var j = 0; j < temp[i][1].length; j++) {
             var option = $("<option></option>");
@@ -386,12 +394,12 @@ async function formatSelectSpecific(firstOption, selectId) {
     var a = true;
     function formatOption(option) {
       if (!option.id) {return option.text;}
-      var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectOptionImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
+      var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectOptionImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.2vw">' + option.text + '</div></div></div></span>');
       return optionWithImage;
     }
     function formatSelected(option) {
         if (!option.id) {return option.text;}
-        var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.4vw">' + option.text + '</div></div></div></span>');
+        var optionWithImage = $('<span class="textCont"><div style="display: flex;"><img src="images/' + option.id + '" class="selectImg" /><div style="display: table"><div style="display: table-cell; vertical-align: middle; font-size: 1.2vw">' + option.text + '</div></div></div></span>');
         return optionWithImage;
       }
       if(a) {
@@ -405,7 +413,6 @@ async function formatSelectSpecific(firstOption, selectId) {
                 option.val(temp[i][1][j][0]);
                 option.text(temp[i][1][j][1]);
                 if(temp[i][1][j][1] === firstOption.text) {
-                    console.log("a")
                     var option = $("<option selected='true'></option>");
                 } 
                 option.val(temp[i][1][j][0]);
@@ -439,11 +446,13 @@ function hideCustomAlert() {
 
 function addCourse(formID, isNew, courseVal) {
     courseLengths[currCourse] = [0, 0];
-    const form = document.getElementById(formID);
-
+    const flex = document.getElementById("courseFlex");
+    if(currCourse > 0) {
+        //flex.style.justifyContent = 'left';
+    }
     const filler1 = document.createElement('div'); const filler2 = document.createElement('div');
     filler1.className = "courseFillerDiv"; filler2.className = "courseFillerDiv";
-    const mainDiv = document.createElement('div');const div1 = document.createElement('div'); const div2 = document.createElement('div');const div3 = document.createElement('div');
+    const mainDiv = document.createElement('div'); const div1 = document.createElement('div'); const div2 = document.createElement('div');const div3 = document.createElement('div');
     div1.className = "courseDivSide"; div2.className = "courseDivMid";div3.className = "courseDivSide"; mainDiv.className = "courseDivMain";
     mainDiv.id = "courseDiv" + currCourse;
     var but = document.createElement("input"); but.type = "button"; but.id = "min" + currCourse; but.className = "minButtonCourse";
@@ -462,5 +471,6 @@ function addCourse(formID, isNew, courseVal) {
     var buttonDiv = document.createElement("div"); buttonDiv.className = "appendButtonsDiv"; buttonDiv.id = "appendButtonsDiv" + currCourse;
     but = document.createElement("input"); but.type = "button"; but.id = "add" + currCourse; but.className = "addButton";
     but.onclick = function() { addItem(this.id.substring(3)) }; but.value = "+"; buttonDiv.appendChild(but); mainDiv.appendChild(buttonDiv);
-    form.appendChild(filler1); form.appendChild(mainDiv); form.appendChild(filler2);
+    
+   flex.appendChild(mainDiv)
 }

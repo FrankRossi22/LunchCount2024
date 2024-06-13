@@ -47,6 +47,7 @@ h3 {
   border-radius: 15px;
   vertical-align: middle;
 }
+
 @font-face {
   font-family: BlockLetters;
   src: url(/files/ThatSoundsGreat-yYLE3.ttf);
@@ -96,6 +97,9 @@ input[type="date"]::-webkit-calendar-picker-indicator{
   cursor: pointer;
   border-radius: 3px;
 }
+.select2-results__group {
+  font-size: 1.4vw;
+}
 
 .buttons {
   font-family: BlockLetters;
@@ -121,7 +125,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{
   font-family: BlockLetters;
   font-size: .7vw;
   border-radius: 6px;
-  width: 50%; 
+  width: 70%; 
   padding-top: .1%;
   padding-bottom: .1%;
   margin-top: 50%;
@@ -141,6 +145,15 @@ input[type="date"]::-webkit-calendar-picker-indicator{
 .subCont {
   text-align: center;
   display: none;
+}
+.coursesFlexbox {
+  display: flex;
+  /* width: 70%; */
+  margin-left: 15%;
+  margin-right: 15%;
+  align-items: baseline;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 
 .selectDivSide {
@@ -166,15 +179,18 @@ input[type="date"]::-webkit-calendar-picker-indicator{
 }
 .courseDivMain {
   display: inline-block;
-  width: 25.6%;
-  align-items: center;
+  width: 29.3%;
   margin-bottom: 1.7%;
   border-width: .2%;
   border-style: groove;
   border-color:rgb(211, 205, 205);
   border-radius: 2%;
   background-color: rgb(247, 247, 247);
+  margin: 1.5%;
+  vertical-align: top;
+  min-width: 266px;
 }
+
 .courseDivSide {
   display: inline-block;
   width: 38%;
@@ -190,20 +206,6 @@ input[type="date"]::-webkit-calendar-picker-indicator{
   width: 20%;
   text-align: center; 
 
-}
-.courseFillerDiv {
-  display: inline-block;
-  width: 35%;
-  height: 100%;
-  min-height: 5px;
-  text-align: left;
-}
-.courseFillerCont {
-  display: inline-block;
-  width: 40%;
-  height: 100%;
-  min-height: 5px;
-  text-align: left;
 }
 
 
