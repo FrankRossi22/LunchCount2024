@@ -20,18 +20,17 @@ TODO -
 */
 
 //check if user is logged in
-if(school === null) {
-    window.location.href = "http://localhost:3000/login";
-}
+// if(school === null) {
+//     window.location.href = "http://localhost:3000/login";
+// }
 //function gets school image data from server and loads page 
 async function getImages() {
-    const schoolJ = {school};
+    // const schoolJ = {school};
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(schoolJ)
     }
-    await fetch('/fetchImageSet', options).then(response => {
+    await fetch('/fetchImageSet').then(response => {
         var data = response.json();
         data.then(async function(result) {
             const imageData = await result.message;
@@ -151,7 +150,7 @@ async function submit() {
     // for(var i = 0; i < courseSet.length; i++) {
     //     studentChoices[i] = localStorage.getItem(courseSet[i]);
     // }
-    const message = [localStorage.getItem('school'), localStorage.getItem('email'), userChoices];
+    const message = [userChoices];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},

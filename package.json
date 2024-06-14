@@ -17,9 +17,11 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.19.2",
+    "express-session": "^1.18.0",
     "jquery": "^3.7.1",
     "nedb": "^1.8.0",
     "nedb-async-await": "^0.1.2",
+    "nedb-session-store": "^1.1.2",
     "select2": "^4.1.0-rc.0"
   }
 }

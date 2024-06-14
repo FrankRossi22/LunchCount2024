@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/scripts/default/defaultPage.css">
-    <link rel="stylesheet" href="/scripts/main/signInStyles.css">
+    <link rel="stylesheet" href="/scripts/main/newSignInStyles.css">
     <title>LunchCount</title>
 </head>
 <body>
@@ -30,16 +30,14 @@
                 <div class="signInText">
                     <b>Sign In:</b> 
                 </div>
-                <br /> <br /> <br />
-                <input class="inputs" id="email" type="text" size="40" autocomplete="on" placeholder="School Email" style="height: 30px;"/>
-                <br /> <br /> <br />
-                <input class="inputs" id="classCode" type="text" size="40" autocomplete="off" placeholder="Class Code" style="height: 30px;"/>
-                <br /> <br /> <br />
+                <input class="inputs" id="email" type="text" size="40" autocomplete="on" placeholder="School Email"/>
+                <!-- <input class="passInput" id="password" type="password" size="40" autocomplete="off" placeholder="Password"/> -->
+                <input class="inputs" id="classCode" type="text" size="40" autocomplete="off" placeholder="Class Code"/>
                 <input type="button" value="Sign In" class="buttons" style="font-family: BlockLetters; font-size: 15px;" onclick="signIn()">
             </form>
         </section>
     </main>
 </body>
 <script src="/scripts/default/defaultScripts.js"></script>
-<script src="/scripts/main/signIn.js"></script>
+<script src="/scripts/main/newSignIn.js"></script>
 </html>

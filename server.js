@@ -1,11 +1,42 @@
 const express = require('express');
 const { get } = require('http');
+const session = require('express-session');
+
 const app = express();
 app.listen(3000, () => console.log('listening at 3000'));
 var path = require('path');
 app.use(express.json({limit: '1mb'}))
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+var NedbStore = require('nedb-session-store')(session);
+const sharedSecretKey = "ThisIsNotSecure"; // Will be updated to be stored securely once the server isnt being run on localhost
+app.use(
+  session({
+    secret: sharedSecretKey,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      path: '/',
+      httpOnly: true,
+      // 365 * 24 * 60 * 60 * 1000 == 1 year 
+      maxAge: 3 * 60 * 60 * 1000  // == 3 hours
+    },
+    store: new NedbStore({
+      filename: 'databases/sessions.db'
+    })
+  })
+);
+// //Middleware to add validation to request
+// app.use((req, res, next) => {
+//     //console.log('Session:', req.session.isLogged != true);
+//     if(req.session.isLogged != true) {
+//         req.body.isValid = false;
+//     } else { 
+//         req.body.isValid = true;
+//         next();}
+// });
 
 
 /*
@@ -17,34 +48,63 @@ TODO -
     Think of more top bar buttons
     Setup buttons to be able to middle click to open in new tab
 */
-
 //set links to corresponding html file
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/main/redirects.html'));
 });
-app.get('/AdminLogin', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/admin/adminSignIn.html'));
+app.get('/admin/login', (req, res) => {
+    if(req.session.isAdmin != true) {
+        res.sendFile(path.join(__dirname, '/public/admin/adminSignIn.html'));
+    } else {
+        res.redirect('/admin/');
+    }
 });
-app.get('/AdminPage', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/admin/adminPage.html'));
+app.get('/admin', (req, res) => {
+    if(req.session.isAdmin != true) {
+        res.redirect('/admin/login');
+    } else {
+        res.sendFile(path.join(__dirname, '/public/admin/adminPage.html'));
+    }
+    
 });
 app.get('/Login', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/main/signInPage.html'));
+    if(req.session.isLogged != true) {
+        res.sendFile(path.join(__dirname, '/public/main/signInPage.html'));
+    } else {
+        res.redirect('/student');
+    }
 });
 app.get('/student', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/main/mainPage.html'));
+    if(req.session.isLogged != true) {
+        res.redirect('/Login');
+    } else {
+        res.sendFile(path.join(__dirname, '/public/main/mainPage.html'));
+    }
 });
-app.get('/createLunch', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/admin/subpages/changeLunch.html'));
+app.get('/admin/createLunch', (req, res) => {
+    if(req.session.isAdmin != true) {
+        res.redirect('/admin/login');
+    } else {
+        res.sendFile(path.join(__dirname, '/public/admin/subpages/changeLunch.html'));
+    }
 });
-app.get('/yourCount', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/admin/subpages/seeCount.html'));
+app.get('/admin/yourCount', (req, res) => {
+    if(req.session.isAdmin != true) {
+        res.redirect('/admin/login');
+    } else {
+        res.sendFile(path.join(__dirname, '/public/admin/subpages/seeCount.html'));
+    }
 });
-app.get('/test', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/admin/subpages/test.html'));
+app.get('/admin/test', (req, res) => {
+    if(req.session.isAdmin != true) {
+        res.redirect('/admin/login');
+    } else {
+        res.sendFile(path.join(__dirname, '/public/admin/subpages/test.html'));
+    }
 });
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/select2', express.static(__dirname + '/node_modules/select2/dist/'));
+app.use("/admin/images", express.static(__dirname + "/images"));
 app.use("/images", express.static(__dirname + "/images"));
 app.use("/files", express.static(__dirname + "/files"));
 app.use("/scripts", express.static(__dirname + "/scripts"));
@@ -66,22 +126,23 @@ optionCaches.loadDatabase();
 schoolLogin.loadDatabase();
 schoolLunches.loadDatabase();
 userCounts.loadDatabase();
-console.log(getDate())
+console.log(getDate());
 
 
 /*
     Main Page Functions
 */
 //get and send images to user for MainPage
-app.post('/fetchImageSet', (request, response) => {
-    const school = request.body.school;
+app.get('/fetchImageSet', (request, response) => {
+    //const school = request.body.school;
     var date = getDate();
     var returnData = [];
-    schoolLunches.find({$and: [{ school: school }, { date: date }]}, (err, data) => {
+    schoolLunches.find({$and: [{ school: request.session.school }, { date: date }]}, (err, data) => {
         if(data.length > 0) {
             returnData[0] = data[0].menu;
            
         }
+        console.log(returnData);
         response.json({
             message: returnData
         });
@@ -90,10 +151,10 @@ app.post('/fetchImageSet', (request, response) => {
 //post gets user lunch count from main page and updates user and school counts
 app.post('/updateLunchCount', (request, response) => {
     const schoolData = request.body;
-    const school = schoolData[0]; const user = schoolData[1]; const selections = schoolData[2]; const date = getDate();
+    const school = request.session.school; const user = request.session.userName; const selections = schoolData[0]; const date = getDate();
     userCounts.find({$and: [{ school: school }, { date: date }]}, (err, data) => {
         var prevSelections = [];
-        var jsonCounts = {}
+        var jsonCounts = {};
         if(data.length > 0) {
             if(data[0].hasOwnProperty("userCounts")) {
                 jsonCounts = JSON.parse(data[0].userCounts);
@@ -146,6 +207,11 @@ app.post('/validateUser', (request, response) => {
            const schoolData = [data[0].schoolEmails, data[0].classCodes];
            isValid = validLogin(schoolData, userData);
         }
+        if(isValid) {
+            request.session.username = userData.email;
+            request.session.school = school;
+            request.session.isLogged = true;
+        }
         response.json({
             school: school,
             valid: isValid
@@ -161,6 +227,11 @@ app.post('/validateAdmin', (request, response) => {
         if(data.length > 0) {
            const schoolData = [data[0].adminEmails, data[0].adminPasswords];
            isValid = validAdminLogin(schoolData, userData);
+        }
+        if(isValid) {
+            request.session.adminUser = userData.email;
+            request.session.adminSchool = school;
+            request.session.isAdmin = true;
         }
         response.json({
             school: school,

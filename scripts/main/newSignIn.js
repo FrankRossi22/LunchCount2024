@@ -1,3 +1,4 @@
+
 /*
 TODO - 
     Send Date and Time to server with login info
@@ -5,14 +6,15 @@ TODO -
 
 function signIn() {
     var isValid = false;
-    var email = document.getElementById("email").value;
-    var adminPass = document.getElementById("adminPass").value;
+    const email = document.getElementById("email").value;
+    const classCode = document.getElementById("classCode").value;
+    //const pass = document.getElementById("password").value;
     var i = 0;
-    if(adminPass === "" || email === "") {
-        alertBox("Please Input Email and Password\n\n");
+    if(classCode === "" || email === "") {
+        alertBox("Please Input Email,\nPassword, and Class Code\n\n");
         return;
     }
-    const userInfo = {email, adminPass};
+    const userInfo = {email, classCode};
     const options = {
         method: 'POST',
         headers: {
@@ -21,21 +23,21 @@ function signIn() {
         body: JSON.stringify(userInfo)
     }
     //send user data to server to be validated => open next page if so
-    fetch('/validateAdmin', options).then(response => {
+    fetch('/validateUser', options).then(response => {
         const data = response.json();
         data.then(function(result) {
         isValid = result.valid;
         if(!isValid) {
-            alertBox("Invalid Email or Password\nPlease Try Again\n\n");
+            alertBox("Invalid Email,\nPassword, or Class Code\n\nPlease Try Again\n");
             return;
         } else {
-            localStorage.setItem("schoolAdmin", result.school);
-            window.location.href = "http://localhost:3000/admin";
+            localStorage.setItem("school", result.school);
+            localStorage.setItem("email", email);
+            window.location.href = "http://localhost:3000/student";
         }
         });
     });
 }
-
 
 function alertBox(text) {
     let customAlert = document.getElementById('customAlert');

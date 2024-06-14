@@ -12,10 +12,10 @@ CSS Ideas -
     All Page Functions
 */
 function checkValid() {
-    const admin = localStorage.getItem("admin");
-    if(admin === null) {
-        window.location.href = "http://localhost:3000/adminLogin";
-    }
+    // const admin = localStorage.getItem("admin");
+    // if(admin === null) {
+    //     window.location.href = "http://localhost:3000/adminLogin";
+    // }
 }
 
 /*
@@ -24,7 +24,7 @@ function checkValid() {
 //function gets current count for today from server and calls showCount to display the data
 async function getCount() {
     //const date = parseDate(document.getElementById("date").value);
-    const message = [localStorage.getItem('school'), "6/7/2024"];
+    const message = [localStorage.getItem("schoolAdmin"),"6/7/2024"];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -74,6 +74,7 @@ async function getDateData() {
     deletedCourses = 0;
     selectBoxOptions = [];
     currMenu = [];
+
     if(document.getElementById("date").value === '') {
         document.getElementById('header').innerHTML = 'Change Lunch';
         document.getElementById('inputForm').innerHTML = '';
@@ -83,6 +84,7 @@ async function getDateData() {
 
         return;
     }
+
     const date = parseDate(document.getElementById("date").value);
     const message = [localStorage.getItem('school'), date];
     const options = {
@@ -91,10 +93,11 @@ async function getDateData() {
         body: JSON.stringify(message)
     }
     //ask server for lunch on selected date
+
     await fetch('/getCurrLunch', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-            getOptions(localStorage.getItem('school'));
+            getOptions(localStorage.getItem('schoolAdmin'));
             if(result.message.length === 0) {
                 showCreateLunch();
             } else {
@@ -118,10 +121,9 @@ function showUpdateLunch() {
 }
 //function >
 function showCreateLunch() {
-    sessionStorage.clear();
     document.getElementById('updateForm').innerHTML = '';
     document.getElementById('inputForm').innerHTML = '';
-    getOptions(localStorage.getItem('school'));
+    getOptions(localStorage.getItem('schoolAdmin'));
     document.getElementById('header').innerHTML = 'Create Lunch';
     //document.getElementById('changeLunch').style.display = 'none';
     document.getElementById('updateLunch').style.display = 'none';
@@ -282,7 +284,7 @@ function loadCourses() {
 }
 //function resets menu html and variables
 function resetMenu() {
-    getOptions(localStorage.getItem('school'))
+    getOptions(localStorage.getItem('schoolAdmin'))
     currItem = 1;
     currCourse = 0;
     const form = document.getElementById('updateForm');
@@ -299,7 +301,7 @@ async function submitLunch() {
         alertBox("Please Fill In or Remove Empty Items or Courses\n\n");
         return;
     }
-    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), menu];
+    const message = [localStorage.getItem('schoolAdmin'), parseDate(document.getElementById('date').value), menu];
     const options = {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(message)}
     await fetch('/submitLunch', options).then(response => {
         var data = response.json();
@@ -316,7 +318,7 @@ async function updateLunch() {
         alertBox("Please Fill In or Remove Empty Items or Courses\n\n");
         return;
     }
-    const message = [localStorage.getItem('school'), parseDate(document.getElementById('date').value), menu];
+    const message = [localStorage.getItem('schoolAdmin'), parseDate(document.getElementById('date').value), menu];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
