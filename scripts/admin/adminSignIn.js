@@ -1,6 +1,5 @@
 /*
 TODO - 
-    Send Date and Time to server with login info
 */
 
 function signIn() {

@@ -17,6 +17,7 @@ app.use(
     secret: sharedSecretKey,
     resave: false,
     saveUninitialized: false,
+    rolling: true,
     cookie: {
       path: '/',
       httpOnly: true,
@@ -41,12 +42,10 @@ app.use(
 
 /*
 TODO - 
-    Setup better login system
     Clear user selections when school updates menu
     Organize code better
     Setup class code creation system and teacher page
     Think of more top bar buttons
-    Setup buttons to be able to middle click to open in new tab
 */
 //set links to corresponding html file
 app.get('/', (req, res) => {
@@ -102,6 +101,21 @@ app.get('/admin/test', (req, res) => {
         res.sendFile(path.join(__dirname, '/public/admin/subpages/test.html'));
     }
 });
+app.get('/teacher/login', (req, res) => {
+    if(req.session.isAdmin != true) {
+        res.sendFile(path.join(__dirname, '/public/teacher/teacherSignIn.html'));
+    } else {
+        res.redirect('/teacher/');
+    }
+});
+app.get('/teacher', (req, res) => {
+    if(req.session.isAdmin != true) {
+        res.redirect('/teacher/login');
+    } else {
+        res.sendFile(path.join(__dirname, '/public/teacher/teacherPage.html'));
+    }
+    
+});
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/select2', express.static(__dirname + '/node_modules/select2/dist/'));
 app.use("/admin/images", express.static(__dirname + "/images"));
@@ -110,9 +124,9 @@ app.use("/files", express.static(__dirname + "/files"));
 app.use("/scripts", express.static(__dirname + "/scripts"));
 
 
-app.post('/test', (request, response) => {
-    const data = request.body;
-    response.end;
+app.post('/test', (req, res) => {
+    const data = req.body;
+    res.end;
 });
 
 //load databases
@@ -133,25 +147,24 @@ console.log(getDate());
     Main Page Functions
 */
 //get and send images to user for MainPage
-app.get('/fetchImageSet', (request, response) => {
-    //const school = request.body.school;
+app.get('/fetchImageSet', (req, res) => {
+    //const school = req.body.school;
     var date = getDate();
     var returnData = [];
-    schoolLunches.find({$and: [{ school: request.session.school }, { date: date }]}, (err, data) => {
+    schoolLunches.find({$and: [{ school: req.session.school }, { date: date }]}, (err, data) => {
         if(data.length > 0) {
             returnData[0] = data[0].menu;
            
         }
-        console.log(returnData);
-        response.json({
+        res.json({
             message: returnData
         });
     })
 });
 //post gets user lunch count from main page and updates user and school counts
-app.post('/updateLunchCount', (request, response) => {
-    const schoolData = request.body;
-    const school = request.session.school; const user = request.session.userName; const selections = schoolData[0]; const date = getDate();
+app.post('/updateLunchCount', (req, res) => {
+    const schoolData = req.body;
+    const school = req.session.school; const user = req.session.userName; const selections = schoolData[0]; const date = getDate();
     userCounts.find({$and: [{ school: school }, { date: date }]}, (err, data) => {
         var prevSelections = [];
         var jsonCounts = {};
@@ -187,7 +200,7 @@ app.post('/updateLunchCount', (request, response) => {
     
     //console.log(data)
     var returnData = true;
-    response.json({
+    res.json({
         message: returnData
     });
 });
@@ -197,9 +210,15 @@ app.post('/updateLunchCount', (request, response) => {
 /*
     Login Page Functions
 */
+app.get('/logOut', (req, res) => {
+    req.session.destroy(function(err) {})
+    res.json({
+        message: true  
+    });
+});
 //validate logins for main login
-app.post('/validateUser', (request, response) => {
-    const userData = request.body;
+app.post('/validateUser', (req, res) => {
+    const userData = req.body;
     const school = getEmail(userData.email);
     var isValid = false;
     schoolLogin.find({school: school}, (err, data) => {
@@ -208,19 +227,19 @@ app.post('/validateUser', (request, response) => {
            isValid = validLogin(schoolData, userData);
         }
         if(isValid) {
-            request.session.username = userData.email;
-            request.session.school = school;
-            request.session.isLogged = true;
+            req.session.username = userData.email;
+            req.session.school = school;
+            req.session.isLogged = true;
         }
-        response.json({
+        res.json({
             school: school,
             valid: isValid
         });
     })
 });
 //validate logins for admin login
-app.post('/validateAdmin', (request, response) => {
-    const userData = request.body;
+app.post('/validateAdmin', (req, res) => {
+    const userData = req.body;
     const school = getEmail(userData.email);
     var isValid = false;
     schoolLogin.find({school: school}, (err, data) => {
@@ -229,11 +248,11 @@ app.post('/validateAdmin', (request, response) => {
            isValid = validAdminLogin(schoolData, userData);
         }
         if(isValid) {
-            request.session.adminUser = userData.email;
-            request.session.adminSchool = school;
-            request.session.isAdmin = true;
+            req.session.adminUser = userData.email;
+            req.session.adminSchool = school;
+            req.session.isAdmin = true;
         }
-        response.json({
+        res.json({
             school: school,
             valid: isValid
         });
@@ -264,20 +283,20 @@ function getEmail(userEmail) {
 /*
     Admin Page Functions
 */
-app.post('/getCurrLunch', (request, response) => {
-    const adminData = request.body;
+app.post('/getCurrLunch', (req, res) => {
+    const adminData = req.body;
     var returnData = [];
     schoolLunches.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
         if(data.length > 0) {
             returnData = data[0];
         }
-        response.json({
+        res.json({
             message: returnData
         });
     })
 });
-app.post('/submitLunch', (request, response) => {
-    const lunchData = request.body;
+app.post('/submitLunch', (req, res) => {
+    const lunchData = req.body;
     var fullMenu = lunchData[2];
     var items = [];
     for(var i = 0; i < fullMenu.length; i++) {
@@ -299,19 +318,19 @@ app.post('/submitLunch', (request, response) => {
             schoolLunches.insert({school: lunchData[0], date: lunchData[1], menu: lunchData[2], counts: jsonCounts});
             //userCounts.insert({school: lunchData[0], date: lunchData[1], userCounts: {}});
             var returnData = [true];
-            response.json({
+            res.json({
             message: returnData
             });
         }
     })
 });
-app.post('/getLunchOptions', (request, response) => {
+app.post('/getLunchOptions', (req, res) => {
     var returnData = [];
-    const adminData = request.body;
+    const adminData = req.body;
     optionCaches.find({ school: adminData[0] }, (err, data) => {
         if(data.length > 0) {
             returnData = data[0].options;
-            response.json({
+            res.json({
                 message: returnData
             });
         } else {
@@ -319,15 +338,15 @@ app.post('/getLunchOptions', (request, response) => {
                 if(data.length > 0) {
                     returnData = data[0].options;
                 }
-                response.json({
+                res.json({
                     message: returnData
                 });
             })
         }
     })
 });
-app.post('/getLunchCount', (request, response) => {
-    const adminData = request.body;
+app.post('/getLunchCount', (req, res) => {
+    const adminData = req.body;
     var returnData = [];
     schoolLunches.find({$and: [{ school: adminData[0] }, { date: getDate() }]}, (err, data) => {
         if(data.length > 0) {
@@ -335,46 +354,46 @@ app.post('/getLunchCount', (request, response) => {
             returnData[1] = data[0].counts;
             //console.log(returnData);
         }
-        response.json({
+        res.json({
             message: returnData
         });
     })
 });
-app.post('/updateLunch', (request, response) => {
-    const adminData = request.body;
+app.post('/updateLunch', (req, res) => {
+    const adminData = req.body;
     var returnData = [];
     schoolLunches.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
         if(data.length > 0) {
             returnData[0] = data[0].courses;
             returnData[1] = data[0].imageNames;
         }
-        response.json({
+        res.json({
             message: returnData
         });
     })
 });
-app.post('/createLunch', (request, response) => {
-    const adminData = request.body;
+app.post('/createLunch', (req, res) => {
+    const adminData = req.body;
     var returnData = [];
     schoolLunches.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
         if(data.length > 0) {
             returnData[0] = data[0].courses;
             returnData[1] = data[0].imageNames;
         }
-        response.json({
+        res.json({
             message: returnData
         });
     })
 });
-app.post('/getCount', (request, response) => {
-    const adminData = request.body;
+app.post('/getCount', (req, res) => {
+    const adminData = req.body;
     var returnData = [];
     schoolLunches.find({$and: [{ school: adminData[0] }, { date: adminData[1] }]}, (err, data) => {
         if(data.length > 0) {
             returnData[0] = data[0].courses;
             returnData[1] = data[0].imageNames;
         }
-        response.json({
+        res.json({
             message: returnData
         });
     })

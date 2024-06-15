@@ -1,11 +1,15 @@
 /*
 TODO - 
     Add student view option
-    Stop menu submission if boxes are not filled
+    create savable menu option
+    add indicator of changes made to currently viewed lunch menu to show if it is saved on the server yet
+    clear date after updating lunch?
+
+    Add date picker to show count so admin can see past counts
 */
 /*
 CSS Ideas - 
-    ChangeLunch - Make courses show up 3 per row // make course divs have background and or outline to seperate them clearly
+
 */
 
 /*

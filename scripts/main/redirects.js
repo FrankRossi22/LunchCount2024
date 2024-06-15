@@ -10,7 +10,21 @@ function adminLog() {
 function mainLog() {
     window.location.href = "http://localhost:3000/login";
 }
+function teacher() {
+    window.location.href = "http://localhost:3000/teacher";
+}
+function teacherLog() {
+    window.location.href = "http://localhost:3000/teacher/login";
+}
 function clearData() {
     localStorage.clear();
     sessionStorage.clear();
+}
+async function logOut() {
+    await fetch('/logOut').then(response => {
+        var data = response.json();
+        data.then(async function(result) {
+            console.log(result.message);
+        });
+    });
 }
