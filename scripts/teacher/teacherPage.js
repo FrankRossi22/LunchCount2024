@@ -11,8 +11,20 @@ CSS Ideas -
     All Page Functions
 */
 
-function generateClassCode() {
-    
+async function generateClassCode() {
+    //const date = parseDate(document.getElementById("date").value);
+    // const message = [localStorage.getItem("schoolAdmin"),"6/7/2024"];
+    // const options = {
+    //     method: 'POST',
+    //     headers: {'Content-Type': 'application/json'},
+    //     body: JSON.stringify(message)
+    // }
+    await fetch('/createClassCode').then(response => {
+        var data = response.json();
+        data.then(async function(result) {
+           console.log(result)
+        });
+    });
 }
 function getClassCount() {
 

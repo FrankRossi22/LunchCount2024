@@ -27,8 +27,15 @@ function checkValid() {
 async function addStudents() {
     var str = "";
     const textVal = document.getElementById("addStudentsTextbox").value;
+    const userType = document.getElementById("userTypeOption").value === "students";
+    var type = "";
+    if(userType) {
+        type = 'user.';
+    } else {
+        type = 'teacher.';
+    }
     for(var i = 1; i <= 10; i++) {
-        str += "user." + i + "@school2.edu, ";
+        str += type + i + "@school2.edu, ";
     }
     console.log(str);
     const studentArray = textVal.split(/[ ,\n]+/);
@@ -37,7 +44,7 @@ async function addStudents() {
     }
     if(studentArray.length === 0) {return;}
     console.log(studentArray)
-    const message = [studentArray];
+    const message = [studentArray, userType];
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},

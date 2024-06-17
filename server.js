@@ -111,14 +111,14 @@ app.get('/admin/test', (req, res) => {
     }
 });
 app.get('/teacher/login', (req, res) => {
-    if(req.session.isAdmin != true) {
+    if(req.session.isTeacher != true) {
         res.sendFile(path.join(__dirname, '/public/teacher/teacherSignIn.html'));
     } else {
         res.redirect('/teacher/');
     }
 });
 app.get('/teacher', (req, res) => {
-    if(req.session.isAdmin != true) {
+    if(req.session.isTeacher != true) {
         res.redirect('/teacher/login');
     } else {
         res.sendFile(path.join(__dirname, '/public/teacher/teacherPage.html'));
@@ -126,12 +126,7 @@ app.get('/teacher', (req, res) => {
     
 });
 app.get('/backend', (req, res) => {
-    if(req.session.isAdmin != true) {
-        res.redirect('/backendAdmin/login');
-    } else {
-        res.sendFile(path.join(__dirname, '/public/backendAdmin/backendPage.html'));
-    }
-    
+    res.sendFile(path.join(__dirname, '/public/backendAdmin/backendPage.html'));
 });
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/select2', express.static(__dirname + '/node_modules/select2/dist/'));
@@ -170,7 +165,8 @@ app.post('/addSchool', (req, res) => {
         } else {
             isValid = true;
             bcrypt.hash(userData.adminPass, saltRounds, function(err, hash) {
-                schoolLogin.insert({school: school, adminEmails: [userData.adminEmail], adminPasswords: hash, schoolEmails: [], classCodes: [], date: getDate()});
+                schoolLogin.insert({school: school, adminEmails: [userData.adminEmail], adminPasswords: hash, teacherEmails: [],
+                     teacherPasswords: hash, schoolEmails: [], classCodes: [], teacherCodes: {}, date: getDate()});
             });
         }
         res.json({
@@ -275,6 +271,42 @@ app.post('/validateUser', (req, res) => {
     })
 });
 //validate logins for admin login
+app.post('/validateTeacher', (req, res) => {
+    const userData = req.body;
+    const school = getEmail(userData.email);
+    var isValid = false;
+    schoolLogin.find({school: school}, (err, data) => {
+        if(data.length > 0) {
+            if(school === "school2.edu") {
+                console.log(JSON.parse(data[0].teacherCodes)["teacher.1@school2.edu"]);
+                const teacherData = [data[0].teacherEmails, data[0].teacherPasswords];
+                const validEmail = teacherData[0].includes(userData.email);
+                bcrypt.compare(userData.teacherPass, teacherData[1], function(err, result) {
+                    isValid = result && validEmail;
+                    console.log(result);
+                    console.log(validEmail);
+
+                    if(isValid) {
+                        req.session.teacherUser = userData.email;
+                        req.session.teacherSchool = school;
+                        req.session.isTeacher = true;
+                        const classCode = JSON.parse(data[0].teacherCodes)[userData.email];
+                        if(classCode === undefined) {
+                            req.session.teacherClassCode = -1;
+                        } else {
+                            req.session.teacherClassCode = classCode;
+                        }
+                    }
+                    res.json({
+                        school: school,
+                        valid: isValid
+                    });
+                });
+            }
+        }
+    })
+});
+//validate logins for admin login
 app.post('/validateAdmin', (req, res) => {
     const userData = req.body;
     const school = getEmail(userData.email);
@@ -334,7 +366,54 @@ function getEmail(userEmail) {
     }
     return email;
 }
+/*
+    Teacher Page Functions
 
+*/
+app.get('/createClassCode', (req, res) => {
+    var currCode = req.session.teacherClassCode;
+    const school = req.session.teacherSchool;
+    const teacherEmail = req.session.teacherUser;
+    var randCode = Math.floor(Math.random() * 9000 + 1000);
+    var success = false;
+    schoolLogin.find({school: school}, async (err, data) => {
+        console.log(111)
+        if(data.length > 0) {
+            var usedCodes = data[0].classCodes;
+            var teacherCodes = JSON.parse(data[0].teacherCodes);
+            success = !usedCodes.includes(randCode);
+            var i = 0;
+            while(i < 15 && !success) {
+                var j = 0;
+                const randCode = Math.floor(Math.random() * 9000 + 1000);
+                success = !usedCodes.includes(randCode);
+                i++
+            }
+            console.log(success)
+            if(success) {
+                const index = usedCodes.indexOf(currCode)
+                if(index > -1) {
+                    usedCodes.splice(index, 1)
+                }
+                currCode = randCode;
+                usedCodes.push(randCode)
+                teacherCodes[teacherEmail] = randCode;
+                req.session.teacherClassCode = randCode;
+                console.log(usedCodes)
+                schoolLogin.update({ school: school }, { $set: { classCodes: usedCodes, teacherCodes: JSON.stringify(teacherCodes) } }, function (err, numReplaced) {});
+            }
+            res.json({
+                success: success,
+                classCode: currCode
+            });
+        } else {
+            res.json({
+                success: false
+            });
+        } 
+        
+    })
+});
 /*
     Admin Page Functions
 
@@ -342,10 +421,15 @@ function getEmail(userEmail) {
 //Add Students to School Database
 app.post('/addUsers', (req, res) => {
     const emailsToAdd = req.body[0];
+    const areStudents = req.body[1];
     var school = req.session.adminSchool;
     schoolLogin.find({school: school}, (err, data) => {
         if(data.length > 0) {
-            schoolLogin.update({ school: school }, { $addToSet: { schoolEmails: { $each: emailsToAdd } } }, function (err, numReplaced) {});
+            if(areStudents) {
+                schoolLogin.update({ school: school }, { $addToSet: { schoolEmails: { $each: emailsToAdd } } }, function (err, numReplaced) {});
+            } else {
+                schoolLogin.update({ school: school }, { $addToSet: { teacherEmails: { $each: emailsToAdd } } }, function (err, numReplaced) {});
+            }
             res.json({
                 message: true
             });

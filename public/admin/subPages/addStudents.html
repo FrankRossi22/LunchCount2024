@@ -31,6 +31,12 @@
         <hr style="width: 25%; margin-bottom: 0;"/>
         <section>
             <form class="addStudentsInput" id="studentInput">
+                <label for="hr-select">Students or Teachers?</label>
+                <select name="userTypes" id="userTypeOption" style="margin-left: 1%;">
+                    <option value="students">Students</option>
+                    <option value="teachers">Teachers</option>
+                </select>
+                <br /> <br />
                 <b>Seperate Student Emails with Commas and/or Spaces</b> <br/>  <br/>
                 <textarea id="addStudentsTextbox" class="addStudentsText" rows="8" cols="50" placeholder="Add Students Here" maxlength="500"></textarea> <br/>
                 <input type="button" value="Add Students" class="buttons" style="font-family: BlockLetters; font-size: .6vw;" onclick="addStudents()">
