@@ -166,7 +166,7 @@ app.post('/addSchool', (req, res) => {
             isValid = true;
             bcrypt.hash(userData.adminPass, saltRounds, function(err, hash) {
                 schoolLogin.insert({school: school, adminEmails: [userData.adminEmail], adminPasswords: hash, teacherEmails: [],
-                     teacherPasswords: hash, schoolEmails: [], classCodes: [], teacherCodes: {}, date: getDate()});
+                     teacherPasswords: hash, schoolEmails: [], classCodes: [], userCodes: {}, teacherCodes: {}, classData: {}, date: getDate()});
             });
         }
         res.json({
@@ -198,7 +198,7 @@ app.get('/fetchImageSet', (req, res) => {
 app.post('/updateLunchCount', (req, res) => {
     const schoolData = req.body;
     const school = req.session.school; const user = req.session.userName; const selections = schoolData[0]; const date = getDate();
-    userCounts.find({$and: [{ school: school }, { date: date }]}, (err, data) => {
+    schoolLunches.find({$and: [{ school: school }, { date: date }]}, (err, data) => {
         var prevSelections = [];
         var jsonCounts = {};
         if(data.length > 0) {
@@ -209,11 +209,11 @@ app.post('/updateLunchCount', (req, res) => {
                 }
             }
         } else {
-            userCounts.insert({school: school, date: date}); 
+            //userCounts.insert({school: school, date: date}); 
         }
         jsonCounts[user] = selections;
         //console.log(jsonCounts);
-        userCounts.update({$and: [{ school: school }, { date: date }]}, { $set: { userCounts: JSON.stringify(jsonCounts) } }, (err, numReplaced) => {
+        schoolLunches.update({$and: [{ school: school }, { date: date }]}, { $set: { userCounts: JSON.stringify(jsonCounts) } }, (err, numReplaced) => {
             schoolLunches.find({$and: [{ school: school }, { date: date }]}, (err, data) => {
                 if(data.length > 0) {
                     var currCount = data[0].counts;
@@ -255,16 +255,39 @@ app.post('/validateUser', (req, res) => {
     const school = getEmail(userData.email);
     var isValid = false;
     schoolLogin.find({school: school}, (err, data) => {
+        var teacher = "";
         if(data.length > 0) {
-           const schoolData = [data[0].schoolEmails, data[0].classCodes];
-           isValid = validLogin(schoolData, userData);
+            teacher = JSON.parse(data[0].classData)[userData.classCode];
+            const schoolData = [data[0].schoolEmails, data[0].classCodes];
+            isValid = validLogin(schoolData, userData);
         }
         if(isValid) {
-            req.session.username = userData.email;
+            var userClass = JSON.parse(data[0].userCodes);
+            const classData = JSON.parse(data[0].classData);
+            var users = classData[userData.classCode].users;
+            if(userClass.hasOwnProperty(userData.email)) {
+                var oldClass = userClass[userData.email];
+                if(oldClass !== userData.classCode) {
+                    userClass[userData.email] = userData.classCode;
+                    var oldClassUsers = classData[oldClass].users;
+                    const index = oldClassUsers.indexOf(userData.email);
+                    if (index > -1) { 
+                        oldClassUsers.splice(index, 1); 
+                    }
+                    classData[oldClass].users = oldClassUsers;
+                }
+            } else {
+                userClass[userData.email] = userData.classCode;
+            }
+            if(!users.includes(userData.email)) {users.push(userData.email)}
+            classData[userData.classCode].users = users;
+            schoolLogin.update({ school: school }, { $set: { classData: JSON.stringify(classData), userCodes: JSON.stringify(userClass) } }, function (err, numReplaced) {});
+            req.session.userName = userData.email;
             req.session.school = school;
             req.session.isLogged = true;
         }
         res.json({
+            class: teacher,
             school: school,
             valid: isValid
         });
@@ -278,14 +301,10 @@ app.post('/validateTeacher', (req, res) => {
     schoolLogin.find({school: school}, (err, data) => {
         if(data.length > 0) {
             if(school === "school2.edu") {
-                console.log(JSON.parse(data[0].teacherCodes)["teacher.1@school2.edu"]);
                 const teacherData = [data[0].teacherEmails, data[0].teacherPasswords];
                 const validEmail = teacherData[0].includes(userData.email);
                 bcrypt.compare(userData.teacherPass, teacherData[1], function(err, result) {
                     isValid = result && validEmail;
-                    console.log(result);
-                    console.log(validEmail);
-
                     if(isValid) {
                         req.session.teacherUser = userData.email;
                         req.session.teacherSchool = school;
@@ -370,49 +389,60 @@ function getEmail(userEmail) {
     Teacher Page Functions
 
 */
-app.get('/createClassCode', (req, res) => {
+app.post('/createClassCode', (req, res) => {
     var currCode = req.session.teacherClassCode;
     const school = req.session.teacherSchool;
     const teacherEmail = req.session.teacherUser;
-    var randCode = Math.floor(Math.random() * 9000 + 1000);
+    var randCode = Math.floor(Math.random() * 9000 + 1000).toString();
     var success = false;
-    schoolLogin.find({school: school}, async (err, data) => {
-        console.log(111)
-        if(data.length > 0) {
-            var usedCodes = data[0].classCodes;
-            var teacherCodes = JSON.parse(data[0].teacherCodes);
-            success = !usedCodes.includes(randCode);
-            var i = 0;
-            while(i < 15 && !success) {
-                var j = 0;
-                const randCode = Math.floor(Math.random() * 9000 + 1000);
+    if(!req.body[0] && currCode > 999) {
+        res.json({
+            success: true,
+            classCode: currCode
+        });
+    } else {
+        schoolLogin.find({school: school}, async (err, data) => {
+            if(data.length > 0) {
+                var usedCodes = data[0].classCodes;
+                var teacherClass = JSON.parse(data[0].teacherCodes);
                 success = !usedCodes.includes(randCode);
-                i++
-            }
-            console.log(success)
-            if(success) {
-                const index = usedCodes.indexOf(currCode)
-                if(index > -1) {
-                    usedCodes.splice(index, 1)
+                var i = 0;
+                while(i < 15 && !success) {
+                    var j = 0;
+                    randCode = Math.floor(Math.random() * 9000 + 1000).toString();
+                    success = !usedCodes.includes(randCode);
+                    i++
                 }
-                currCode = randCode;
-                usedCodes.push(randCode)
-                teacherCodes[teacherEmail] = randCode;
-                req.session.teacherClassCode = randCode;
-                console.log(usedCodes)
-                schoolLogin.update({ school: school }, { $set: { classCodes: usedCodes, teacherCodes: JSON.stringify(teacherCodes) } }, function (err, numReplaced) {});
-            }
-            res.json({
-                success: success,
-                classCode: currCode
-            });
-        } else {
-            res.json({
-                success: false
-            });
-        } 
-        
-    })
+                if(success) {
+                    const index = usedCodes.indexOf(currCode)
+                    var classData = JSON.parse(data[0].classData)
+                    var currClassData = {};
+                    if(index > -1) {
+                        usedCodes.splice(index, 1)
+                        currClassData = classData[currCode];
+                        delete classData[currCode];
+                    } else {
+                        currClassData = {users: [], teacher: teacherEmail};
+                    }
+                    classData[randCode] = currClassData;
+                    usedCodes.push(randCode)
+                    teacherClass[teacherEmail] = randCode;
+                    req.session.teacherClassCode = randCode;
+                    schoolLogin.update({ school: school }, { $set: { classCodes: usedCodes, teacherCodes: JSON.stringify(teacherClass),
+                        classData: JSON.stringify(classData) } }, function (err, numReplaced) {});
+                }
+                res.json({
+                    success: success,
+                    classCode: randCode
+                });
+            } else {
+                res.json({
+                    success: false
+                });
+            } 
+            
+        })
+    }
 });
 /*
     Admin Page Functions
@@ -469,8 +499,9 @@ app.post('/submitLunch', (req, res) => {
         //console.log(data);
 
         if(data.length > 0) {
-            schoolLunches.update({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, { $set: { menu: lunchData[2], counts: jsonCounts } }, function (err, numReplaced) {});
-            userCounts.update({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, { $unset: { userCounts: true } }, (err, numReplaced) => {});
+            schoolLunches.update({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, { $set: { menu: lunchData[2], counts: jsonCounts},
+                $unset: { userCounts: true } }, function (err, numReplaced) {});
+            //userCounts.update({$and: [{ school: lunchData[0] }, { date: lunchData[1] }]}, { $unset: { userCounts: true } }, (err, numReplaced) => {});
         } else {
             schoolLunches.insert({school: lunchData[0], date: lunchData[1], menu: lunchData[2], counts: jsonCounts});
             //userCounts.insert({school: lunchData[0], date: lunchData[1], userCounts: {}});

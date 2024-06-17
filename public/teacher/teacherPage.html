@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/scripts/teacher/teacherStyles.css">
     <title>LunchCount</title>
 </head>
-<body>
+<body onload="generateClassCode(false)">
     <section class="pageHeader">
         <img src="/files/lcLogo2.png" class="banner">
         <hr class="bannerHeader" />
@@ -22,7 +22,7 @@
             <h2>Teacher Options</h2>
             <hr style="width: 17%; min-width: 100px;"/> <br />
             <div class="changeLunch" style="padding-bottom: 2%;">
-                <button id="teacherButton1" class="teacherButtons" onclick="generateClassCode()">Generate Class Code</button>
+                <button id="teacherButton1" class="teacherButtons" onclick="generateClassCode(true)">Generate Class Code</button>
             </div>
             <div class="showLunchCount" style="padding-bottom: 2%;">
                 <button id="teacherButton3" class="teacherButtons" onclick="getClassCount()">Show Class Count</button>
@@ -30,6 +30,12 @@
             <div class="showLunchCount" style="padding-bottom: 2%;">
                 <button id="teacherButton3" class="teacherButtons" onclick="getStudentCounts()">Show Students Count</button>
             </div>
+        </section>
+        <hr style="width: 87%; min-width: 200px;"/> <br />
+        <section id="displaySection" class="teacherOps" style="text-align: center;">
+            <div><p id="classCodePar" style="font-size: 2vw;"></p></div>
+            <div><p id="classCountPar" style="font-size: 2vw;"></p></div>
+            <div><p id="studentCountPar" style="font-size: 2vw;"></p></div>
         </section>
     </main>
 </body>

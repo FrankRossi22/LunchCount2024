@@ -11,21 +11,28 @@ CSS Ideas -
     All Page Functions
 */
 
-async function generateClassCode() {
-    //const date = parseDate(document.getElementById("date").value);
-    // const message = [localStorage.getItem("schoolAdmin"),"6/7/2024"];
-    // const options = {
-    //     method: 'POST',
-    //     headers: {'Content-Type': 'application/json'},
-    //     body: JSON.stringify(message)
-    // }
-    await fetch('/createClassCode').then(response => {
+async function generateClassCode(getNew) {
+    const message = [getNew];
+    const options = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(message)
+    }
+    await fetch('/createClassCode', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-           console.log(result)
+            var str = "";
+            if(result.success) {
+                str = "Class Code: " + result.classCode;
+            } else {
+                str = "Class Code Could Not Be Generated";
+            }
+            document.getElementById('classCodePar').innerText = str;
+           
         });
     });
 }
+
 function getClassCount() {
 
 }
