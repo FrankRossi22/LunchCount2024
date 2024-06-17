@@ -21,6 +21,35 @@ function checkValid() {
     //     window.location.href = "http://localhost:3000/adminLogin";
     // }
 }
+/*
+    Add StudentsFunctions
+*/
+async function addStudents() {
+    var str = "";
+    const textVal = document.getElementById("addStudentsTextbox").value;
+    for(var i = 1; i <= 10; i++) {
+        str += "user." + i + "@school2.edu, ";
+    }
+    console.log(str);
+    const studentArray = textVal.split(/[ ,\n]+/);
+    if(studentArray[studentArray.length - 1] === "") {
+        studentArray.splice(studentArray.length - 1, 1);
+    }
+    if(studentArray.length === 0) {return;}
+    console.log(studentArray)
+    const message = [studentArray];
+    const options = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(message)
+    }
+    await fetch('/addUsers', options).then(response => {
+        var data = response.json();
+        data.then(async function(result) {
+            console.log(result.message);
+        });
+    });
+}
 
 /*
     Show Count Functions

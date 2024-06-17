@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/scripts/default/defaultPage.css">
+    <link rel="stylesheet" href="/scripts/backendAdmin/backendPageStyles.css">
+    <title>LunchCount</title>
+</head>
+<body">
+    <section class="pageHeader">
+        <img src="/files/lcLogo2.png" class="banner">
+        <hr class="bannerHeader" />
+    </section>
+    <section class="topRow">
+        <a href="http://localhost:3000/"><button class="topButtons" style="margin-left: 1%; margin-top: .5%;">Menu</button></a>
+        <hr />
+    </section>
+    <div class="custom-alert" id="customAlert" style="text-align: center;">
+        <p id="customAlertMessage" class="custom-Message"></p>
+        <div style="text-align: center;">
+        <button class="close-button" onclick="hideCustomAlert()">Close</button>
+        </div>
+    </div>
+    <main>
+        <!--Section Shows Admin Options and displays selected option-->
+        <section id="options" class="adminOps" style="text-align: center;">
+            <!-- <h2>Admin Options</h2>
+            <hr style="width: 17%; min-width: 100px;"/>  -->
+            <br />
+            <section class="addSchoolBack">
+                <form class="addSchoolInputs" id="addSchoolInput">
+                    <div class="addSchoolText">
+                        <b>Add School:</b> <br />
+                    </div>
+                    <input class="inputs" id="email" type="text" size="40" autocomplete="off" placeholder="Admin Email" style="height: 30px;"/>
+                    <input class="inputs" id="adminPass" type="password" size="40" autocomplete="off" placeholder="Admin Password" style="height: 30px;"/>
+                    <input type="button" value="Submit" class="buttons" style="font-family: BlockLetters; font-size: 15px;" onclick="addSchool()">
+                </form>
+            </section>
+        </section>
+    </main>
+</body>
+<script src="/scripts/default/defaultScripts.js"></script>
+<script src="/scripts/backendAdmin/backendPage.js"></script>
+</html>

@@ -16,6 +16,12 @@ function teacher() {
 function teacherLog() {
     window.location.href = "http://localhost:3000/teacher/login";
 }
+function backendAdmin() {
+    window.location.href = "http://localhost:3000/backend";
+}
+function backendLog() {
+    window.location.href = "http://localhost:3000/backend/login";
+}
 function clearData() {
     localStorage.clear();
     sessionStorage.clear();

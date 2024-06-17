@@ -11,7 +11,15 @@ CSS Ideas -
     All Page Functions
 */
 
+function generateClassCode() {
+    
+}
+function getClassCount() {
 
+}
+function getStudentCounts() {
+
+}
 
 
 /*

@@ -1,6 +1,8 @@
 const express = require('express');
 const { get } = require('http');
 const session = require('express-session');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const app = express();
 app.listen(3000, () => console.log('listening at 3000'));
@@ -94,6 +96,13 @@ app.get('/admin/yourCount', (req, res) => {
         res.sendFile(path.join(__dirname, '/public/admin/subpages/seeCount.html'));
     }
 });
+app.get('/admin/addStudents', (req, res) => {
+    if(req.session.isAdmin != true) {
+        res.redirect('/admin/login');
+    } else {
+        res.sendFile(path.join(__dirname, '/public/admin/subpages/addStudents.html'));
+    }
+});
 app.get('/admin/test', (req, res) => {
     if(req.session.isAdmin != true) {
         res.redirect('/admin/login');
@@ -113,6 +122,14 @@ app.get('/teacher', (req, res) => {
         res.redirect('/teacher/login');
     } else {
         res.sendFile(path.join(__dirname, '/public/teacher/teacherPage.html'));
+    }
+    
+});
+app.get('/backend', (req, res) => {
+    if(req.session.isAdmin != true) {
+        res.redirect('/backendAdmin/login');
+    } else {
+        res.sendFile(path.join(__dirname, '/public/backendAdmin/backendPage.html'));
     }
     
 });
@@ -142,6 +159,26 @@ schoolLunches.loadDatabase();
 userCounts.loadDatabase();
 console.log(getDate());
 
+//Add School To Database
+app.post('/addSchool', (req, res) => {
+    const userData = req.body;
+    const school = getEmail(userData.adminEmail);
+    var isValid = false;
+    schoolLogin.find({school: school}, (err, data) => {
+        if(data.length > 0) {
+           isValid = false;
+        } else {
+            isValid = true;
+            bcrypt.hash(userData.adminPass, saltRounds, function(err, hash) {
+                schoolLogin.insert({school: school, adminEmails: [userData.adminEmail], adminPasswords: hash, schoolEmails: [], classCodes: [], date: getDate()});
+            });
+        }
+        res.json({
+            school: school,
+            valid: isValid
+        });
+    })
+});
 
 /*
     Main Page Functions
@@ -244,18 +281,36 @@ app.post('/validateAdmin', (req, res) => {
     var isValid = false;
     schoolLogin.find({school: school}, (err, data) => {
         if(data.length > 0) {
-           const schoolData = [data[0].adminEmails, data[0].adminPasswords];
-           isValid = validAdminLogin(schoolData, userData);
+            if(school === "school2.edu") {
+                const schoolData = [data[0].adminEmails, data[0].adminPasswords];
+                const validEmail = data[0].adminEmails[0] === userData.email;
+                bcrypt.compare(userData.adminPass, data[0].adminPasswords, function(err, result) {
+                    isValid = result && validEmail;
+                    console.log(isValid);
+                    if(isValid) {
+                        req.session.adminUser = userData.email;
+                        req.session.adminSchool = school;
+                        req.session.isAdmin = true;
+                    }
+                    res.json({
+                        school: school,
+                        valid: isValid
+                    });
+                });
+            } else {
+                const schoolData = [data[0].adminEmails, data[0].adminPasswords];
+                isValid = validAdminLogin(schoolData, userData);
+                if(isValid) {
+                    req.session.adminUser = userData.email;
+                    req.session.adminSchool = school;
+                    req.session.isAdmin = true;
+                }
+                res.json({
+                    school: school,
+                    valid: isValid
+                });
+            }
         }
-        if(isValid) {
-            req.session.adminUser = userData.email;
-            req.session.adminSchool = school;
-            req.session.isAdmin = true;
-        }
-        res.json({
-            school: school,
-            valid: isValid
-        });
     })
 });
 function validLogin(schoolData, userData) {
@@ -282,7 +337,25 @@ function getEmail(userEmail) {
 
 /*
     Admin Page Functions
+
 */
+//Add Students to School Database
+app.post('/addUsers', (req, res) => {
+    const emailsToAdd = req.body[0];
+    var school = req.session.adminSchool;
+    schoolLogin.find({school: school}, (err, data) => {
+        if(data.length > 0) {
+            schoolLogin.update({ school: school }, { $addToSet: { schoolEmails: { $each: emailsToAdd } } }, function (err, numReplaced) {});
+            res.json({
+                message: true
+            });
+        } else {
+            res.json({
+                message: false
+            });
+        }
+    })
+});
 app.post('/getCurrLunch', (req, res) => {
     const adminData = req.body;
     var returnData = [];

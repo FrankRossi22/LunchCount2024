@@ -8,9 +8,10 @@ function signIn() {
     var isValid = false;
     const email = document.getElementById("email").value;
     const classCode = document.getElementById("classCode").value;
+    //const pass = document.getElementById("password").value;
     var i = 0;
     if(classCode === "" || email === "") {
-        alertBox("Please Input Email and Class Code\n\n");
+        alertBox("Please Input Email,\nPassword, and Class Code\n\n");
         return;
     }
     const userInfo = {email, classCode};
@@ -27,7 +28,7 @@ function signIn() {
         data.then(function(result) {
         isValid = result.valid;
         if(!isValid) {
-            alertBox("Invalid Email or Class Code\nPlease Try Again\n\n");
+            alertBox("Invalid Email,\nPassword, or Class Code\n\nPlease Try Again\n");
             return;
         } else {
             localStorage.setItem("school", result.school);

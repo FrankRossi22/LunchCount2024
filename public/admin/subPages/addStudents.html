@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/scripts/default/defaultPage.css">
+    <link rel="stylesheet" href="/scripts/admin/adminStyles.css">
+    <link rel="stylesheet" href= "/select2/css/select2.min.css" /> 
+    <script src="/jquery/jquery.js"></script>
+    <script src="/select2/js/select2.min.js"></script>
+    <title>LunchCount</title>
+</head>
+<body>
+    <section class="pageHeader">
+        <img src="/files/lcLogo2.png" style="width: 10%; height: 7%; padding-top: .5%;">
+        <hr style="margin-bottom: 0; padding-bottom: 0;"/>
+    </section>
+    <section class="topRow">
+        <a href="http://localhost:3000/adminPage"><button class="topButtons" style="margin-left: 1%; margin-top: .5%;">Admin</button></a>
+        <a href="http://localhost:3000/"><button class="topButtons" style="margin-left: 1%; margin-top: .5%;">Menu</button></a>
+        <hr />
+    </section>
+    <div class="custom-alert" id="customAlert" style="text-align: center;">
+        <p id="customAlertMessage" class="custom-Message"></p>
+        <div style="text-align: center;">
+            <button class="close-button" onclick="hideCustomAlert()">Close</button>
+        </div>
+      </div>
+      <main id="main" class="changeLunch">
+        <h2 id="header">Add Students</h2>
+        <hr style="width: 25%; margin-bottom: 0;"/>
+        <section>
+            <form class="addStudentsInput" id="studentInput">
+                <b>Seperate Student Emails with Commas and/or Spaces</b> <br/>  <br/>
+                <textarea id="addStudentsTextbox" class="addStudentsText" rows="8" cols="50" placeholder="Add Students Here" maxlength="500"></textarea> <br/>
+                <input type="button" value="Add Students" class="buttons" style="font-family: BlockLetters; font-size: .6vw;" onclick="addStudents()">
+            </form>
+        </section>
+         </div>
+    </main>
+</body>
+<script src="/scripts/default/defaultScripts.js"></script>
+<script src="/scripts/admin/adminPage.js"></script>
+</html>

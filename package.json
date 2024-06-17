@@ -16,6 +16,7 @@
   "author": "Frank Rossi",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "jquery": "^3.7.1",

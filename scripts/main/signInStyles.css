@@ -1,45 +1,48 @@
-  p {
-    color: rgb(0, 0, 0);
-  }
-  @font-face {
-    font-family: BlockLetters;
-    src: url(/files/ThatSoundsGreat-yYLE3.ttf);
-  }
-  .lunchOptions {
-    padding-top: 10px;
-  }
-  .inputs {
-    background-color: rgb(233, 233, 248);
-    border-radius: 10px;
-  }
-  input::placeholder {
-    color: black;
-  }
-  
-  .signInText {
-    text-align: left;
-    padding-left: 45px;
-    font-size: 24px;
-    font-family: BlockLetters;
-  }
-  .buttons {
-    border-radius: 6px;
-    width: 260px;
-    height: 50px;
-  }
-  .buttons:hover {
-    border-color: rgb(0, 0, 0);
-    background-color:#d6d5d5;
-    transition: 0.2s;
-  }
-  .signInInputs {
-    margin: 0 auto;
-    width: 400px;
-    background-color: rgb(157, 156, 158);
-    border-radius: 30px;
-    text-align: center;
-    padding-bottom: 40px;
-    padding-top: 40px;
-  }
+p {
+  color: rgb(0, 0, 0);
+}
+@font-face {
+  font-family: BlockLetters;
+  src: url(/files/ThatSoundsGreat-yYLE3.ttf);
+}
+.lunchOptions {
+  padding-top: 10px;
+}
+input {
+  background-color: rgb(233, 233, 248);
+  border-radius: 10px;
+  height: 30px;
+  margin-top: 15%;
+}
 
-  
+
+input::placeholder {
+  color: black;
+}
+
+.signInText {
+  text-align: left;
+  padding-left: 45px;
+  font-size: 24px;
+  font-family: BlockLetters;
+}
+.buttons {
+  border-radius: 6px;
+  width: 260px;
+  height: 50px;
+}
+.buttons:hover {
+  border-color: rgb(0, 0, 0);
+  background-color:#d6d5d5;
+  transition: 0.2s;
+}
+.signInInputs {
+  margin: 0 auto;
+  width: 400px;
+  background-color: rgb(157, 156, 158);
+  border-radius: 30px;
+  text-align: center;
+  padding-bottom: 40px;
+  padding-top: 40px;
+}
+

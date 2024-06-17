@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/scripts/default/defaultPage.css">
-    <link rel="stylesheet" href="/scripts/admin/adminStyles.css">
+    <link rel="stylesheet" href="/scripts/teacher/teacherStyles.css">
     <title>LunchCount</title>
 </head>
 <body onload="checkValid()">
@@ -22,13 +22,13 @@
             <h2>Teacher Options</h2>
             <hr style="width: 17%; min-width: 100px;"/> <br />
             <div class="changeLunch" style="padding-bottom: 2%;">
-                <a href="http://localhost:3000/teacher/createCode"><button id="teacherButton1" class="teacherButtons">Class Code</button></a>
+                <button id="teacherButton1" class="teacherButtons" onclick="generateClassCode()">Generate Class Code</button>
             </div>
             <div class="showLunchCount" style="padding-bottom: 2%;">
-                <a href="http://localhost:3000/teacher/classCount"><button id="teacherButton3" class="teacherButtons">Class Lunch Count</button></a>
+                <button id="teacherButton3" class="teacherButtons" onclick="getClassCount()">Show Class Count</button>
             </div>
             <div class="showLunchCount" style="padding-bottom: 2%;">
-                <a href="http://localhost:3000/teacher/test"><button id="teacherButton3" class="teacherButtons">Test</button></a>
+                <button id="teacherButton3" class="teacherButtons" onclick="getStudentCounts()">Show Students Count</button>
             </div>
         </section>
     </main>
