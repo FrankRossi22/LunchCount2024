@@ -46,9 +46,22 @@ async function getCount() {
     await fetch('/getClassCount', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-            students = result.message.users;
-            studentsCounts = JSON.parse(result.message.userCounts);
-            menu = result.message.menu;
+            if(result.message.users === undefined) {
+                students = [];
+            } else {
+                students = result.message.users;
+            }
+            if(result.message.userCounts === undefined) {
+                studentsCounts = {};
+            } else {
+                studentsCounts = JSON.parse(result.message.userCounts);
+            }
+            if(result.message.menu === undefined) {
+                menu = [];
+            } else {
+                menu = result.message.menu;
+            }
+            
             showStudentCounts(studentsCounts, students, menu);
         });
     });
@@ -93,6 +106,11 @@ async function showStudentCounts(userCounts, users, menu){
         div.appendChild(hr);
     }
     var div = document.getElementById('classTotal');
+    if(menu.length === 0) {
+        var p = document.createElement('p'); 
+        p.innerHTML = 'No Lunch Data Yet!';
+        div.appendChild(p);
+    }
     for(var i = 0; i < menu.length; i++) {
         var h3 = document.createElement('h3'); var hr = document.createElement('hr');
         h3.innerHTML = menu[i][0];

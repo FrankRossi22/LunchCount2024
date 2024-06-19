@@ -166,7 +166,7 @@ app.post('/addSchool', (req, res) => {
             isValid = true;
             bcrypt.hash(userData.adminPass, saltRounds, function(err, hash) {
                 schoolLogin.insert({school: school, adminEmails: [userData.adminEmail], adminPasswords: hash, teacherEmails: [],
-                     teacherPasswords: hash, schoolEmails: [], classCodes: [], userCodes: {}, teacherCodes: {}, classData: {}, date: getDate()});
+                     teacherPasswords: hash, schoolEmails: [], classCodes: [], userCodes: JSON.stringify({}), teacherCodes: JSON.stringify({}), classData: JSON.stringify({}), date: getDate()});
             });
         }
         res.json({
@@ -299,7 +299,7 @@ app.post('/validateTeacher', (req, res) => {
     var isValid = false;
     schoolLogin.find({school: school}, (err, data) => {
         if(data.length > 0) {
-            if(school === "school2.edu") {
+            
                 const teacherData = [data[0].teacherEmails, data[0].teacherPasswords];
                 const validEmail = teacherData[0].includes(userData.email);
                 bcrypt.compare(userData.teacherPass, teacherData[1], function(err, result) {
@@ -320,7 +320,7 @@ app.post('/validateTeacher', (req, res) => {
                         valid: isValid
                     });
                 });
-            }
+            
         }
     })
 });
@@ -331,7 +331,7 @@ app.post('/validateAdmin', (req, res) => {
     var isValid = false;
     schoolLogin.find({school: school}, (err, data) => {
         if(data.length > 0) {
-            if(school === "school2.edu") {
+            
                 const schoolData = [data[0].adminEmails, data[0].adminPasswords];
                 const validEmail = data[0].adminEmails[0] === userData.email;
                 bcrypt.compare(userData.adminPass, data[0].adminPasswords, function(err, result) {
@@ -347,19 +347,7 @@ app.post('/validateAdmin', (req, res) => {
                         valid: isValid
                     });
                 });
-            } else {
-                const schoolData = [data[0].adminEmails, data[0].adminPasswords];
-                isValid = validAdminLogin(schoolData, userData);
-                if(isValid) {
-                    req.session.adminUser = userData.email;
-                    req.session.adminSchool = school;
-                    req.session.isAdmin = true;
-                }
-                res.json({
-                    school: school,
-                    valid: isValid
-                });
-            }
+            
         }
     })
 });
