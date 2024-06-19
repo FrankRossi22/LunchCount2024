@@ -25,7 +25,7 @@
                 <button id="teacherButton1" class="teacherButtons" onclick="generateClassCode(true)">Generate Class Code</button>
             </div>
             <div class="showLunchCount" style="padding-bottom: 2%;">
-                <button id="teacherButton3" class="teacherButtons" onclick="getClassCount()">Show Class Count</button>
+                <button id="teacherButton3" class="teacherButtons" onclick="getCount()">Show Class Count</button>
             </div>
             <div class="showLunchCount" style="padding-bottom: 2%;">
                 <button id="teacherButton3" class="teacherButtons" onclick="getStudentCounts()">Show Students Count</button>
@@ -37,6 +37,14 @@
             <div><p id="classCountPar" style="font-size: 2vw;"></p></div>
             <div><p id="studentCountPar" style="font-size: 2vw;"></p></div>
         </section>
+        <div id="classCountDiv" class="mainCont" style="display: block; text-align: center;">
+            <br /> <hr style="width: 20%;"/>
+            <h2>Class Count</h2>
+            <hr style="width: 20%;"/> <br />
+            <div id="classTotal"></div>
+            <div id="studentCounts"></div>
+            <!-- <input type="button" class="buttons" value="Show" onclick="showStudentCounts()" id="showStudentsBut"/> -->
+        </div>
     </main>
 </body>
 <script src="/scripts/default/defaultScripts.js"></script>

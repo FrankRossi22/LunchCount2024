@@ -21,6 +21,8 @@ function checkValid() {
     //     window.location.href = "http://localhost:3000/adminLogin";
     // }
 }
+
+
 /*
     Add StudentsFunctions
 */
@@ -61,6 +63,7 @@ async function addStudents() {
 /*
     Show Count Functions
 */
+
 //function gets current count for today from server and calls showCount to display the data
 async function getCount() {
     //const date = parseDate(document.getElementById("date").value);
@@ -73,10 +76,12 @@ async function getCount() {
     await fetch('/getLunchCount', options).then(response => {
         var data = response.json();
         data.then(async function(result) {
-            showCount(result.message[0], result.message[1])
+            showCount(result.message.menu, result.message.counts)
+            showStudentCounts(JSON.parse(result.message.userCounts), result.message.users)
         });
     });
 }
+
 //function displays lunch count data from given schoolData
 function showCount(menu, counts) {
     var div = document.getElementById('countsDiv');
@@ -94,6 +99,33 @@ function showCount(menu, counts) {
     }
     
 
+}
+
+async function showStudentCounts(userCounts, users){
+    console.log(userCounts["user.1@school2.edu"])
+    var div = document.getElementById('studentCountsDiv');
+    var hr = document.createElement('hr');
+    hr.style.width = "15%";
+    div.appendChild(hr);
+   
+    for(var i = 0; i < users.length; i++) {
+        var str = users[i] + ": ";
+        if(userCounts.hasOwnProperty(users[i])) {
+            const currUser = userCounts[users[i]];
+            for(var j = 0; j < currUser.length; j++) {
+                str += currUser[j][0] + ", ";
+            }
+            str = str.substring(0, str.length - 2);
+        } else {
+            str += 'NONE'
+        }
+        var p = document.createElement('p');
+        p.innerHTML = str;
+        div.appendChild(p);
+        hr = document.createElement('hr');
+        hr.style.width = "15%";
+        div.appendChild(hr);
+    }
 }
 /*
     Create Lunch Page Functions

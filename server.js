@@ -208,9 +208,7 @@ app.post('/updateLunchCount', (req, res) => {
                     prevSelections = jsonCounts[user];
                 }
             }
-        } else {
-            //userCounts.insert({school: school, date: date}); 
-        }
+        } 
         jsonCounts[user] = selections;
         //console.log(jsonCounts);
         schoolLunches.update({$and: [{ school: school }, { date: date }]}, { $set: { userCounts: JSON.stringify(jsonCounts) } }, (err, numReplaced) => {
@@ -265,7 +263,8 @@ app.post('/validateUser', (req, res) => {
             var userClass = JSON.parse(data[0].userCodes);
             const classData = JSON.parse(data[0].classData);
             var users = classData[userData.classCode].users;
-            if(userClass.hasOwnProperty(userData.email)) {
+            if(userClass.hasOwnProperty(userData.email) && classData.hasOwnProperty(userClass[userData.email])) {
+
                 var oldClass = userClass[userData.email];
                 if(oldClass !== userData.classCode) {
                     userClass[userData.email] = userData.classCode;
@@ -428,8 +427,13 @@ app.post('/createClassCode', (req, res) => {
                     usedCodes.push(randCode)
                     teacherClass[teacherEmail] = randCode;
                     req.session.teacherClassCode = randCode;
+                    const students = currClassData.users;
+                    var studentCodes = JSON.parse(data[0].userCodes);
+                    for(var i = 0; i < students.length; i++) {
+                        studentCodes[students[i]] = randCode;
+                    }
                     schoolLogin.update({ school: school }, { $set: { classCodes: usedCodes, teacherCodes: JSON.stringify(teacherClass),
-                        classData: JSON.stringify(classData) } }, function (err, numReplaced) {});
+                        classData: JSON.stringify(classData), userCodes: JSON.stringify(studentCodes)} }, function (err, numReplaced) {});
                 }
                 res.json({
                     success: success,
@@ -535,16 +539,28 @@ app.post('/getLunchOptions', (req, res) => {
 });
 app.post('/getLunchCount', (req, res) => {
     const adminData = req.body;
-    var returnData = [];
+    var returnData = {};
     schoolLunches.find({$and: [{ school: adminData[0] }, { date: getDate() }]}, (err, data) => {
         if(data.length > 0) {
-            returnData[0] = data[0].menu;
-            returnData[1] = data[0].counts;
+            schoolLogin.find({school: adminData[0]}, (err, usersData) => {
+                if(data.length > 0) {
+                    
+                    returnData.users = usersData[0].schoolEmails;
+                    returnData.menu = data[0].menu;
+                    returnData.counts = data[0].counts;
+                    returnData.userCounts = data[0].userCounts;
+                    //console.log(returnData);
+                }
+                res.json({
+                    message: returnData
+                });
+            })
             //console.log(returnData);
+        } else {
+            res.json({
+                message: returnData
+            });   
         }
-        res.json({
-            message: returnData
-        });
     })
 });
 app.post('/updateLunch', (req, res) => {
@@ -584,6 +600,33 @@ app.post('/getCount', (req, res) => {
         res.json({
             message: returnData
         });
+    })
+});
+/*
+    Teacher Page Functions
+*/
+app.post('/getClassCount', (req, res) => {
+    const adminData = req.body;
+    var returnData = {};
+    schoolLunches.find({$and: [{ school: req.session.teacherSchool }, { date: getDate() }]}, (err, data) => {
+        if(data.length > 0) {
+            schoolLogin.find({school: req.session.teacherSchool}, (err, usersData) => {
+                if(data.length > 0) {
+                    returnData.users = JSON.parse(usersData[0].classData)[req.session.teacherClassCode].users;
+                    returnData.menu = data[0].menu;
+                    returnData.userCounts = data[0].userCounts;
+                    //console.log(returnData);
+                }
+                res.json({
+                    message: returnData
+                });
+            })
+            //console.log(returnData);
+        } else {
+            res.json({
+                message: returnData
+            });   
+        }
     })
 });
 /*
