@@ -77,55 +77,75 @@ async function getCount() {
         var data = response.json();
         data.then(async function(result) {
             showCount(result.message.menu, result.message.counts)
-            showStudentCounts(JSON.parse(result.message.userCounts), result.message.users)
+            var userC = result.message.userCounts;
+            if(userC !== undefined) {userC = JSON.parse(userC);}
+            showStudentCounts(userC, result.message.users)
         });
     });
 }
 
 //function displays lunch count data from given schoolData
 function showCount(menu, counts) {
-    var div = document.getElementById('countsDiv');
-    for(var i = 0; i < menu.length; i++) {
-        var h3 = document.createElement('h3'); var hr = document.createElement('hr');
-        h3.innerHTML = menu[i][0];
-        div.appendChild(h3);
-        hr.style.width = "15%";
-        div.appendChild(hr); 
-        for(var j = 0; j < menu[i][1].length; j++) {
-            var p = document.createElement('p'); var curr = menu[i][1][j][0]
-            p.innerHTML = curr + ":    " + counts[curr];
-            div.appendChild(p);
+    if(menu === undefined) {
+        var div = document.getElementById('countsDiv');
+        var p = document.createElement('p');
+        p.innerHTML = "No Menu Data To Display";
+        div.appendChild(p);
+    } else {
+        var div = document.getElementById('countsDiv');
+        for(var i = 0; i < menu.length; i++) {
+            var h3 = document.createElement('h3'); var hr = document.createElement('hr');
+            h3.innerHTML = menu[i][0];
+            div.appendChild(h3);
+            hr.style.width = "15%";
+            div.appendChild(hr); 
+            for(var j = 0; j < menu[i][1].length; j++) {
+                var p = document.createElement('p'); var curr = menu[i][1][j][0]
+                p.innerHTML = curr + ":    " + counts[curr];
+                div.appendChild(p);
+            }
         }
     }
+    
     
 
 }
 
 async function showStudentCounts(userCounts, users){
-    console.log(userCounts["user.1@school2.edu"])
     var div = document.getElementById('studentCountsDiv');
-    var hr = document.createElement('hr');
-    hr.style.width = "15%";
-    div.appendChild(hr);
-   
-    for(var i = 0; i < users.length; i++) {
-        var str = users[i] + ": ";
-        if(userCounts.hasOwnProperty(users[i])) {
-            const currUser = userCounts[users[i]];
-            for(var j = 0; j < currUser.length; j++) {
-                str += currUser[j][0] + ", ";
-            }
-            str = str.substring(0, str.length - 2);
-        } else {
-            str += 'NONE'
-        }
+    console.log(userCounts)
+    if(userCounts === undefined) {
         var p = document.createElement('p');
-        p.innerHTML = str;
+        p.innerHTML = "No Students Have Submitted Their Lunch Count Yet!";
         div.appendChild(p);
         hr = document.createElement('hr');
+        hr.style.width = "20%";
+        div.appendChild(hr);
+    } else {
+        var hr = document.createElement('hr');
         hr.style.width = "15%";
         div.appendChild(hr);
+    
+        for(var i = 0; i < users.length; i++) {
+            var str = users[i] + ": ";
+            if(userCounts.hasOwnProperty(users[i])) {
+                const currUser = userCounts[users[i]];
+                for(var j = 0; j < currUser.length; j++) {
+                    str += currUser[j][0] + ", ";
+                }
+                str = str.substring(0, str.length - 2);
+            } else {
+                str += 'NONE'
+            }
+            var p = document.createElement('p');
+            p.innerHTML = str;
+            div.appendChild(p);
+            hr = document.createElement('hr');
+            hr.style.width = "15%";
+            div.appendChild(hr);
+        }
     }
+    
 }
 /*
     Create Lunch Page Functions

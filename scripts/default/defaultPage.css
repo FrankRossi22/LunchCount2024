@@ -37,18 +37,43 @@
   }
   .topRow {
     background-color: rgb(85, 85, 85);
+    display: inline-flex;
+    width: 100%;
+  }
+  .topLeft {
+    width: 35%;
+    display: inline-flex;
+  }
+  .mainB{
+    width: 100%;
+    float: left;
+  }
+  .logOutB{
+    width: 100%;
+    float: right;
+  }
+  .topMiddle {
+    width: 30%;
+    display: inline-flex;
+    height: 0;
+  }
+  .topRight {
+    width: 35%;
+    display: inline-flex;
+    float: right;
   }
   .topButtons {
     background-color: transparent;
     border-color: transparent;
     color: rgb(241, 243, 243);
     border-radius: 6px;
-    width: 5%;
+    width: 18%;
     padding: 2px;
-    margin-bottom: .1%;
+    margin-bottom: .2%;
     font-family: BlockLetters;
     font-size: max(1vw, 8px);
     min-width: 40px;
+    vertical-align: middle;
     
     
     
